@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Swing 4 Fun">
+    
+    <title>Swing 4 Fun 2026 - Launcher</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+
+    <style>
+        :root {
+            --primary: #72bf44;
+            --primary-dark: #5a9936;
+            --teal: #1acfbf; 
+            --bg: #f7f8fa; 
+            --card-bg: #ffffff;
+            --text: #2d3436;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+            font-size: 18px;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Quicksand', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 70px; background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center;
+            justify-content: space-between; padding: 0 15px; z-index: 1000;
+        }
+
+        .left-actions { display: flex; align-items: center; gap: 12px; }
+
+        .header-btn {
+            background: none; border: none; font-size: 1.5rem; cursor: pointer; 
+            padding: 5px; color: var(--text); display: flex; align-items: center; justify-content: center;
+        }
+
+        .logo-icon {
+            width: 45px; height: 45px;
+            background-image: url('image_0.png'); 
+            background-size: cover; border-radius: 50%; border: 2px solid var(--primary);
+        }
+
+        .header-actions { display: flex; align-items: center; gap: 8px; }
+
+        #langSelect {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 0.85rem;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        #installBtn {
+            background: linear-gradient(45deg, var(--primary), var(--teal));
+            color: white; border: none; padding: 10px 14px; border-radius: 50px;
+            font-family: inherit; font-weight: 700; font-size: 0.75rem; cursor: pointer;
+            display: none;
+            animation: pulseInstall 2s infinite;
+        }
+
+        @keyframes pulseInstall {
+            0% { box-shadow: 0 0 0 0 rgba(114, 191, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(114, 191, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(114, 191, 68, 0); }
+        }
+
+        .container { max-width: 850px; margin: 0 auto; padding: 100px 20px 40px; width: 100%; flex-grow: 1; }
+        
+        .welcome-section { text-align: center; margin-bottom: 25px; line-height: 1.4; }
+        .welcome-text { color: var(--primary-dark); font-size: 1.15rem; font-weight: 500; margin: 0; }
+        .welcome-text b { font-weight: 800; }
+
+        .apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 15px; }
+
+        .app-card {
+            background: var(--card-bg); border-radius: 15px; padding: 18px; 
+            display: flex; align-items: center; gap: 15px; box-shadow: var(--shadow);
+            text-decoration: none; color: inherit; border: 2px solid transparent; 
+            min-height: 140px; 
+        }
+        
+        .app-icon { 
+            font-size: 2.6rem; background: #f8f9fa; width: 70px; height: 70px; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center; border-radius: 12px; 
+        }
+        
+        .app-content { 
+            flex-grow: 1; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 12px; 
+            overflow: hidden; 
+        }
+
+        .app-info { text-align: left; }
+        
+        .app-name { 
+            font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+        }
+        
+        .app-desc { font-size: 0.85rem; color: #636e72; line-height: 1.3; }
+        
+        .btn-launch { 
+            padding: 8px 18px; background: linear-gradient(45deg, var(--primary), var(--teal));
+            color: white; border-radius: 50px; font-weight: 700; font-size: 0.8rem;
+            align-self: flex-start; 
+        }
+        
+        .app-card.disabled { opacity: 0.6; cursor: not-allowed; filter: grayscale(1); background: #f0f0f0; }
+
+        footer { text-align: center; padding: 20px; color: #b2bec3; font-size: 0.9rem; }
+
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px;
+        }
+        .modal-content { background: white; padding: 25px; border-radius: 16px; text-align: center; max-width: 350px; width: 100%; }
+        .close-modal { margin-top: 15px; background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
+        .btn-secondary { background: #f0f0f0; color: #333; margin-top: 10px; }
+        .qr-code-img { width: 200px; height: 200px; margin: 15px auto; display: block; border-radius: 10px; border: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="left-actions">
+        <button id="headerShareBtn" class="header-btn" title="Partager">📤</button>
+        <div class="logo-icon"></div>
+    </div>
+    <div class="header-actions">
+        <select id="langSelect">
+            <option value="fr">🇫🇷 Français</option>
+            <option value="en">🇺🇸 English</option>
+            <option value="es">🇪🇸 Español</option>
+        </select>
+        <button id="installBtn" data-i18n="installBtn">📲 Installer</button>
+    </div>
+</header>
+
+<div id="iosModal" class="modal-overlay">
+    <div class="modal-content">
+        <div style="font-size: 1.17em; font-weight: bold; margin-bottom: 10px; color: var(--text);" data-i18n="iosTitle">Installer sur iPhone</div>
+        <p data-i18n="iosStep1">Pour installer l'application :</p>
+        <p>1. <span data-i18n="iosStep2">Appuyez sur partager</span> <b>[⍐]</b>.</p>
+        <p>2. <span data-i18n="iosStep3">Ajouter à l'écran d'accueil</span> <b>[+]</b>.</p>
+        <button class="close-modal" id="closeModalBtn" data-i18n="iosClose">J'ai compris</button>
+    </div>
+</div>
+
+<div id="shareModal" class="modal-overlay">
+    <div class="modal-content">
+        <h3 style="margin-top: 0; margin-bottom: 10px; color: var(--text);" data-i18n="shareTitle">Partager l'application</h3>
+        <img src="qr-code.png" alt="QR Code" class="qr-code-img">
+        <button class="close-modal" id="nativeShareBtn" style="background: linear-gradient(45deg, var(--primary), var(--teal));" data-i18n="shareActionBtn">Partager le lien</button>
+        <button class="close-modal btn-secondary" id="closeShareModalBtn" data-i18n="closeBtn">Fermer</button>
+    </div>
+</div>
+
+<div class="container">
+    <div class="welcome-section">
+        <p class="welcome-text">
+            <span data-i18n="welcomePart1"><b>Swinguez en s'amusant,</b></span><br>
+            <span data-i18n="welcomePart2">sans connexion Internet.</span>
+        </p>
+    </div>
+
+    <div class="apps-grid">
+        <a href="match-fr.html" class="app-card" id="matchLink">
+            <div class="app-icon">🤝</div>
+            <div class="app-content">
+                <div class="app-info">
+                    <div class="app-name" data-i18n="matchTitle">Match en équipe</div>
+                    <div class="app-desc" data-i18n="matchDesc">Joue en équipe à 3 ou 4 joueurs.</div>
+                </div>
+                <div class="btn-launch" data-i18n="launchBtn">Lancer</div>
+            </div>
+        </a>
+
+        <a href="loup-fr.html" class="app-card" id="wolfLink">
+            <div class="app-icon">🐺</div>
+            <div class="app-content">
+                <div class="app-info">
+                    <div class="app-name" data-i18n="wolfTitle">Le jeu du Loup</div>
+                    <div class="app-desc" data-i18n="wolfDesc">Le Loup choisit son partenaire ou joue seul. Fun à 4.</div>
+                </div>
+                <div class="btn-launch" data-i18n="launchBtn">Lancer</div>
+            </div>
+        </a>
+
+        <a href="#" class="app-card disabled" onclick="event.preventDefault();">
+            <div class="app-icon">💎</div>
+            <div class="app-content">
+                <div class="app-info">
+                    <div class="app-name" data-i18n="skinsTitle">Le Skins Game</div>
+                    <div class="app-desc" data-i18n="skinsDesc">Chaque trou vaut un point. Egalité = report.</div>
+                </div>
+                <div class="btn-launch" data-i18n="soonBtn">Bientôt</div>
+            </div>
+        </a>
+
+        <a href="#" class="app-card disabled" onclick="event.preventDefault();">
+            <div class="app-icon">🎯</div>
+            <div class="app-content">
+                <div class="app-info">
+                    <div class="app-name" data-i18n="bingoTitle">Le Bingo Bango Bongo</div>
+                    <div class="app-desc" data-i18n="bingoDesc">Points sur le green, près du trou et score.</div>
+                </div>
+                <div class="btn-launch" data-i18n="soonBtn">Bientôt</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<footer>
+    &copy; 2026 Swing 4 Fun - Version 1.0.3
+</footer>
+
+<script>
+    const translations = {
+        fr: {
+            installBtn: "📲 Installer",
+            welcomePart1: "<b>Swinguez en s'amusant,</b>",
+            welcomePart2: "sans connexion Internet.",
+            matchTitle: "Match en équipe",
+            matchDesc: "Joue en équipe à 3 ou 4 joueurs.",
+            wolfTitle: "Le jeu du Loup",
+            wolfDesc: "Le Loup choisit son partenaire ou joue seul. Fun à 4.",
+            skinsTitle: "Le Skins Game",
+            skinsDesc: "Chaque trou vaut un point. Egalité = report.",
+            bingoTitle: "Le Bingo Bango Bongo",
+            bingoDesc: "Points sur le green, près du trou et score.",
+            launchBtn: "Lancer",
+            soonBtn: "Bientôt",
+            iosTitle: "Installer sur iPhone",
+            iosStep1: "Pour installer l'application :",
+            iosStep2: "Appuyez sur partager",
+            iosStep3: "Ajouter à l'écran d'accueil",
+            iosClose: "J'ai compris",
+            manualMsg: "Pour installer, ouvrez le menu de votre navigateur et sélectionnez 'Ajouter à l'écran d'accueil'.",
+            shareTitle: "Partager l'application",
+            shareActionBtn: "Partager le lien",
+            closeBtn: "Fermer"
+        },
+        en: {
+            installBtn: "📲 Install",
+            welcomePart1: "<b>Swing for Fun,</b>",
+            welcomePart2: "even offline.",
+            matchTitle: "Team Match",
+            matchDesc: "Play in teams of 3 or 4 players.",
+            wolfTitle: "Wolf Game",
+            wolfDesc: "The Wolf picks a partner or plays solo. Fun for 4.",
+            skinsTitle: "Skins Game",
+            skinsDesc: "Each hole is a point. Carry over on tie.",
+            bingoTitle: "Bingo Bango Bongo",
+            bingoDesc: "Points for green, pin, and holing out.",
+            launchBtn: "Launch",
+            soonBtn: "Soon",
+            iosTitle: "Install on iPhone",
+            iosStep1: "To install the app:",
+            iosStep2: "Tap the share icon",
+            iosStep3: "Add to Home Screen",
+            iosClose: "Got it",
+            manualMsg: "To install, open your browser menu and select 'Add to Home Screen'.",
+            shareTitle: "Share the app",
+            shareActionBtn: "Share Link",
+            closeBtn: "Close"
+        },
+        es: {
+            installBtn: "📲 Instalar",
+            welcomePart1: "<b>Swing 4 Fun,</b>",
+            welcomePart2: "sin conexión.",
+            matchTitle: "Partido en equipo",
+            matchDesc: "Juega en equipos de 3 o 4 jugadores.",
+            wolfTitle: "Juego del Lobo",
+            wolfDesc: "El Lobo elige compañero o juega solo. Diversión para 4.",
+            skinsTitle: "Skins Game",
+            skinsDesc: "Hoyo vale un punto. Empate = se acumula.",
+            bingoTitle: "Bingo Bango Bongo",
+            bingoDesc: "Puntos en green, cerca de hoyo y embocando.",
+            launchBtn: "Abrir",
+            soonBtn: "Pronto",
+            iosTitle: "Instalar en iPhone",
+            iosStep1: "Para instalar la aplicación:",
+            iosStep2: "Pulsa compartir",
+            iosStep3: "Añadir a pantalla de inicio",
+            iosClose: "Entendido",
+            manualMsg: "Para instalar, abre el menú del navegador y selecciona 'Añadir a la pantalla de inicio'.",
+            shareTitle: "Compartir la aplicación",
+            shareActionBtn: "Compartir enlace",
+            closeBtn: "Cerrar"
+        }
+    };
+
+    let deferredPrompt;
+    const installBtn = document.getElementById('installBtn');
+    const iosModal = document.getElementById('iosModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    const langSelect = document.getElementById('langSelect');
+    
+    // Nouveaux éléments pour la modale de partage
+    const headerShareBtn = document.getElementById('headerShareBtn');
+    const shareModal = document.getElementById('shareModal');
+    const closeShareModalBtn = document.getElementById('closeShareModalBtn');
+    const nativeShareBtn = document.getElementById('nativeShareBtn');
+
+    function updateLanguage(lang) {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang] && translations[lang][key]) {
+                el.innerHTML = translations[lang][key];
+            }
+        });
+        
+        document.documentElement.lang = lang;
+        localStorage.setItem('userLanguage', lang);
+        
+        const matchLink = document.getElementById('matchLink');
+        if (matchLink) {
+            matchLink.href = 'match-' + lang.toLowerCase() + '.html';
+        }
+
+        const wolfLink = document.getElementById('wolfLink');
+        if (wolfLink) {
+            wolfLink.href = 'loup-' + lang.toLowerCase() + '.html';
+        }
+    }
+
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('sw.js').catch(err => {
+                console.log('Service Worker non enregistré.');
+            });
+        });
+    }
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+
+    if (!isStandalone) {
+        installBtn.style.display = 'block';
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        installBtn.style.display = 'block'; 
+    });
+
+    installBtn.addEventListener('click', async () => {
+        if (isIOS) {
+            iosModal.style.display = 'flex';
+        } else if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                installBtn.style.display = 'none';
+            }
+            deferredPrompt = null;
+        } else {
+            alert(translations[langSelect.value].manualMsg);
+        }
+    });
+
+    closeModalBtn.addEventListener('click', () => {
+        iosModal.style.display = 'none';
+    });
+
+    // Gestion de la modale de partage
+    headerShareBtn.addEventListener('click', () => {
+        shareModal.style.display = 'flex';
+    });
+
+    closeShareModalBtn.addEventListener('click', () => {
+        shareModal.style.display = 'none';
+    });
+
+    nativeShareBtn.addEventListener('click', async () => {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: 'Swing 4 Fun',
+                    text: 'Swinguez en s\'amusant, sans connexion !',
+                    url: window.location.href
+                });
+            } catch (err) {
+                console.log('Partage annulé ou erreur', err);
+            }
+        } else {
+            alert('Le partage natif n\'est pas supporté sur ce navigateur. Vous pouvez copier l\'URL de la page.');
+        }
+    });
+
+    // Fermer les modales si on clique en dehors du contenu
+    window.addEventListener('click', (e) => {
+        if (e.target === iosModal) {
+            iosModal.style.display = 'none';
+        }
+        if (e.target === shareModal) {
+            shareModal.style.display = 'none';
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('userLanguage');
+        const browserLang = navigator.language.split('-')[0];
+        
+        let initialLang = 'en';
+        if (savedLang && translations[savedLang]) {
+            initialLang = savedLang;
+        } else if (translations[browserLang]) {
+            initialLang = browserLang;
+        }
+
+        langSelect.value = initialLang;
+        updateLanguage(initialLang); 
+
+        langSelect.addEventListener('change', (e) => updateLanguage(e.target.value));
+    });
+</script>
+
+</body>
+</html>

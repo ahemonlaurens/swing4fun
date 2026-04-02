@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Match par équipe - Gestionnaire Pro</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #05b9f0;
+            --primary-dark: #0396c4;
+            --orange: #ff4200; --violet: #7536f0;
+            --teal: #1acfbf; --blue: #1e88e5;
+            --crimson: #d6084d; --lime: #d9fa4f;
+            --bg: #f7f8fa; --card-bg: #ffffff;
+            --text: #2d3436;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+            
+            /* Couleurs des joueurs */
+            --p1: #1e88e5; --p2: #e53935; --p3: #43a047; --p4: #fb8c00;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        html, body { 
+            overscroll-behavior: none; 
+            overscroll-behavior-y: none;
+            font-family: 'Quicksand', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            line-height: 1.5; 
+            font-size: 1.06rem; 
+        }
+
+        .container { max-width: 900px; margin: 0 auto; padding: 80px 15px 40px; }
+        .screen { display: none; animation: fadeIn 0.4s ease-out; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        header {
+            position: fixed; top: 0; width: 100%; height: 65px; background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center;
+            justify-content: space-between; padding: 0 20px; z-index: 1000;
+        }
+        .logo { font-weight: 700; font-size: 1.2rem; color: var(--primary-dark); }
+        .step-indicator { font-weight: 600; color: #636e72; font-size: 0.95rem; }
+
+        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
+        h2 { font-size: 1.28rem; margin-top: 0; color: #2d3436; border-left: 4px solid var(--primary); padding-left: 12px; }
+        h3 { font-size: 1.1rem; color: var(--primary-dark); margin-bottom: 15px; text-align: center; }
+
+        .form-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .form-label { flex: 1; font-weight: 500;}
+        .form-desc { font-size: 0.92rem; color: #636e72; display: block; font-weight: 400;}
+        
+        input[type="text"], input[type="number"], select {
+            border: 2px solid #dfe6e9; border-radius: 8px; padding: 8px 12px;
+            font-family: inherit; font-size: 1rem; outline: none; transition: 0.2s;
+        }
+        input[type="number"] { text-align: center; }
+        input:focus, select:focus { border-color: var(--primary); }
+        input:disabled { background: #f1f2f6; cursor: not-allowed; color: #b2bec3; border-color: #eee; text-align: center; }
+        
+        .hcp-input { text-align: center !important; font-size: 1.1rem; }
+
+        .btn-group { display: flex; gap: 5px; background: #f1f2f6; padding: 4px; border-radius: 10px; }
+        .btn-group input { display: none; }
+        .btn-group label { padding: 6px 10px; cursor: pointer; border-radius: 8px; font-weight: 600; font-size: 0.95rem; transition: 0.2s; text-align: center; flex: 1; white-space: nowrap;}
+        .btn-group input:checked + label { background: var(--primary); color: white; }
+
+        .table-responsive { overflow-x: auto; width: 100%; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.95rem; }
+        th { font-size: 0.85rem; text-transform: uppercase; color: #636e72; padding: 10px 5px; text-align: center; }
+        td { padding: 8px 5px; border-bottom: 1px solid #f1f2f6; text-align: center; vertical-align: middle; }
+        .text-left { text-align: left; }
+        .disabled-cell { background: #f9f9f9; }
+        
+        /* Ajustement colonnes Par et Hcp */
+        #tableAller th:nth-child(2), #tableAller th:nth-child(3),
+        #tableRetour th:nth-child(2), #tableRetour th:nth-child(3),
+        #tableAller td:nth-child(2), #tableAller td:nth-child(3),
+        #tableRetour td:nth-child(2), #tableRetour td:nth-child(3) { width: 40%; }
+        
+        .score-brut { font-weight: 700; color: var(--text); }
+        .score-net { font-weight: 600; color: var(--blue); }
+
+        #tableSummary { table-layout: fixed; width: 100%; font-size: 0.9rem; }
+        #tableSummary th, #tableSummary td { padding: 6px 2px; word-wrap: break-word; }
+
+        /* Style Tableau Résultat type Image Optimisé */
+        .table-image-style { width: 100%; border-collapse: collapse; font-family: 'Quicksand', sans-serif; font-size: 0.9rem; }
+        .table-image-style th { border-bottom: 2px solid #eee; padding: 10px 2px; color: #2d3436; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;}
+        .table-image-style td { border-bottom: 1px solid #f8f9fa; padding: 8px 2px; text-align: center; vertical-align: middle; }
+        .table-image-style .net-score { color: #5dade2; font-size: 0.85rem; font-weight: 600;}
+        .table-image-style .brut-score { color: #2d3436; font-weight: 700; font-size: 0.9rem;}
+        .table-image-style .player-name { text-align: left; font-weight: 700; font-size: 0.9rem; padding-left: 8px; border-radius: 4px; }
+
+        .course-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .course-grid { grid-template-columns: 1fr; } }
+
+        .btn-main { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--primary), var(--violet)); color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: transform 0.1s; }
+        .btn-main:active { transform: scale(0.98); }
+        .btn-secondary { background: #dfe6e9; color: #2d3436; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; display: inline-block; }
+        
+        .btn-ghost { background: transparent; color: #b2bec3; border: 2px dashed #dfe6e9; padding: 12px; border-radius: 8px; font-weight: 600; width: 100%; cursor: pointer; transition: 0.2s; margin-top: 15px;}
+        .btn-ghost:hover { border-color: #636e72; color: #636e72; }
+
+        #btnDeleteCourse:disabled { background: #b2bec3; cursor: not-allowed; opacity: 0.7; }
+        
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: white; }
+        .dot { height: 14px; width: 14px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 8px; flex-shrink: 0; }
+        
+        .score-row { display: grid; grid-template-columns: auto 1fr 100px 50px; align-items: center; gap: 8px; margin-bottom: 15px; }
+        
+        #resultsCapture { padding: 20px; background: var(--bg); border-radius: 12px; }
+        .podium { display: flex; align-items: flex-end; justify-content: center; gap: 15px; margin: 40px 0 20px 0; height: 250px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+        .podium-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; transition: height 0.5s ease; max-width: 150px;}
+        .podium-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; text-align: center; text-transform: uppercase; }
+        .podium-bar { width: 100%; border-radius: 8px 8px 0 0; display: flex; flex-direction: column; justify-content: flex-start; padding-top: 10px; color: white; font-weight: 700; text-align: center; position: relative; margin: 0 auto; }
+        .podium-medal { font-size: 1.5rem; margin-bottom: 5px; }
+        
+        .t-1 { background: linear-gradient(45deg, var(--blue), var(--teal)); box-shadow: 0 -4px 15px rgba(30,136,229,0.3); }
+        .t-2 { background: linear-gradient(45deg, var(--orange), var(--crimson)); box-shadow: 0 -4px 15px rgba(255,66,0,0.3); }
+
+        /* Couleurs pour les confrontations (Tableau de bord) */
+        .match1-bg { background-color: rgba(255, 215, 0, 0.15); } 
+        .match2-bg { background-color: rgba(192, 192, 192, 0.15); } 
+
+        .dashboard-team-score { display: flex; justify-content: space-around; background: #f8f9fa; padding: 15px 10px; border-radius: 8px; margin-top: 15px; border: 1px solid #eee;}
+        .team-score-item { text-align: center; font-weight: bold; flex: 1; }
+        
+        /* Modal Style */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal-title { font-size: 1.25rem; font-weight: bold; color: var(--primary-dark); margin-bottom: 15px; }
+        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
+
+        /* Styles Règles */
+        .rules-content { font-size: 1.05rem; line-height: 1.6; color: #444; background: #fdfdfd; padding: 18px; border-radius: 8px; border: 1px solid #eee; margin-top: 10px; }
+        .rules-content p { margin-top: 0; margin-bottom: 10px; }
+        .rules-content p:last-child { margin-bottom: 0; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">⛳ Match par équipe</div>
+    <div class="step-indicator" id="stepIndicator">Configuration</div>
+</header>
+
+<div class="container">
+    
+    <div id="screenSetup" class="screen active">
+
+        <div class="card">
+            <h2 onclick="toggleRules()" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                Règles <span id="rulesToggleIcon" style="font-size:0.9rem;">▶ Afficher</span>
+            </h2>
+            <div id="rulesContent" class="rules-content" style="display:none;">
+                <p><strong>Le Principe :</strong> Deux équipes s'affrontent (2v2, 2v1 ou 1v3).</p>
+                <p><strong>Le Score (Match) :</strong> À chaque trou :</p>
+                <ul>
+                    <li><strong>À 4 joueurs (2v2) :</strong> 2 points sont en jeu. Le meilleur joueur de l'équipe 1 affronte le meilleur de l'équipe 2 (1 point). Les 2èmes meilleurs s'affrontent également (1 point).</li>
+                    <li><strong>À 3 joueurs (2v1 ou 1v3) :</strong> <b>1 seul point</b> est en jeu. Le joueur qui joue seul se compare uniquement au <b>meilleur des deux autres</b> joueurs adverses.</li>
+                </ul>
+                <p><i>* En cas d'égalité sur un match, personne ne marque (0 point). En cas d'égalité au sein de la même équipe, l'ordre des matchs est choisi au hasard.</i></p>
+                <p><strong>La Croix (X) :</strong> Entrer "X" signifie ramasser la balle. Cela vaut <b>Par + 4</b>. Ce score s'additionne à votre total. Un score validé gagne toujours contre une Croix (X), même si une équipe a plusieurs Croix. Si deux croix s'affrontent, il y a égalité parfaite (0 point).</p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Options de Jeu</h2>
+            
+            <div class="form-group">
+                <div class="form-label">Mode de calcul<span class="form-desc">Brut (réel) ou Net (ajusté Hcp)</span></div>
+                <div class="btn-group">
+                    <input type="radio" name="calcMode" id="modeBrut" value="brut" checked onchange="updateCalcMode()"><label for="modeBrut">Brut</label>
+                    <input type="radio" name="calcMode" id="modeNet" value="net" onchange="updateCalcMode()"><label for="modeNet">Net</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="form-label">Parcours<span class="form-desc">Sélection des trous</span></div>
+                <div class="btn-group">
+                    <input type="radio" name="holes" id="h18" value="18" checked onchange="updateCourseVisibility()"><label for="h18">18</label>
+                    <input type="radio" name="holes" id="hFront" value="front" onchange="updateCourseVisibility()"><label for="hFront">Aller</label>
+                    <input type="radio" name="holes" id="hBack" value="back" onchange="updateCourseVisibility()"><label for="hBack">Retour</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="form-label">Nb joueurs</div>
+                <div class="btn-group">
+                    <input type="radio" name="nbPlayers" id="p3" value="3" onchange="updatePlayerCount()"><label for="p3">3 Joueurs</label>
+                    <input type="radio" name="nbPlayers" id="p4" value="4" checked onchange="updatePlayerCount()"><label for="p4">4 Joueurs</label>
+                </div>
+            </div>
+
+            <div class="form-group" style="flex-wrap: wrap; gap: 10px;">
+                <div class="form-label" style="min-width: 100px;">Nom équipe 1</div>
+                <input type="text" id="team1Name" value="Équipe 1" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--blue); text-align: center;">
+            </div>
+            <div class="form-group" style="flex-wrap: wrap; gap: 10px;">
+                <div class="form-label" style="min-width: 100px;">Nom équipe 2</div>
+                <input type="text" id="team2Name" value="Équipe 2" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--orange); text-align: center;">
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Les Joueurs</h2>
+            <div id="playersList"></div>
+        </div>
+
+        <div class="card">
+            <h2>Le Parcours</h2>
+            <div class="form-group" style="display:flex; flex-direction:column; align-items:stretch; background:#f8f9fa; padding:15px; border-radius:8px; margin-bottom:15px; border-bottom:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                    <div class="form-label" style="font-weight:bold; color:var(--primary-dark); white-space:nowrap;">Mes parcours</div>
+                    <select id="savedCoursesDropdown" onchange="loadSavedCourse()" style="padding:5px; border-radius:5px; border:1px solid #dfe6e9; flex:1; min-width:0; font-size:0.9rem;">
+                        <option value="">-- Nouveau parcours --</option>
+                    </select>
+                    <button onclick="openDeleteModal()" class="btn-secondary" id="btnDeleteCourse" style="padding:6px 10px; background:var(--crimson); color:white; border:none; flex-shrink:0;" disabled>🗑️</button>
+                </div>
+            </div>
+            
+            <div class="form-group" id="whsGroup" style="display:none; background:#f8f9fa; padding:15px; border-radius:8px; margin-bottom:15px; border-bottom:none;">
+                <div class="form-label" style="flex:1">Étalonnage WHS<span class="form-desc">Calcul de l'Index de jeu</span></div>
+                <div style="display:flex; gap:15px; text-align:center;">
+                    <div>
+                        <label for="optSlope" style="font-size:0.85rem; font-weight:700; color:#636e72;">SLOPE</label><br>
+                        <input type="number" id="optSlope" value="113" style="width:80px; margin-top:5px;" min="55" max="155">
+                    </div>
+                    <div>
+                        <label for="optSss" style="font-size:0.85rem; font-weight:700; color:#636e72;">SSS</label><br>
+                        <input type="number" id="optSss" value="72.0" step="0.1" style="width:80px; margin-top:5px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-grid">
+                <div id="containerAller">
+                    <h3>ALLER (1-9)</h3>
+                    <div class="table-responsive">
+                        <table id="tableAller">
+                            <thead><tr><th>T</th><th>Par</th><th>Hcp</th></tr></thead>
+                            <tbody id="bodyAller"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="containerRetour">
+                    <h3>RETOUR (10-18)</h3>
+                    <div class="table-responsive">
+                        <table id="tableRetour">
+                            <thead><tr><th>T</th><th>Par</th><th>Hcp</th></tr></thead>
+                            <tbody id="bodyRetour"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+            <button class="btn-secondary" style="flex:1; padding:15px 5px; font-size:0.95rem; white-space:nowrap;" onclick="window.location.href='index.html'">← Retour</button>
+            <button class="btn-main" style="flex:2.2; padding:15px 5px; font-size:1rem; white-space:nowrap;" onclick="validateSetup()">Valider et Récapituler ➜</button>
+        </div>
+    </div>
+
+    <div id="screenRecap" class="screen">
+        <div class="card">
+            <h2>Résumé de votre configuration</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; background: #f8f9fa; padding: 15px; border-radius: 8px;" id="recapOptionsGrid"></div>
+            
+            <h3>Les Équipes</h3>
+            <div id="recapPlayersList" style="margin-bottom: 20px;"></div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-secondary" style="flex:1;" onclick="showScreen('screenSetup')">← Modifier</button>
+            <button class="btn-main" style="flex:2;" onclick="startGame()">Commencer le Jeu ➜</button>
+        </div>
+    </div>
+
+    <div id="screenGame" class="screen">
+        
+        <div class="card" style="padding:15px;">
+            <h3 style="margin-top:0; color:#2d3436; text-align:left; font-size:1rem;">📊 Tableau de bord (Trou Précédent)</h3>
+            
+            <div id="prevHoleDashboard" style="display:none;">
+                <table style="margin:0;">
+                    <thead id="dashboardHeader">
+                        <tr><th class="text-left">Jou.</th><th>Brut</th><th class="col-net">Stb</th><th>Total</th><th>+/-</th></tr>
+                    </thead>
+                    <tbody id="bodyLiveDashboard"></tbody>
+                </table>
+                <div class="dashboard-team-score" id="dashboardTeamScores"></div>
+            </div>
+            <div id="prevHoleEmpty" style="color:#636e72; font-size:0.9rem; font-style:italic;">En attente du premier score...</div>
+        </div>
+
+        <div class="card">
+            <div id="holeInfo" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"></div>
+            
+            <div style="display:grid; grid-template-columns: auto 1fr 100px 50px; gap:8px; margin-top:10px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72;">
+                <div></div><div>Joueur</div><div style="text-align:center">Score</div><div style="text-align:center">CR</div>
+            </div>
+            <div id="holeInputs"></div>
+
+            <div style="display:flex; gap:10px; margin-top:25px;">
+                <button class="btn-secondary" id="btnPrevHole" onclick="prevHole()" style="flex:1;">← Précédent</button>
+                <button class="btn-main" id="btnNextHole" onclick="nextHole()" style="flex:2;">Valider ➜</button>
+            </div>
+        </div>
+
+        <button class="btn-ghost" onclick="openEndGameModal()">🛑 Terminer prématurément</button>
+    </div>
+
+    <div id="screenEdit" class="screen">
+        <div class="card">
+            <h2>Édition des scores</h2>
+            <div class="form-group" style="flex-direction:column; align-items:flex-start;">
+                <label class="form-label" style="margin-bottom:8px; font-weight:bold; color:var(--primary-dark)">Sélectionnez le trou à modifier :</label>
+                <select id="editHoleSelect" onchange="changeEditHole(this.value)" style="width:100%; font-size:1.05rem; padding:10px;"></select>
+            </div>
+        </div>
+
+        <div class="card">
+            <div id="editHoleInfo" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"></div>
+
+            <div style="display:grid; grid-template-columns: auto 1fr 100px 50px; gap:8px; margin-top:20px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72;">
+                <div></div><div>Joueur</div><div style="text-align:center">Score</div><div style="text-align:center">CR</div>
+            </div>
+            <div id="editHoleInputs"></div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:25px;">
+            <button class="btn-secondary" style="flex:1;" onclick="cancelEdit()">Annuler</button>
+            <button class="btn-main" style="flex:2;" onclick="saveAndCloseEdit()">Enregistrer & Recalculer ➜</button>
+        </div>
+    </div>
+
+    <div id="screenResults" class="screen">
+        <div id="resultsCapture">
+            <h2 style="text-align:center; border:none; padding:0; margin-bottom:10px; color:var(--primary-dark)">Score Final</h2>
+            
+            <div class="podium" id="podium"></div>
+            
+            <div class="card" style="box-shadow:none; border: 1px solid #eee;">
+                <h3>Récapitulatif des Scores</h3>
+                <div class="table-responsive">
+                    <table id="tableSummary"></table>
+                </div>
+            </div>
+
+            <div class="card" style="box-shadow:none; border: 1px solid #eee; padding: 10px;">
+                <h3 style="margin-top:5px; margin-bottom: 15px;">Scores par trou <span style="font-size:0.75rem; font-weight:normal; color:#636e72;">(<span style="color:var(--text); font-weight:bold;">Brut</span> / <span style="color:#5dade2; font-weight:bold;">Std</span>)</span></h3>
+                <div id="groupedHolesContainer"></div>
+            </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
+            <button class="btn-secondary" style="flex:1" onclick="exportCSV()">📥 CSV</button>
+            <button class="btn-secondary" style="flex:1" onclick="takeScreenshot()">📸 Capture</button>
+            <button class="btn-secondary" style="flex:100%; border: 2px solid var(--primary); color:var(--primary-dark); font-weight:700;" onclick="openEditMode()">✏️ Éditer les scores</button>
+            <button class="btn-main" style="flex:100%; margin-top:5px;" onclick="window.location.href='equipe.html'">🔄 Nouvelle Partie / Accueil</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-overlay" id="teamErrorModal">
+    <div class="modal-content">
+        <div class="modal-title" style="color: var(--crimson);">⚠️ Équipes Invalides</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Chaque équipe doit avoir au moins 1 joueur pour commencer.</p>
+        <div class="modal-btns" style="justify-content: center; margin-top: 0;">
+            <button class="btn-main" style="width: 100%;" onclick="document.getElementById('teamErrorModal').style.display='none'">OK</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="resumeModal">
+    <div class="modal-content">
+        <div class="modal-title">Une partie en cours ?</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 5px;">Une partie non terminée a été détectée.</p>
+        <p style="font-size: 0.95rem; font-weight:bold;">Voulez-vous la reprendre ?</p>
+        <div class="modal-btns">
+            <button class="btn-secondary" style="flex:1;" onclick="handleResume(false)">Nouvelle</button>
+            <button class="btn-main" style="flex:1; padding: 10px;" onclick="handleResume(true)">Reprendre</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="endGameModal">
+    <div class="modal-content">
+        <div class="modal-title">Voulez-vous terminer la partie ?</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 5px;">Vous pourrez reprendre cette partie plus tard là où vous l'avez laissée.</p>
+        <div class="modal-btns">
+            <button class="btn-secondary" style="flex:1;" onclick="closeEndGameModal()">Annuler</button>
+            <button class="btn-main" style="flex:1; background:var(--crimson);" onclick="forceFinishGame()">Terminer</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="validationModal">
+    <div class="modal-content">
+        <div class="modal-title" style="color: var(--orange);">⚠️ Attention</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Entrez les scores pour valider le trou.</p>
+        <div class="modal-btns" style="justify-content: center; margin-top: 0;">
+            <button class="btn-main" style="width: 100%;" onclick="closeValidationModal()">OK</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="courseNameModal">
+    <div class="modal-content">
+        <div class="modal-title">Nom du parcours</div>
+        <input type="text" id="newCourseNameInput" placeholder="Saisissez un nom (optionnel)" style="width: 100%; margin-bottom: 10px;">
+        <p style="font-size: 0.85rem; color: #636e72; margin-bottom: 20px;">Voulez-vous sauvegarder ce parcours localement ?</p>
+        <div class="modal-btns">
+            <button class="btn-secondary" style="flex:1;" onclick="finalizeSetupFlow(false)">Passer</button>
+            <button class="btn-main" style="flex:1;" onclick="finalizeSetupFlow(true)">Valider</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="deleteCourseModal">
+    <div class="modal-content">
+        <div class="modal-title" style="color: var(--crimson);">Voulez-vous effacer le parcours ?</div>
+        <div class="modal-btns">
+            <button class="btn-secondary" style="flex:1;" onclick="confirmDeleteCourse(false)">Conserve</button>
+            <button class="btn-main" style="flex:1; background:var(--crimson);" onclick="confirmDeleteCourse(true)">Efface</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const state = {
+        playersCount: 4,
+        teams: [{ id: 1, name: 'Équipe 1' }, { id: 2, name: 'Équipe 2' }],
+        players: [
+            { id: 0, name: '', hcp: 0, playingHcp: 0, color: 'var(--p1)', team: 1, scores: [] },
+            { id: 1, name: '', hcp: 0, playingHcp: 0, color: 'var(--p2)', team: 1, scores: [] },
+            { id: 2, name: '', hcp: 0, playingHcp: 0, color: 'var(--p3)', team: 2, scores: [] },
+            { id: 3, name: '', hcp: 0, playingHcp: 0, color: 'var(--p4)', team: 2, scores: [] }
+        ],
+        course: [],
+        options: { mode: 'brut', holes: '18', slope: 113, sss: 72, courseName: '' },
+        currentHoleIndex: 0,
+        gameData: []
+    };
+
+    let backupGameData = null;
+    let currentEditIndex = 0;
+
+    // INITIALISATION
+    function init() {
+        renderPlayerInputs();
+        
+        const bAller = document.getElementById('bodyAller');
+        const bRetour = document.getElementById('bodyRetour');
+        for(let i=1; i<=18; i++) {
+            const row = `<tr>
+                <td style="font-weight:700; color:#636e72;">${i}</td>
+                <td><input type="number" id="par${i}" value="4" min="3" max="6" style="width:100%"></td>
+                <td class="hcp-cell"><input type="number" id="hcp${i}" value="${i}" min="1" max="18" style="width:100%"></td>
+            </tr>`;
+            if(i <= 9) bAller.innerHTML += row;
+            else bRetour.innerHTML += row;
+        }
+        
+        loadPlayersLocally();
+        updateCourseDropdown();
+        updateCalcMode();
+        updateCourseVisibility();
+        checkSavedGame();
+    }
+
+    function toggleRules() {
+        const content = document.getElementById('rulesContent');
+        const icon = document.getElementById('rulesToggleIcon');
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            icon.innerHTML = '▼ Masquer';
+        } else {
+            content.style.display = 'none';
+            icon.innerHTML = '▶ Afficher';
+        }
+    }
+
+    function renderPlayerInputs() {
+        const pList = document.getElementById('playersList');
+        pList.innerHTML = '';
+        const t1Name = document.getElementById('team1Name').value || 'Équipe 1';
+        const t2Name = document.getElementById('team2Name').value || 'Équipe 2';
+
+        for (let i = 0; i < state.playersCount; i++) {
+            const defaultTeam = (i < 2) ? 1 : 2; 
+            pList.innerHTML += `
+                <div class="form-group" style="display: flex; gap: 8px; padding: 5px 0; border: none; margin-bottom: 5px; flex-wrap: nowrap;">
+                    <span class="dot" style="background:${state.players[i].color}; width:16px; height:16px; align-self: center;"></span>
+                    <input type="text" id="pName${i}" placeholder="Joueur ${i+1}" maxlength="15" style="flex: 2; min-width: 0;">
+                    <input type="text" inputmode="decimal" id="pHcp${i}" placeholder="Index" style="flex: 1; min-width: 0;" class="hcp-input">
+                    <select id="pTeam${i}" style="flex: 1.5; min-width: 0; padding: 6px; font-size:0.9rem;">
+                        <option value="1" ${defaultTeam === 1 ? 'selected' : ''}>${t1Name}</option>
+                        <option value="2" ${defaultTeam === 2 ? 'selected' : ''}>${t2Name}</option>
+                    </select>
+                </div>`;
+        }
+        updateCalcMode();
+    }
+
+    function updateTeamDropdowns() {
+        const t1Name = document.getElementById('team1Name').value || 'Équipe 1';
+        const t2Name = document.getElementById('team2Name').value || 'Équipe 2';
+        for (let i = 0; i < 4; i++) {
+            const sel = document.getElementById('pTeam' + i);
+            if (sel) {
+                sel.options[0].text = t1Name;
+                sel.options[1].text = t2Name;
+            }
+        }
+    }
+
+    function updatePlayerCount() {
+        state.playersCount = document.getElementById('p3').checked ? 3 : 4;
+        renderPlayerInputs();
+        loadPlayersLocally();
+    }
+
+    // LOCAL STORAGE
+    function loadPlayersLocally() {
+        try {
+            const saved = JSON.parse(localStorage.getItem('wolf_saved_players'));
+            if(saved && saved.length > 0) {
+                for(let i=0; i < state.playersCount; i++) {
+                    if (saved[i]) {
+                        document.getElementById('pName'+i).value = saved[i].name || '';
+                        if (saved[i].hcp !== null && saved[i].hcp !== '🔒') {
+                            document.getElementById('pHcp'+i).value = saved[i].hcp;
+                        }
+                    }
+                }
+            }
+        } catch(e) { console.error("Erreur chargement joueurs", e); }
+    }
+
+    function savePlayersLocally() {
+        const arr = [];
+        for(let i=0; i<4; i++) {
+            let hcpEl = document.getElementById('pHcp'+i);
+            let hcpVal = hcpEl ? hcpEl.value : '';
+            arr.push({
+                name: document.getElementById('pName'+i) ? document.getElementById('pName'+i).value.trim() : `Joueur ${i+1}`,
+                hcp: (hcpVal === '🔒') ? '' : hcpVal
+            });
+        }
+        localStorage.setItem('wolf_saved_players', JSON.stringify(arr));
+    }
+
+    function getSavedCourses() {
+        try { return JSON.parse(localStorage.getItem('wolf_saved_courses')) || {}; } catch(e) { return {}; }
+    }
+
+    function updateCourseDropdown() {
+        const courses = getSavedCourses();
+        const select = document.getElementById('savedCoursesDropdown');
+        select.innerHTML = '<option value="">-- Nouveau parcours --</option>';
+        for(let name in courses) { select.innerHTML += `<option value="${name}">${name}</option>`; }
+    }
+
+    function loadSavedCourse() {
+        const name = document.getElementById('savedCoursesDropdown').value;
+        const btnDel = document.getElementById('btnDeleteCourse');
+        if(!name) { btnDel.disabled = true; return; }
+        
+        const data = getSavedCourses()[name];
+        if(data) {
+            document.getElementById('optSlope').value = data.slope || 113;
+            document.getElementById('optSss').value = data.sss || 72.0;
+            data.holes.forEach((h, idx) => {
+                const i = idx + 1;
+                document.getElementById('par'+i).value = h.par;
+                
+                const hcpInput = document.getElementById('hcp'+i);
+                if(document.getElementById('modeNet').checked) {
+                    hcpInput.value = h.hcp;
+                } else {
+                    hcpInput.dataset.old = h.hcp; 
+                }
+            });
+            btnDel.disabled = false;
+        }
+    }
+
+    function saveCurrentCourse(name) {
+        if(!name) return;
+        const courseData = { slope: document.getElementById('optSlope').value, sss: document.getElementById('optSss').value, holes: [] };
+        for(let i=1; i<=18; i++) {
+            let hcpInput = document.getElementById('hcp'+i);
+            let hcpVal = hcpInput.value;
+            if(hcpVal === '🔒') hcpVal = hcpInput.dataset.old || '';
+            courseData.holes.push({ par: document.getElementById('par'+i).value, hcp: hcpVal });
+        }
+        const courses = getSavedCourses();
+        courses[name] = courseData;
+        localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
+        updateCourseDropdown();
+        document.getElementById('savedCoursesDropdown').value = name;
+        document.getElementById('btnDeleteCourse').disabled = false;
+    }
+
+    function openDeleteModal() {
+        const name = document.getElementById('savedCoursesDropdown').value;
+        if(!name) return;
+        document.getElementById('deleteCourseModal').style.display = 'flex';
+    }
+
+    function confirmDeleteCourse(doDelete) {
+        document.getElementById('deleteCourseModal').style.display = 'none';
+        if (doDelete) {
+            const name = document.getElementById('savedCoursesDropdown').value;
+            const courses = getSavedCourses();
+            delete courses[name];
+            localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
+            updateCourseDropdown();
+            document.getElementById('btnDeleteCourse').disabled = true;
+        }
+    }
+
+    // UI UPDATES
+    function updateCalcMode() {
+        const isNet = document.getElementById('modeNet').checked;
+        document.getElementById('whsGroup').style.display = isNet ? 'flex' : 'none';
+
+        document.querySelectorAll('.hcp-input').forEach(el => {
+            el.disabled = !isNet;
+            if(!isNet) {
+                el.value = '🔒';
+                el.style.color = '#b2bec3';
+                el.style.textAlign = 'center';
+            } else {
+                if(el.value === '🔒') el.value = '';
+                el.style.color = 'inherit';
+                el.style.textAlign = 'center';
+            }
+        });
+
+        document.querySelectorAll('.hcp-cell input').forEach(el => {
+            el.disabled = !isNet;
+            if(!isNet) {
+                if (el.value !== '🔒') el.dataset.old = el.value;
+                el.type = 'text'; el.value = '🔒';
+            } else {
+                el.type = 'number';
+                if(el.dataset.old) el.value = el.dataset.old;
+                else if (el.value === '🔒') el.value = '';
+            }
+        });
+    }
+
+    function updateCourseVisibility() {
+        const holes = document.querySelector('input[name="holes"]:checked').value;
+        document.getElementById('containerAller').style.display = (holes === '18' || holes === 'front') ? 'block' : 'none';
+        document.getElementById('containerRetour').style.display = (holes === '18' || holes === 'back') ? 'block' : 'none';
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+        
+        let label = "Configuration";
+        if(id === 'screenRecap') label = "Récapitulatif";
+        if(id === 'screenGame' && state.course.length > 0) {
+            label = `Trou ${state.course[state.currentHoleIndex].num} (${state.currentHoleIndex+1}/${state.course.length})`;
+        }
+        if(id === 'screenResults') label = "Résultats";
+        if(id === 'screenEdit') label = "Édition des scores";
+        document.getElementById('stepIndicator').textContent = label;
+    }
+
+    // MODALS
+    function checkSavedGame() {
+        const saved = localStorage.getItem('team_saved_game_state');
+        if (saved) {
+            const data = JSON.parse(saved);
+            if (data.gameData && data.gameData.length > 0) {
+                document.getElementById('resumeModal').style.display = 'flex';
+            }
+        }
+    }
+
+    function handleResume(resume) {
+        document.getElementById('resumeModal').style.display = 'none';
+        if (resume) {
+            const data = JSON.parse(localStorage.getItem('team_saved_game_state'));
+            Object.assign(state, data);
+            loadHole();
+            showScreen('screenGame');
+        } else {
+            localStorage.removeItem('team_saved_game_state');
+        }
+    }
+
+    function openEndGameModal() { document.getElementById('endGameModal').style.display = 'flex'; }
+    function closeEndGameModal() { document.getElementById('endGameModal').style.display = 'none'; }
+    function forceFinishGame() { closeEndGameModal(); finishGame(); }
+
+    function showValidationModal() { document.getElementById('validationModal').style.display = 'flex'; }
+    function closeValidationModal() { document.getElementById('validationModal').style.display = 'none'; }
+
+    function saveGameLocally() { localStorage.setItem('team_saved_game_state', JSON.stringify(state)); }
+
+    // SETUP & RECAP
+    function validateSetup() {
+        const isNet = document.getElementById('modeNet').checked;
+        const selectedCourse = document.getElementById('savedCoursesDropdown').value;
+
+        // Validation qu'il y a au moins 1 joueur par équipe
+        let t1c = 0, t2c = 0;
+        for(let i=0; i < state.playersCount; i++) {
+            let t = parseInt(document.getElementById('pTeam'+i).value);
+            if(t === 1) t1c++;
+            if(t === 2) t2c++;
+        }
+        if(t1c === 0 || t2c === 0) {
+            document.getElementById('teamErrorModal').style.display = 'flex';
+            return;
+        }
+
+        // Validation des indexs
+        state.players = [];
+        let totalCoursePar = 0;
+        for(let i=1; i<=18; i++) totalCoursePar += parseInt(document.getElementById('par'+i).value) || 4;
+        let slope = parseFloat(document.getElementById('optSlope').value) || 113;
+        let sss = parseFloat(document.getElementById('optSss').value) || 72;
+
+        for(let i=0; i < state.playersCount; i++) {
+            let name = document.getElementById('pName'+i).value.trim();
+            let pObj = {
+                id: i,
+                name: name || `Joueur ${i+1}`,
+                color: `var(--p${i+1})`,
+                team: parseInt(document.getElementById('pTeam'+i).value),
+                scores: [], hcp: 0, playingHcp: 0
+            };
+            
+            if(isNet) {
+                let exactHcp = parseFloat(document.getElementById('pHcp'+i).value.replace(',', '.'));
+                if(isNaN(exactHcp) || exactHcp < -10 || exactHcp > 54) {
+                    alert(`Veuillez entrer un index valide pour ${pObj.name}.`);
+                    return; 
+                }
+                pObj.hcp = exactHcp;
+                pObj.playingHcp = Math.round((exactHcp * slope / 113) + (sss - totalCoursePar));
+            }
+            state.players.push(pObj);
+        }
+
+        if (!selectedCourse) {
+            document.getElementById('courseNameModal').style.display = 'flex';
+        } else {
+            finalizeSetupFlow(true, selectedCourse);
+        }
+    }
+
+    function finalizeSetupFlow(saveCourseLocally, existingName = null) {
+        document.getElementById('courseNameModal').style.display = 'none';
+        
+        let finalCourseName = existingName;
+        if (!existingName && saveCourseLocally) {
+            finalCourseName = document.getElementById('newCourseNameInput').value.trim();
+            if(finalCourseName) saveCurrentCourse(finalCourseName);
+        }
+
+        const isNet = document.getElementById('modeNet').checked;
+
+        state.options = {
+            mode: isNet ? 'net' : 'brut',
+            holes: document.querySelector('input[name="holes"]:checked').value,
+            slope: parseFloat(document.getElementById('optSlope').value) || 113,
+            sss: parseFloat(document.getElementById('optSss').value) || 72,
+            courseName: finalCourseName || ""
+        };
+
+        state.teams[0].name = document.getElementById('team1Name').value.trim() || 'Équipe 1';
+        state.teams[1].name = document.getElementById('team2Name').value.trim() || 'Équipe 2';
+
+        savePlayersLocally();
+
+        state.course = [];
+        let start = 1, end = 18;
+        if(state.options.holes === 'front') end = 9;
+        if(state.options.holes === 'back') start = 10;
+        for(let i=start; i<=end; i++) {
+            let hcpInput = document.getElementById('hcp'+i);
+            let hcpVal = hcpInput.value === '🔒' ? hcpInput.dataset.old : hcpInput.value;
+            hcpVal = parseInt(hcpVal);
+            state.course.push({
+                num: i,
+                par: parseInt(document.getElementById('par'+i).value) || 4,
+                hcp: isNet ? (isNaN(hcpVal) ? 1 : hcpVal) : null
+            });
+        }
+
+        renderRecap();
+        showScreen('screenRecap');
+    }
+
+    function renderRecap() {
+        const cName = state.options.courseName ? `<br><span style="font-size:0.9rem; color:#636e72">📍 ${state.options.courseName}</span>` : '';
+        document.getElementById('recapOptionsGrid').innerHTML = `
+            <div><b>Mode :</b> <span style="text-transform:capitalize">${state.options.mode}</span></div>
+            <div><b>Trous :</b> ${state.options.holes.toUpperCase()}${cName}</div>
+            ${state.options.mode === 'net' ? `
+            <div style="grid-column: 1 / -1; margin-top:5px; padding-top:10px; border-top:1px solid #ddd;">
+                <b>Étalonnage :</b> Slope ${state.options.slope} / SSS ${state.options.sss}
+            </div>` : ''}
+        `;
+        
+        let pListHtml = '';
+        state.teams.forEach(team => {
+            const tPlayers = state.players.filter(p => p.team === team.id);
+            if (tPlayers.length > 0) {
+                pListHtml += `<div style="font-weight:bold; color:var(--primary-dark); margin-top:10px;">${team.name}</div>`;
+                tPlayers.forEach(p => {
+                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b> ➜ Jeu: <b>${p.playingHcp}</b>)` : '';
+                    pListHtml += `<div style="padding:3px 0; margin-left:10px;"><span class="dot" style="background:${p.color}"></span> ${p.name} <span style="font-size:0.85rem; color:#636e72">${hcpText}</span></div>`;
+                });
+            }
+        });
+        document.getElementById('recapPlayersList').innerHTML = pListHtml;
+    }
+
+    function startGame() {
+        state.currentHoleIndex = 0;
+        state.gameData = [];
+        localStorage.removeItem('team_saved_game_state');
+        loadHole();
+        showScreen('screenGame');
+    }
+
+    function calculateCR(player, hole) {
+        if(state.options.mode === 'brut') return 0;
+        const hcpJeu = Math.max(0, player.playingHcp);
+        let cr = Math.floor(hcpJeu / 18);
+        if((hcpJeu % 18) >= hole.hcp) { cr++; }
+        return cr;
+    }
+
+    // Fonction Globale de Recalcul des Scores basée sur state.gameData
+    function recalculateAllScores() {
+        state.players.forEach(p => p.scores = []); // Reset complet
+        
+        for (let i = 0; i < state.gameData.length; i++) {
+            const record = state.gameData[i];
+            const hole = state.course[i];
+            
+            state.players.forEach(p => {
+                let val = record[p.id];
+                if (val === undefined) return;
+                
+                const cr = calculateCR(p, hole);
+                let isCross = (val === 'X');
+                let brut = isCross ? (hole.par + 4) : parseInt(val);
+                let net = brut - cr; 
+                
+                if (state.options.mode === 'net' && net > hole.par + 2 && !isCross) { 
+                    net = hole.par + 2; brut = net + cr; 
+                }
+                let stb = Math.max(0, 2 + hole.par - net);
+                
+                p.scores[i] = { brut: brut, net: net, stb: stb, display: isCross ? 'X' : brut, isCross: isCross };
+            });
+        }
+    }
+
+    // Calcule les points d'équipe pour un trou spécifique avec la logique 1v1
+    function calculateHolePoints(holeIndex) {
+        let t1 = [], t2 = [];
+        state.players.forEach(p => {
+            if(p.scores[holeIndex]) {
+                let score = state.options.mode === 'net' ? p.scores[holeIndex].net : p.scores[holeIndex].brut;
+                let isCross = p.scores[holeIndex].isCross;
+                if(p.team === 1) t1.push({id: p.id, score: score, isCross: isCross});
+                if(p.team === 2) t2.push({id: p.id, score: score, isCross: isCross});
+            }
+        });
+        
+        // Tri : Un vrai score gagne toujours contre une Croix (X), même si l'autre a une Croix plus faible.
+        const sortFn = (a, b) => {
+            if (a.isCross && !b.isCross) return 1; // b passe devant
+            if (!a.isCross && b.isCross) return -1; // a passe devant
+            if (a.score === b.score) return Math.random() - 0.5; // Hasard si stricte égalité
+            return a.score - b.score; // Plus petit est meilleur
+        };
+
+        t1.sort(sortFn);
+        t2.sort(sortFn);
+        
+        let ptsT1 = 0, ptsT2 = 0;
+        let p1Winner = 0, p2Winner = 0; // 1 = Eq1 gagne, 2 = Eq2 gagne, 0 = Egalité
+        
+        if(t1.length > 0 && t2.length > 0) {
+            // Match 1: N°1 vs N°1 (Le meilleur de chaque équipe)
+            if (t1[0].isCross && t2[0].isCross) {
+                // Egalité (2 croix)
+            } else if (t1[0].isCross) {
+                ptsT2++; p1Winner = 2;
+            } else if (t2[0].isCross) {
+                ptsT1++; p1Winner = 1;
+            } else if(t1[0].score < t2[0].score) { 
+                ptsT1++; p1Winner = 1; 
+            } else if(t2[0].score < t1[0].score) { 
+                ptsT2++; p1Winner = 2; 
+            }
+            
+            // Match 2: N'A LIEU QUE SI CHAQUE ÉQUIPE A AU MOINS 2 JOUEURS (Match à 4)
+            let is4Players = (t1.length > 1 && t2.length > 1);
+            
+            if (is4Players) {
+                let s1 = t1[1];
+                let s2 = t2[1];
+                
+                if (s1.isCross && s2.isCross) {
+                    // Egalité
+                } else if (s1.isCross) {
+                    ptsT2++; p2Winner = 2;
+                } else if (s2.isCross) {
+                    ptsT1++; p2Winner = 1;
+                } else if(s1.score < s2.score) { 
+                    ptsT1++; p2Winner = 1; 
+                } else if(s2.score < s1.score) { 
+                    ptsT2++; p2Winner = 2; 
+                }
+            }
+        }
+        
+        return { ptsT1, ptsT2, t1, t2, p1Winner, p2Winner };
+    }
+
+    function getTeamPointsUpTo(teamId, holesPlayedIndex) {
+        let totalPts = 0;
+        for(let i=0; i < holesPlayedIndex; i++) {
+            let res = calculateHolePoints(i);
+            if (teamId === 1) totalPts += res.ptsT1;
+            if (teamId === 2) totalPts += res.ptsT2;
+        }
+        return totalPts;
+    }
+
+    function updateDashboard() {
+        const isBrut = state.options.mode === 'brut';
+        
+        document.querySelectorAll('.col-net').forEach(el => el.style.display = isBrut ? 'none' : 'table-cell');
+
+        if(state.currentHoleIndex === 0) {
+            document.getElementById('prevHoleDashboard').style.display = 'none';
+            document.getElementById('prevHoleEmpty').style.display = 'block';
+            return;
+        }
+
+        document.getElementById('prevHoleDashboard').style.display = 'block';
+        document.getElementById('prevHoleEmpty').style.display = 'none';
+        
+        const bLive = document.getElementById('bodyLiveDashboard');
+        bLive.innerHTML = '';
+        
+        // On analyse le trou précédent
+        const holeData = calculateHolePoints(state.currentHoleIndex - 1);
+        
+        state.players.forEach(p => {
+            const s = p.scores[state.currentHoleIndex - 1];
+            if(!s) return;
+            
+            let ptsWon = 0;
+            let matchClass = '';
+            let matchIcon = '';
+            
+            if(holeData.t1.length > 0 && holeData.t2.length > 0) {
+                // Match 1
+                if(p.id === holeData.t1[0].id || p.id === holeData.t2[0].id) {
+                    matchClass = 'match1-bg';
+                    matchIcon = '🥇 ';
+                    if(p.team === 1 && holeData.p1Winner === 1) ptsWon++;
+                    if(p.team === 2 && holeData.p1Winner === 2) ptsWon++;
+                }
+                
+                // Match 2 (seulement si 4 joueurs répartis 2v2)
+                if (holeData.t1.length > 1 && holeData.t2.length > 1) {
+                    if(p.id === holeData.t1[1].id || p.id === holeData.t2[1].id) {
+                        matchClass = 'match2-bg'; 
+                        matchIcon += '🥈 ';
+                        if(p.team === 1 && holeData.p2Winner === 1) ptsWon++;
+                        if(p.team === 2 && holeData.p2Winner === 2) ptsWon++;
+                    }
+                }
+            }
+
+            // Total Brut du joueur : La croix EST intégrée et s'additionne (Par + 4).
+            let totB = p.scores.slice(0, state.currentHoleIndex).reduce((sum, score) => sum + score.brut, 0);
+
+            let htmlRow = `<tr class="${matchClass}">
+                <td class="text-left" style="color:${p.color}; font-weight:bold;">${matchIcon} ${p.name.substring(0,8)}</td>
+                <td class="score-brut">${s.display}</td>`;
+                
+            if (!isBrut) {
+                const stbColor = s.stb >= 2 ? 'var(--primary-dark)' : (s.stb === 0 ? 'var(--crimson)' : '#636e72');
+                htmlRow += `<td style="font-weight:700; color:${stbColor}">${s.stb}</td>`;
+            }
+            
+            let ptsColor = ptsWon > 0 ? 'var(--primary-dark)' : '#636e72';
+            htmlRow += `<td style="font-weight:bold;">${totB > 0 ? totB : '-'}</td><td style="font-weight:bold; color:${ptsColor}; font-size:1.1rem;">${ptsWon > 0 ? '+'+ptsWon : '0'}</td></tr>`;
+            bLive.innerHTML += htmlRow;
+        });
+
+        // Scores Équipes
+        const tsDiv = document.getElementById('dashboardTeamScores');
+        const t1Score = getTeamPointsUpTo(1, state.currentHoleIndex);
+        const t2Score = getTeamPointsUpTo(2, state.currentHoleIndex);
+        
+        tsDiv.innerHTML = `
+            <div class="team-score-item" style="color:var(--blue); border-right: 1px solid #ddd;">
+                ${state.teams[0].name} <br>
+                <span style="font-size:1.3rem">${t1Score} pt${t1Score > 1 ? 's' : ''}</span>
+            </div>
+            <div class="team-score-item" style="color:var(--orange)">
+                ${state.teams[1].name} <br>
+                <span style="font-size:1.3rem">${t2Score} pt${t2Score > 1 ? 's' : ''}</span>
+            </div>
+        `;
+    }
+
+    function loadHole() {
+        if(state.currentHoleIndex >= state.course.length) { finishGame(); return; }
+        
+        const hole = state.course[state.currentHoleIndex];
+        document.getElementById('stepIndicator').textContent = `Trou ${hole.num} (${state.currentHoleIndex+1}/${state.course.length})`;
+        
+        updateDashboard();
+
+        document.getElementById('holeInfo').innerHTML = `
+            <span class="badge" style="background:var(--primary); font-size:0.9rem; padding:6px 12px;">TROU ${hole.num}</span>
+            <span class="badge" style="background:#636e72; font-size:0.9rem; padding:6px 12px;">PAR ${hole.par}</span>
+            ${state.options.mode === 'net' ? `<span class="badge" style="background:var(--violet); font-size:0.9rem; padding:6px 12px;">HCP ${hole.hcp}</span>` : ''}
+        `;
+
+        const inputDiv = document.getElementById('holeInputs');
+        inputDiv.innerHTML = '';
+        
+        const pastRecord = state.gameData[state.currentHoleIndex] || {};
+        
+        state.players.forEach(p => {
+            const cr = calculateCR(p, hole);
+            const val = pastRecord[p.id] || '';
+            const tColor = p.team === 1 ? 'var(--blue)' : 'var(--orange)';
+            
+            inputDiv.innerHTML += `
+                <div class="score-row">
+                    <span class="dot" style="background:${p.color}; margin:0;"></span>
+                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} <span style="font-size:0.75rem; color:${tColor};">(${p.team === 1 ? 'Éq 1' : 'Éq 2'})</span></span>
+                    <div style="display:flex; gap:4px;">
+                        <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="p-score-input" data-pid="${p.id}" placeholder="Score" value="${val}" style="width:100%; min-width:0; text-align:center; padding:8px 5px;">
+                        <button class="btn-secondary" style="padding:0; width:35px; font-weight:bold; color:var(--crimson); flex-shrink:0;" onclick="this.previousElementSibling.value='X'">X</button>
+                    </div>
+                    <div style="text-align:center; color:#636e72; background:#f1f2f6; padding:5px; border-radius:5px;">
+                        ${state.options.mode === 'net' ? cr : '🔒'}
+                    </div>
+                </div>`;
+        });
+        
+        const btnPrev = document.getElementById('btnPrevHole');
+        if (state.currentHoleIndex === 0) {
+            btnPrev.textContent = '← Récap';
+            btnPrev.onclick = () => showScreen('screenRecap');
+        } else {
+            btnPrev.textContent = '← Précédent';
+            btnPrev.onclick = prevHole;
+        }
+
+        document.getElementById('btnNextHole').textContent = (state.currentHoleIndex === state.course.length - 1) ? 'Terminer 🏆' : 'Valider ➜';
+    }
+
+    function prevHole() {
+        if(state.currentHoleIndex > 0) {
+            state.currentHoleIndex--;
+            loadHole();
+        }
+    }
+
+    function nextHole() {
+        const inputs = document.querySelectorAll('.p-score-input');
+        let record = {};
+        
+        let hasError = false;
+        
+        for(let input of inputs) {
+            let val = input.value.trim().toUpperCase();
+            if(!val || (val !== 'X' && isNaN(parseInt(val)))) { 
+                hasError = true; 
+                break;
+            }
+            record[input.dataset.pid] = val;
+        }
+        
+        if (hasError) {
+            showValidationModal();
+            return;
+        }
+
+        state.gameData[state.currentHoleIndex] = record;
+        
+        recalculateAllScores();
+        
+        state.currentHoleIndex++;
+        saveGameLocally();
+        loadHole();
+    }
+
+
+    // ECRAN ÉDITION
+    function openEditMode() {
+        backupGameData = JSON.parse(JSON.stringify(state.gameData));
+        const sel = document.getElementById('editHoleSelect');
+        sel.innerHTML = '';
+        for(let i=0; i < state.gameData.length; i++) {
+            sel.innerHTML += `<option value="${i}">Trou ${state.course[i].num}</option>`;
+        }
+        showScreen('screenEdit');
+        currentEditIndex = 0;
+        sel.value = 0;
+        loadEditHole(0);
+    }
+
+    function changeEditHole(index) {
+        if(!saveCurrentEditHoleLocally()) {
+            document.getElementById('editHoleSelect').value = currentEditIndex;
+            return;
+        }
+        currentEditIndex = parseInt(index);
+        loadEditHole(currentEditIndex);
+    }
+
+    function saveCurrentEditHoleLocally() {
+        const inputs = document.querySelectorAll('.edit-score-input');
+        let record = {};
+        for(let input of inputs) {
+            let val = input.value.trim().toUpperCase();
+            if(!val || (val !== 'X' && isNaN(parseInt(val)))) { 
+                showValidationModal();
+                return false; 
+            }
+            record[input.dataset.pid] = val;
+        }
+        state.gameData[currentEditIndex] = record;
+        return true;
+    }
+
+    function loadEditHole(index) {
+        const hole = state.course[index];
+        const record = state.gameData[index];
+        
+        document.getElementById('editHoleInfo').innerHTML = `
+            <span class="badge" style="background:var(--primary); font-size:0.9rem; padding:6px 12px;">TROU ${hole.num}</span>
+            <span class="badge" style="background:#636e72; font-size:0.9rem; padding:6px 12px;">PAR ${hole.par}</span>
+            ${state.options.mode === 'net' ? `<span class="badge" style="background:var(--violet); font-size:0.9rem; padding:6px 12px;">HCP ${hole.hcp}</span>` : ''}
+        `;
+
+        const inputDiv = document.getElementById('editHoleInputs');
+        inputDiv.innerHTML = '';
+        
+        state.players.forEach(p => {
+            const cr = calculateCR(p, hole);
+            const pastVal = record[p.id] || '';
+            const tColor = p.team === 1 ? 'var(--blue)' : 'var(--orange)';
+            
+            inputDiv.innerHTML += `
+                <div class="score-row">
+                    <span class="dot" style="background:${p.color}; margin:0;"></span>
+                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} <span style="font-size:0.75rem; color:${tColor};">(${p.team === 1 ? 'Éq 1' : 'Éq 2'})</span></span>
+                    <div style="display:flex; gap:4px;">
+                        <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="edit-score-input" data-pid="${p.id}" placeholder="Score" value="${pastVal}" style="width:100%; min-width:0; text-align:center; padding:8px 5px;">
+                        <button class="btn-secondary" style="padding:0; width:35px; font-weight:bold; color:var(--crimson); flex-shrink:0;" onclick="this.previousElementSibling.value='X'">X</button>
+                    </div>
+                    <div style="text-align:center; color:#636e72; background:#f1f2f6; padding:5px; border-radius:5px;">
+                        ${state.options.mode === 'net' ? cr : '🔒'}
+                    </div>
+                </div>`;
+        });
+    }
+
+    function saveAndCloseEdit() {
+        if(!saveCurrentEditHoleLocally()) return;
+        recalculateAllScores(); 
+        saveGameLocally(); 
+        finishGame(); 
+    }
+
+    function cancelEdit() {
+        state.gameData = backupGameData; 
+        recalculateAllScores();
+        finishGame();
+    }
+
+
+    // RESULTATS
+    function generateHolesTableImageStyle(holesSubArray, startIndex) {
+        if(holesSubArray.length === 0) return '';
+        
+        let groups = [];
+        let grandTotalPar = 0;
+        
+        for(let i=0; i<holesSubArray.length; i+=3) {
+            let end = Math.min(i+2, holesSubArray.length-1);
+            let label = "";
+            let parLabel = "";
+            
+            for(let j=i; j<=end; j++) {
+                label += holesSubArray[j].num; // ex: 123 sans tiret
+                parLabel += holesSubArray[j].par; // ex: 443
+                grandTotalPar += holesSubArray[j].par;
+            }
+            groups.push({ s: i, e: end, label: label, parLabel: parLabel });
+        }
+
+        let html = `<div class="table-responsive"><table class="table-image-style">`;
+        
+        // Entête Trous
+        html += `<thead><tr><th style="text-align:left; border-bottom:none; padding-bottom:0;">Trous</th>`;
+        groups.forEach(g => { html += `<th style="border-bottom:none; padding-bottom:0;">${g.label}</th>`; });
+        html += `<th style="border-bottom:none; padding-bottom:0;">Total</th></tr>`;
+
+        // Ligne Par (en dessous de Trous)
+        html += `<tr><th style="text-align:left; color:#636e72; font-size:0.75rem; padding-top:2px;">Par</th>`;
+        groups.forEach(g => { html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; letter-spacing:1px;">${g.parLabel}</th>`; });
+        html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px;">${grandTotalPar}</th></tr></thead><tbody>`;
+
+
+        state.players.forEach(p => {
+            html += `<tr><td class="player-name" style="color:${p.color}; border-left: 4px solid ${p.color};">${p.name.substring(0,6)}</td>`;
+            
+            let blockBrut = 0, blockStd = 0;
+
+            groups.forEach(g => {
+                let sBrutStr = "", sStdStr = "";
+                for(let idx = g.s; idx <= g.e; idx++) {
+                    const globalIdx = startIndex + idx;
+                    const s = p.scores[globalIdx];
+                    if(s) { 
+                        // Plus de "X", on affiche toujours sa valeur Brut
+                        sBrutStr += s.brut;
+                        sStdStr += s.stb;
+                        
+                        blockBrut += s.brut; 
+                        blockStd += s.stb;
+                    }
+                    else { 
+                        sBrutStr += '-'; sStdStr += '-'; 
+                    }
+                }
+                
+                html += `<td>
+                    <div class="brut-score" style="letter-spacing:1px;">${sBrutStr}</div>
+                    ${state.options.mode === 'net' ? `<div class="net-score" style="letter-spacing:1px; margin-top:-2px;">${sStdStr}</div>` : ''}
+                </td>`;
+            });
+            
+            html += `<td>
+                <div class="brut-score">${blockBrut > 0 ? blockBrut : '-'}</div>
+                ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px;">${blockStd > 0 ? blockStd : '-'}</div>` : ''}
+            </td></tr>`;
+        });
+        
+        html += `</tbody></table></div>`;
+        return html;
+    }
+
+    function finishGame() {
+        showScreen('screenResults');
+        localStorage.removeItem('team_saved_game_state');
+        
+        const holesPlayed = state.gameData.length;
+        
+        // Podium Teams
+        const t1Score = getTeamPointsUpTo(1, holesPlayed);
+        const t2Score = getTeamPointsUpTo(2, holesPlayed);
+        
+        const pod = document.getElementById('podium');
+        pod.innerHTML = '';
+        
+        const t1 = { id: 1, name: state.teams[0].name, pts: t1Score };
+        const t2 = { id: 2, name: state.teams[1].name, pts: t2Score };
+        
+        let sortedTeams = [t1, t2].sort((a,b) => b.pts - a.pts);
+        
+        const maxPts = sortedTeams[0].pts;
+        const minPts = sortedTeams[1].pts;
+        const range = Math.max(1, maxPts - minPts);
+        
+        sortedTeams.forEach((t, i) => {
+            const isWinner = i === 0 && t.pts !== sortedTeams[1].pts;
+            const isTie = t.pts === sortedTeams[0].pts && t.pts === sortedTeams[1].pts;
+            const medal = isTie ? '🤝' : (isWinner ? '🏆' : '🥈');
+            
+            let height = 40;
+            if(!isTie) {
+                let proportion = (t.pts - minPts)/range; 
+                height = 40 + (proportion * 60);
+            } else { height = 80; }
+            
+            pod.innerHTML += `
+                <div class="podium-col">
+                    <div class="podium-name">${t.name}</div>
+                    <div class="podium-bar t-${t.id}" style="height:${height}%;">
+                        <div class="podium-medal">${medal}</div>
+                        ${t.pts} pt${t.pts > 1 ? 's' : ''}
+                    </div>
+                </div>`;
+        });
+
+        // Résumé Joueurs
+        const tSummary = document.getElementById('tableSummary');
+        let htmlSum = `<thead><tr><th class="text-left">Jou.</th><th>Brut</th>`;
+        if(state.options.mode === 'net') htmlSum += `<th>Net</th><th>Stb</th>`;
+        htmlSum += `</tr></thead><tbody>`;
+        
+        state.players.forEach(p => {
+            let totB = 0, totNet = 0, totStb = 0;
+            // La Croix EST intégrée à totB et totNet (Par+4)
+            p.scores.slice(0, holesPlayed).forEach(s => { 
+                totB += s.brut; 
+                totNet += s.net; 
+                totStb += s.stb; 
+            });
+            
+            htmlSum += `<tr>
+                <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,6)}</td>
+                <td class="score-brut">${totB > 0 ? totB : '-'}</td>`;
+            if(state.options.mode === 'net') {
+                htmlSum += `<td class="score-net">${totNet > 0 ? totNet : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
+            }
+            htmlSum += `</tr>`;
+        });
+        tSummary.innerHTML = htmlSum + `</tbody>`;
+
+        // Détail Trous Style Image avec Titre (Brut / Std)
+        const container = document.getElementById('groupedHolesContainer');
+        container.innerHTML = '';
+        
+        const coursePlayed = state.course.slice(0, holesPlayed);
+        const allerHoles = coursePlayed.filter(h => h.num <= 9);
+        const retourHoles = coursePlayed.filter(h => h.num > 9);
+        
+        if(allerHoles.length > 0) {
+            container.innerHTML += generateHolesTableImageStyle(allerHoles, 0);
+        }
+        if(retourHoles.length > 0) {
+            container.innerHTML += `<div style="margin-top:20px;"></div>` + generateHolesTableImageStyle(retourHoles, allerHoles.length);
+        }
+    }
+
+    function exportCSV() {
+        let headers = "Trou,Par,Hcp," + state.players.map(p => `${p.name} Brut` + (state.options.mode === 'net' ? `,${p.name} Net,${p.name} Stb` : '')).join(",") + "\n";
+        let csv = headers;
+        const holesPlayed = state.gameData.length;
+        
+        state.course.slice(0, holesPlayed).forEach((c, i) => {
+            let row = `${c.num},${c.par},${c.hcp || '-'},`;
+            let pData = state.players.map(p => {
+                const s = p.scores[i];
+                if(!s) return state.options.mode === 'net' ? "-,-,-" : "-";
+                // X n'est plus exporté en texte, c'est la vraie valeur brute/nette
+                return state.options.mode === 'net' ? `${s.brut},${s.net},${s.stb}` : `${s.brut}`;
+            });
+            csv += row + pData.join(",") + "\n";
+        });
+        
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `equipe-resultats.csv`; a.click();
+    }
+
+    function takeScreenshot() {
+        const target = document.getElementById('resultsCapture');
+        html2canvas(target, { scale: 2, backgroundColor: '#f7f8fa' }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `equipe-resultats-${new Date().getTime()}.png`;
+            link.href = canvas.toDataURL(); link.click();
+        });
+    }
+
+    window.onload = init;
+</script>
+
+</body>
+</html>

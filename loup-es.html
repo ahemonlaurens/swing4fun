@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wolf Golf - Gestor Pro</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #72bf44;
+            --primary-dark: #5a9936;
+            --orange: #ff4200; --violet: #7536f0;
+            --teal: #1acfbf; --blue: #05b9f0;
+            --crimson: #d6084d; --lime: #d9fa4f;
+            --bg: #f7f8fa; --card-bg: #ffffff;
+            --text: #2d3436;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+            
+            /* Colores de los jugadores */
+            --p1: #1e88e5;
+            --p2: #e53935; --p3: #43a047; --p4: #fb8c00;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        /* BLOQUEO DEL PULL-TO-REFRESH EN MÓVILES */
+        html, body { 
+            overscroll-behavior: none; 
+            overscroll-behavior-y: none;
+            font-family: 'Quicksand', sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            line-height: 1.5; 
+            font-size: 1.06rem; 
+        }
+
+        /* Navigation & Layout */
+        .container { max-width: 900px; margin: 0 auto; padding: 80px 15px 40px; }
+        .screen { display: none; animation: fadeIn 0.4s ease-out; }
+        .screen.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        header {
+            position: fixed; top: 0; width: 100%; height: 65px; background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center;
+            justify-content: space-between; padding: 0 20px; z-index: 1000;
+        }
+        .logo { font-weight: 700; font-size: 1.2rem; color: var(--primary-dark); }
+        .step-indicator { font-weight: 600; color: #636e72; font-size: 0.95rem; }
+
+        /* UI Cards */
+        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: var(--shadow); }
+        h2 { font-size: 1.28rem; margin-top: 0; color: #2d3436; border-left: 4px solid var(--primary); padding-left: 12px; }
+        h3 { font-size: 1.1rem; color: var(--primary-dark); margin-bottom: 15px; text-align: center; }
+
+        /* Form Controls */
+        .form-group { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .form-label { flex: 1; }
+        .form-desc { font-size: 0.92rem; color: #636e72; display: block; }
+        
+        input[type="text"], input[type="number"], select {
+            border: 2px solid #dfe6e9; border-radius: 8px; padding: 8px 12px;
+            font-family: inherit; font-size: 1rem; outline: none; transition: 0.2s;
+        }
+        input[type="number"] { text-align: center; }
+        input:focus, select:focus { border-color: var(--primary); }
+        input:disabled { background: #f1f2f6; cursor: not-allowed; color: #b2bec3; border-color: #eee; text-align: center; }
+
+        .btn-group { display: flex; gap: 5px; background: #f1f2f6; padding: 4px; border-radius: 10px; }
+        .btn-group input { display: none; }
+        .btn-group label { padding: 6px 15px; cursor: pointer; border-radius: 8px; font-weight: 600; font-size: 0.95rem; transition: 0.2s; text-align: center; flex: 1;}
+        .btn-group input:checked + label { background: var(--primary); color: white; }
+
+        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        /* Tables */
+        .table-responsive { overflow-x: auto; width: 100%; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { font-size: 0.9rem; text-transform: uppercase; color: #636e72; padding: 10px 5px; text-align: center; }
+        td { padding: 10px 5px; border-bottom: 1px solid #f1f2f6; text-align: center; vertical-align: middle; }
+        .text-left { text-align: left; }
+        .disabled-cell { opacity: 0.5; background: #f9f9f9; }
+        
+        .score-brut { font-weight: 700; color: var(--text); }
+        .score-net { font-weight: 600; color: var(--blue); }
+
+        /* Tabla final comprimida */
+        #tableFinalScores, #tableSummary { table-layout: fixed; width: 100%; font-size: 0.95rem; }
+        #tableFinalScores th, #tableFinalScores td, #tableSummary th, #tableSummary td { padding: 8px 2px; word-wrap: break-word; }
+
+        /* Grid for Course */
+        .course-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .course-grid { grid-template-columns: 1fr; } }
+
+        /* Buttons */
+        .btn-main { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--primary), var(--teal)); color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: transform 0.1s; }
+        .btn-main:active { transform: scale(0.98); }
+        .btn-secondary { background: #dfe6e9; color: #2d3436; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; display: inline-block; }
+        
+        /* Elementos visuales */
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: white; }
+        .dot { height: 14px; width: 14px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 8px; flex-shrink: 0; }
+        .positive { color: var(--primary-dark); font-weight: 700; }
+        .negative { color: var(--crimson); font-weight: 700; }
+
+        /* Juego & Lobo */
+        .wolf-banner { background: linear-gradient(45deg, #fff3e0, #ffe0b2); padding: 15px; border-radius: 12px; border: 2px solid var(--orange); margin: 15px 0; text-align: center; font-size: 1.1rem; font-weight: 700; }
+        .score-row { display: grid; grid-template-columns: auto 1fr 100px 50px; align-items: center; gap: 8px; margin-bottom: 15px; }
+        
+        .partner-selector { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .partner-btn { flex: 1; min-width: 100px; padding: 12px; border: 2px solid #dfe6e9; border-radius: 10px; background: white; cursor: pointer; font-weight: 700; text-align: center; transition: 0.2s; }
+        .partner-btn.selected { border-color: var(--primary); background: #f0f9eb; }
+        .partner-btn.solo { border-color: var(--orange); color: var(--orange); }
+        .partner-btn.gold { border-color: #ffd700; background: linear-gradient(45deg, #fff, #fff9e6); }
+        .partner-btn.gold.selected { background: linear-gradient(45deg, var(--orange), var(--lime)); color: black; border-color: transparent; }
+
+        /* Podium Fijo e Idéntico */
+        #resultsCapture { padding: 20px; background: var(--bg); border-radius: 12px; }
+        .podium { display: flex; align-items: flex-end; justify-content: center; gap: 15px; margin: 40px 0 20px 0; height: 250px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+        .podium-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; transition: height 0.5s ease; }
+        .podium-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 8px; text-align: center; text-transform: uppercase; }
+        .podium-bar { width: 100%; max-width: 60px; border-radius: 8px 8px 0 0; display: flex; flex-direction: column; justify-content: flex-start; padding-top: 10px; color: white; font-weight: 700; text-align: center; position: relative; margin: 0 auto; }
+        .podium-medal { font-size: 1.5rem; margin-bottom: 5px; }
+        
+        .p-1 { background: linear-gradient(45deg, var(--orange), var(--lime)); color: #000; box-shadow: 0 -4px 15px rgba(255,66,0,0.3); }
+        .p-2 { background: var(--violet); }
+        .p-3 { background: var(--teal); }
+        .p-4 { background: #b2bec3; }
+
+        /* Reglas */
+        .rules-content { font-size: 1.05rem; line-height: 1.6; color: #444; background: #fdfdfd; padding: 18px; border-radius: 8px; border: 1px solid #eee; margin-top: 10px; }
+        .rules-content ul { padding-left: 20px; margin-top: 10px; }
+        .rules-content li { margin-bottom: 10px; }
+
+        /* Equilibrio de las columnas del Campo */
+        #tableAller th:nth-child(2), #tableAller th:nth-child(3),
+        #tableRetour th:nth-child(2), #tableRetour th:nth-child(3),
+        #tableAller td:nth-child(2), #tableAller td:nth-child(3),
+        #tableRetour td:nth-child(2), #tableRetour td:nth-child(3) {
+            width: 40%;
+        }
+
+        /* Papelera desactivada */
+        #btnDeleteCourse:disabled {
+            background: #b2bec3;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="logo">🐺 El Juego del Lobo</div>
+    <div class="step-indicator" id="stepIndicator">Configuración</div>
+</header>
+
+<div class="container">
+    
+    <div id="screenSetup" class="screen active">
+        
+        <div class="card">
+            <h2 onclick="toggleRules()" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
+                Reglas del Lobo <span id="rulesToggleIcon" style="font-size:0.9rem;">▶ Mostrar</span>
+            </h2>
+            <div id="rulesContent" class="rules-content" style="display:none;">
+                <p><strong>El Principio:</strong> El juego es para 4 jugadores. En cada hoyo, se designa a un jugador diferente como el <b>"Lobo"</b>.</p>
+                
+                <p><strong>1. Formar equipos:</strong> En cada hoyo, el Lobo elige un compañero para jugar <b>2 contra 2</b>. Si se siente seguro, puede elegir enfrentarse a los demás solo, como <b>Lobo Solitario (1 contra 3)</b>.</p>
+                
+                <p><strong>2. Ganar el hoyo:</strong> Solo se compara la <b>mejor puntuación individual</b> de cada bando (se ignora la peor puntuación del equipo). El equipo con la mejor puntuación (en Bruto o Neto, según su configuración) gana el hoyo.</p>
+                
+                <p><strong>3. Los Puntos:</strong></p>
+                <ul>
+                    <li><b>En 2 contra 2:</b> Los 2 jugadores del equipo ganador suman <b>+1 pt</b> cada uno (los 2 perdedores obtienen <b>-1 pt</b>).</li>
+                    <li><b>En Lobo Solitario (1 contra 3):</b> ¡La apuesta base se <b>duplica</b>!
+                        <ul style="margin-top: 5px; margin-bottom: 5px; list-style-type: circle;">
+                            <li><i>Si el Lobo gana solo:</i> se lleva los puntos de los otros 3 y suma <b>+6 pts</b> (los demás obtienen <b>-2 pts</b>).</li>
+                            <li><i>Si el Lobo pierde:</i> los 3 jugadores restantes suman <b>+2 pts</b> cada uno (y el Lobo obtiene <b>-6 pts</b>).</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <p><strong>Reglas Especiales:</strong></p>
+                <ul>
+                    <li><span class="badge" style="background:linear-gradient(45deg, var(--orange), var(--lime)); color:#000;">LOBO DE ORO</span> Si se anuncia <i>antes</i> del primer golpe del hoyo, ¡el Lobo juega en Solitario y la apuesta se <b>triplica</b>! <i>(Si el Lobo gana: +9 pts / Si pierde: -9 pts. Los otros 3 jugadores ganan +3 pts cada uno)</i>.</li>
+                    <li><span class="badge" style="background:var(--orange)">CARRY OVER</span> En caso de empate perfecto entre las mejores puntuaciones, nadie suma puntos y los puntos en juego se acumulan para el siguiente hoyo.</li>
+                    <li><span class="badge" style="background:var(--crimson)">REGLA FINAL</span> En los 2 últimos hoyos (o el último hoyo de un campo de 9), el jugador que vaya último en la clasificación se convierte automáticamente en el Lobo.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Opciones de la Partida</h2>
+            <div class="form-group">
+                <div class="form-label">Modo de cálculo<span class="form-desc">Bruto (real) o Neto (hándicap)</span></div>
+                <div class="btn-group">
+                    <input type="radio" name="calcMode" id="modeBrut" value="brut" checked onchange="updateCalcMode()"><label for="modeBrut">Bruto</label>
+                    <input type="radio" name="calcMode" id="modeNet" value="net" onchange="updateCalcMode()"><label for="modeNet">Neto</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-label">Campo<span class="form-desc">Selección de hoyos</span></div>
+                <div class="btn-group">
+                    <input type="radio" name="holes" id="h18" value="18" checked onchange="updateCourseVisibility()"><label for="h18">18</label>
+                    <input type="radio" name="holes" id="hFront" value="front" onchange="updateCourseVisibility()"><label for="hFront">Ida</label>
+                    <input type="radio" name="holes" id="hBack" value="back" onchange="updateCourseVisibility()"><label for="hBack">Vuelta</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Carry Over<span class="form-desc">Puntos acumulados en empate</span></div>
+                <label class="switch"><input type="checkbox" id="optCarry"><span class="slider"></span></label>
+            </div>
+            <div class="form-group">
+                <div class="form-label">Lobo de Oro<span class="form-desc">Lobo Solitario antes de salir (x3)</span></div>
+                <label class="switch"><input type="checkbox" id="optGolden"><span class="slider"></span></label>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Los Jugadores</h2>
+            <div id="playersList"></div>
+        </div>
+
+        <div class="card">
+            <h2>El Campo</h2>
+
+            <div class="form-group" style="display:flex; flex-direction:column; align-items:stretch; background:#f8f9fa; padding:15px; border-radius:8px; margin-bottom:15px; border-bottom:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                    <div class="form-label" style="font-weight:bold; color:var(--primary-dark); white-space:nowrap;">Mis Campos</div>
+                    <select id="savedCoursesDropdown" onchange="loadSavedCourse()" style="padding:5px; border-radius:5px; border:1px solid #dfe6e9; flex:1; min-width:0; font-size:0.9rem;">
+                        <option value="">-- Nuevo Campo --</option>
+                    </select>
+                    <button onclick="deleteCurrentCourse()" class="btn-secondary" id="btnDeleteCourse" style="padding:6px 10px; background:var(--crimson); color:white; border:none; flex-shrink:0;" disabled>🗑️</button>
+                </div>
+            </div>
+            
+            <div class="form-group" id="whsGroup" style="display:none; background:#f8f9fa; padding:15px; border-radius:8px; margin-bottom:15px; border-bottom:none;">
+                <div class="form-label" style="flex:1">Valoración del Campo<span class="form-desc">Cálculo del Hándicap de Juego</span></div>
+                <div style="display:flex; gap:15px; text-align:center;">
+                    <div>
+                        <label for="optSlope" style="font-size:0.85rem; font-weight:700; color:#636e72;">SLOPE</label><br>
+                        <input type="number" id="optSlope" value="113" style="width:80px; margin-top:5px;" min="55" max="155">
+                    </div>
+                    <div>
+                        <label for="optSss" style="font-size:0.85rem; font-weight:700; color:#636e72;">VC</label><br>
+                        <input type="number" id="optSss" value="72.0" step="0.1" style="width:80px; margin-top:5px;">
+                    </div>
+                </div>
+            </div>
+
+            <div class="course-grid">
+                <div id="containerAller">
+                    <h3>IDA (1-9)</h3>
+                    <div class="table-responsive">
+                        <table id="tableAller">
+                            <thead><tr><th>H</th><th>Par</th><th>Hcp</th></tr></thead>
+                            <tbody id="bodyAller"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="containerRetour">
+                    <h3>VUELTA (10-18)</h3>
+                    <div class="table-responsive">
+                        <table id="tableRetour">
+                            <thead><tr><th>H</th><th>Par</th><th>Hcp</th></tr></thead>
+                            <tbody id="bodyRetour"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+            <button class="btn-secondary" style="flex:1; padding:15px 5px; font-size:0.95rem; white-space:nowrap;" onclick="window.location.href='index.html'">← Volver</button>
+            <button class="btn-main" style="flex:2.2; padding:15px 5px; font-size:1rem; white-space:nowrap;" onclick="validateSetup()">Validar y Resumen ➜</button>
+        </div>
+    </div>
+
+    <div id="screenRecap" class="screen">
+        <div class="card">
+            <h2>Resumen de Configuración</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; background: #f8f9fa; padding: 15px; border-radius: 8px;" id="recapOptionsGrid"></div>
+            
+            <h3>Los Jugadores</h3>
+            <div id="recapPlayersList" style="margin-bottom: 20px;"></div>
+
+            <div style="background: rgba(26, 207, 191, 0.15); border: 2px solid var(--teal); border-radius: 12px; padding: 20px; text-align: center; margin-top: 20px;">
+                <div style="font-size:2.5rem; margin-bottom:10px;">🐺</div>
+                <div style="font-size:1.1rem; color:#636e72;">Sorteo completado. El primer Lobo será:</div>
+                <div id="recapFirstWolf" style="font-size:1.5rem; font-weight:700; color:var(--primary-dark); margin-top:5px;"></div>
+            </div>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-secondary" style="flex:1;" onclick="showScreen('screenSetup')">← Modificar</button>
+            <button class="btn-main" style="flex:2;" onclick="startGame()">Comenzar Juego ➜</button>
+        </div>
+    </div>
+
+    <div id="screenGame" class="screen">
+        
+        <div class="card" style="padding:15px;">
+            <table style="margin:0;">
+                <thead><tr><th class="text-left">Jugador</th><th>H-1</th><th>Total</th></tr></thead>
+                <tbody id="bodyLiveScore"></tbody>
+            </table>
+            <div id="carryIndicator" style="display:none; background:#fff3e0; color:var(--orange); padding:8px; text-align:center; font-weight:700; margin-top:10px; border-radius:8px;"></div>
+        </div>
+
+        <div class="card">
+            <div id="holeInfo" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"></div>
+            
+            <div class="wolf-banner" id="wolfBanner"></div>
+
+            <p style="font-size:0.95rem; font-weight:700; color:#2d3436; margin-bottom:10px;">¿Con quién se asocia el Lobo?</p>
+            <div class="partner-selector" id="partnerSelection"></div>
+
+            <div style="display:grid; grid-template-columns: auto 1fr 100px 50px; gap:8px; margin-top:20px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72;">
+                <div></div><div>Jugador</div><div style="text-align:center">Golpes</div><div style="text-align:center">G.R.</div>
+            </div>
+            <div id="holeInputs"></div>
+
+            <div style="display:flex; gap:10px; margin-top:25px;">
+                <button class="btn-secondary" id="btnPrevHole" style="flex:1;">← Anterior</button>
+                <button class="btn-main" id="btnNextHole" onclick="nextHole()" style="flex:2;">Validar ➜</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="screenEdit" class="screen">
+        <div class="card">
+            <h2>Editar Puntuaciones</h2>
+            <div class="form-group" style="flex-direction:column; align-items:flex-start;">
+                <label class="form-label" style="margin-bottom:8px; font-weight:bold; color:var(--primary-dark)">Seleccione el hoyo a modificar:</label>
+                <select id="editHoleSelect" onchange="changeEditHole(this.value)" style="width:100%; font-size:1.05rem; padding:10px;"></select>
+            </div>
+        </div>
+
+        <div class="card">
+            <div id="editHoleInfo" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"></div>
+            <div class="wolf-banner" id="editWolfBanner"></div>
+            <p style="font-size:0.95rem; font-weight:700; color:#2d3436; margin-bottom:10px;">Compañero del Lobo:</p>
+            <div class="partner-selector" id="editPartnerSelection"></div>
+
+            <div style="display:grid; grid-template-columns: auto 1fr 100px 50px; gap:8px; margin-top:20px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72;">
+                <div></div><div>Jugador</div><div style="text-align:center">Golpes</div><div style="text-align:center">G.R.</div>
+            </div>
+            <div id="editHoleInputs"></div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:25px;">
+            <button class="btn-secondary" style="flex:1;" onclick="cancelEdit()">Cancelar</button>
+            <button class="btn-main" style="flex:2;" onclick="saveAndCloseEdit()">Guardar y Recalcular ➜</button>
+        </div>
+    </div>
+
+    <div id="screenResults" class="screen">
+        <div id="resultsCapture">
+            <h2 style="text-align:center; border:none; padding:0; margin-bottom:10px; color:var(--primary-dark)">Clasificación Final</h2>
+            
+            <div class="podium" id="podium"></div>
+            
+            <div class="card" style="box-shadow:none; border: 1px solid #eee;">
+                <h3>Progresión de Puntos</h3>
+                <div style="height:350px; position:relative; width: 100%;">
+                    <canvas id="chartResults"></canvas>
+                </div>
+            </div>
+
+            <div class="card" style="box-shadow:none; border: 1px solid #eee;">
+                <h3>Resumen de Puntuaciones</h3>
+                <div class="table-responsive">
+                    <table id="tableSummary"></table>
+                </div>
+            </div>
+
+            <div class="card" style="box-shadow:none; border: 1px solid #eee; padding: 10px;">
+                <h3 style="margin-top:10px;">Puntuaciones por Hoyo <span style="font-size:0.8rem; font-weight:normal;">(<span class="score-brut">Bruto</span> / <span style="color:var(--orange); font-weight:bold;">Pts Lobo</span>)</span></h3>
+                <div class="table-responsive">
+                    <table id="tableFinalScores"></table>
+                </div>
+            </div>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
+            <button class="btn-secondary" style="flex:1" onclick="exportCSV()">📥 CSV</button>
+            <button class="btn-secondary" style="flex:1" onclick="takeScreenshot()">📸 Captura</button>
+            <button class="btn-secondary" style="flex:100%; border: 2px solid var(--primary); color:var(--primary-dark); font-weight:700;" onclick="openEditMode()">✏️ Editar puntuaciones</button>
+            <button class="btn-main" style="flex:100%; margin-top:5px;" onclick="window.location.href='index.html'">🔄 Nueva Partida / Inicio</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // --- ESTADO GLOBAL ---
+    const state = {
+        players: [
+            { id: 0, name: '', hcp: 0, playingHcp: 0, color: 'var(--p1)', scores: [], points: [0] },
+            { id: 1, name: '', hcp: 0, playingHcp: 0, color: 'var(--p2)', scores: [], points: [0] },
+            { id: 2, name: '', hcp: 0, playingHcp: 0, color: 'var(--p3)', scores: [], points: [0] },
+            { id: 3, name: '', hcp: 0, playingHcp: 0, color: 'var(--p4)', scores: [], points: [0] }
+        ],
+        course: [],
+        options: { mode: 'brut', holes: '18', carryOver: false, golden: false, slope: 113, sss: 72 },
+        currentHoleIndex: 0,
+        wolfSequence: [],
+        gameData: [],
+        carryPool: 0,
+        chart: null
+    };
+
+    let backupGameData = null; 
+    let currentEditIndex = 0;
+    let editSelectedPartnerId = null;
+
+    // --- INICIALIZACIÓN UI CONFIG ---
+    function init() {
+        const pList = document.getElementById('playersList');
+        state.players.forEach((p, i) => {
+            pList.innerHTML += `
+                <div class="form-group" style="display: flex; gap: 10px; padding: 5px 0; border: none; margin-bottom: 5px; flex-wrap: nowrap;">
+                    <span class="dot" style="background:${p.color}; width:18px; height:18px; margin:0; align-self: center;"></span>
+                    <input type="text" id="pName${i}" placeholder="Jugador ${i+1}" maxlength="15" style="flex: 2; min-width: 0;">
+                    <input type="number" id="pHcp${i}" placeholder="Hcp Exacto" step="0.1" style="flex: 1; min-width: 0;" class="hcp-input">
+                </div>`;
+        });
+        const bAller = document.getElementById('bodyAller');
+        const bRetour = document.getElementById('bodyRetour');
+        for(let i=1; i<=18; i++) {
+            const row = `<tr>
+                <td style="font-weight:700; color:#636e72;">${i}</td>
+                <td><input type="number" id="par${i}" value="4" min="3" max="6" style="width:100%"></td>
+                <td class="hcp-cell"><input type="number" id="hcp${i}" value="${i}" min="1" max="18" style="width:100%"></td>
+            </tr>`;
+            if(i <= 9) bAller.innerHTML += row;
+            else bRetour.innerHTML += row;
+        }
+        
+        loadPlayersLocally();
+        updateCourseDropdown();
+        updateCalcMode();
+        updateCourseVisibility();
+    }
+
+    // --- GESTIÓN DEL ALMACENAMIENTO LOCAL ---
+    function loadPlayersLocally() {
+        try {
+            const saved = JSON.parse(localStorage.getItem('wolf_saved_players'));
+            if(saved && saved.length === 4) {
+                saved.forEach((p, i) => {
+                    document.getElementById('pName'+i).value = p.name || '';
+                    document.getElementById('pHcp'+i).value = (p.hcp !== null && p.hcp !== '🔒') ? p.hcp : '';
+                });
+            }
+        } catch(e) { console.error("Error al cargar jugadores", e); }
+    }
+
+    function savePlayersLocally() {
+        const arr = [];
+        for(let i=0; i<4; i++) {
+            let hcpVal = document.getElementById('pHcp'+i).value;
+            arr.push({
+                name: document.getElementById('pName'+i).value.trim(),
+                hcp: (hcpVal === '🔒') ? '' : hcpVal
+            });
+        }
+        localStorage.setItem('wolf_saved_players', JSON.stringify(arr));
+    }
+
+    function getSavedCourses() {
+        try { return JSON.parse(localStorage.getItem('wolf_saved_courses')) || {}; } 
+        catch(e) { return {}; }
+    }
+
+    function updateCourseDropdown() {
+        const courses = getSavedCourses();
+        const select = document.getElementById('savedCoursesDropdown');
+        select.innerHTML = '<option value="">-- Nuevo Campo --</option>';
+        for(let name in courses) {
+            select.innerHTML += `<option value="${name}">${name}</option>`;
+        }
+    }
+
+    function saveCurrentCourse(name) {
+        if(!name) return;
+        const courseData = {
+            slope: document.getElementById('optSlope').value,
+            sss: document.getElementById('optSss').value,
+            holes: []
+        };
+        for(let i=1; i<=18; i++) {
+            let hcpVal = document.getElementById('hcp'+i).value;
+            courseData.holes.push({ par: document.getElementById('par'+i).value, hcp: (hcpVal === '🔒') ? '' : hcpVal });
+        }
+        const courses = getSavedCourses();
+        courses[name] = courseData;
+        localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
+        updateCourseDropdown();
+        document.getElementById('savedCoursesDropdown').value = name;
+        document.getElementById('btnDeleteCourse').disabled = false;
+    }
+
+    function loadSavedCourse() {
+        const name = document.getElementById('savedCoursesDropdown').value;
+        const btnDelete = document.getElementById('btnDeleteCourse');
+        if(!name) { btnDelete.disabled = true; return; }
+        
+        const courses = getSavedCourses();
+        const data = courses[name];
+        if(data) {
+            document.getElementById('optSlope').value = data.slope;
+            document.getElementById('optSss').value = data.sss;
+            data.holes.forEach((h, idx) => {
+                const i = idx + 1;
+                document.getElementById('par'+i).value = h.par;
+                if(document.getElementById('modeNet').checked) { document.getElementById('hcp'+i).value = h.hcp; }
+            });
+            btnDelete.disabled = false;
+        }
+    }
+
+    function deleteCurrentCourse() {
+        const select = document.getElementById('savedCoursesDropdown');
+        const name = select.value;
+        if(!name) return;
+        if(confirm(`¿Realmente desea eliminar el campo "${name}"?`)) {
+            const courses = getSavedCourses();
+            delete courses[name];
+            localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
+            updateCourseDropdown();
+            document.getElementById('btnDeleteCourse').disabled = true;
+        }
+    }
+
+    // --- NAVEGACIÓN & UI ---
+    function toggleRules() {
+        const content = document.getElementById('rulesContent');
+        const icon = document.getElementById('rulesToggleIcon');
+        if (content.style.display === 'none') {
+            content.style.display = 'block';
+            icon.innerHTML = '▼ Ocultar';
+        } else {
+            content.style.display = 'none';
+            icon.innerHTML = '▶ Mostrar';
+        }
+    }
+
+    function updateCalcMode() {
+        const isNet = document.getElementById('modeNet').checked;
+        document.getElementById('whsGroup').style.display = isNet ? 'flex' : 'none';
+
+        document.querySelectorAll('.hcp-input, .hcp-cell input').forEach(el => {
+            el.disabled = !isNet;
+            if(!isNet) {
+                el.dataset.originalType = el.type;
+                el.type = 'text';
+                el.value = '🔒';
+            } else {
+                if(el.dataset.originalType) el.type = el.dataset.originalType;
+                if(el.value === '🔒') el.value = '';
+            }
+        });
+        document.querySelectorAll('.hcp-cell').forEach(el => {
+            if(!isNet) el.classList.add('disabled-cell');
+            else el.classList.remove('disabled-cell');
+        });
+    }
+
+    function updateCourseVisibility() {
+        const holes = document.querySelector('input[name="holes"]:checked').value;
+        document.getElementById('containerAller').style.display = (holes === '18' || holes === 'front') ? 'block' : 'none';
+        document.getElementById('containerRetour').style.display = (holes === '18' || holes === 'back') ? 'block' : 'none';
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+        
+        let label = "Configuración";
+        if(id === 'screenRecap') label = "Resumen";
+        if(id === 'screenGame') label = `Hoyo ${state.course[state.currentHoleIndex].num} (${state.currentHoleIndex+1}/${state.course.length})`;
+        if(id === 'screenResults') label = "Resultados";
+        if(id === 'screenEdit') label = "Editar Puntuaciones";
+        document.getElementById('stepIndicator').textContent = label;
+    }
+
+    // --- SETUP & VALIDACIÓN ---
+    function validateSetup() {
+        const isNet = document.getElementById('modeNet').checked;
+        const selectedCourse = document.getElementById('savedCoursesDropdown').value;
+        let finalCourseName = selectedCourse;
+
+        if (selectedCourse) {
+            saveCurrentCourse(selectedCourse);
+        } else {
+            const newName = prompt("Nuevo campo: Introduzca un nombre para guardarlo (o déjelo en blanco para jugar sin guardar):");
+            if (newName !== null && newName.trim() !== "") {
+                finalCourseName = newName.trim();
+                saveCurrentCourse(finalCourseName);
+            }
+        }
+
+        state.options = {
+            mode: isNet ? 'net' : 'brut',
+            holes: document.querySelector('input[name="holes"]:checked').value,
+            carryOver: document.getElementById('optCarry').checked,
+            golden: document.getElementById('optGolden').checked,
+            slope: parseFloat(document.getElementById('optSlope').value) || 113,
+            sss: parseFloat(document.getElementById('optSss').value) || 72,
+            courseName: finalCourseName || "Campo personalizado"
+        };
+
+        let totalCoursePar = 0;
+        for(let i=1; i<=18; i++) { totalCoursePar += parseInt(document.getElementById('par'+i).value) || 4; }
+
+        for(let i=0; i<4; i++) {
+            let name = document.getElementById('pName'+i).value.trim();
+            state.players[i].name = name || `Jugador ${i+1}`;
+            
+            if(isNet) {
+                let exactHcp = parseFloat(document.getElementById('pHcp'+i).value.replace(',', '.'));
+                if(isNaN(exactHcp) || exactHcp < -10 || exactHcp > 54) {
+                    alert(`Por favor, introduzca un hándicap válido para ${state.players[i].name}.`);
+                    document.getElementById('pHcp'+i).focus();
+                    return;
+                }
+                state.players[i].hcp = exactHcp;
+                state.players[i].playingHcp = Math.round((exactHcp * state.options.slope / 113) + (state.options.sss - totalCoursePar));
+            } else {
+                state.players[i].hcp = 0;
+            }
+        }
+
+        savePlayersLocally();
+
+        state.course = [];
+        let start = 1, end = 18;
+        if(state.options.holes === 'front') end = 9;
+        if(state.options.holes === 'back') start = 10;
+        for(let i=start; i<=end; i++) {
+            let hcpVal = parseInt(document.getElementById('hcp'+i).value);
+            state.course.push({
+                num: i,
+                par: parseInt(document.getElementById('par'+i).value) || 4,
+                hcp: isNet ? (isNaN(hcpVal) ? 1 : hcpVal) : null
+            });
+        }
+
+        state.wolfSequence = [0, 1, 2, 3];
+        for (let i = state.wolfSequence.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [state.wolfSequence[i], state.wolfSequence[j]] = [state.wolfSequence[j], state.wolfSequence[i]];
+        }
+
+        renderRecap();
+        showScreen('screenRecap');
+    }
+
+    function renderRecap() {
+        const cName = state.options.courseName ? `<br><span style="font-size:0.9rem; color:#636e72">📍 ${state.options.courseName}</span>` : '';
+        document.getElementById('recapOptionsGrid').innerHTML = `
+            <div><b>Modo :</b> <span style="text-transform:capitalize">${state.options.mode === 'brut' ? 'Bruto' : 'Neto'}</span></div>
+            <div><b>Hoyos jugados :</b> ${state.options.holes.toUpperCase()}${cName}</div>
+            <div><b>Carry Over :</b> ${state.options.carryOver ? '✅' : '❌'}</div>
+            <div><b>Lobo de Oro :</b> ${state.options.golden ? '✅' : '❌'}</div>
+            ${state.options.mode === 'net' ? `
+            <div style="grid-column: 1 / -1; margin-top:5px; padding-top:10px; border-top:1px solid #ddd;">
+                <b>Valoración :</b> Slope ${state.options.slope} / VC ${state.options.sss}
+            </div>` : ''}
+        `;
+        
+        let pListHtml = '';
+        state.players.forEach(p => {
+            const hcpText = state.options.mode === 'net' ? `(Hcp: <b>${p.hcp}</b> ➜ Juego: <b>${p.playingHcp}</b>)` : '';
+            pListHtml += `<div style="padding:5px 0;"><span class="dot" style="background:${p.color}"></span> <b>${p.name}</b> <span style="font-size:0.9rem; color:#636e72">${hcpText}</span></div>`;
+        });
+        document.getElementById('recapPlayersList').innerHTML = pListHtml;
+        document.getElementById('recapFirstWolf').textContent = state.players[state.wolfSequence[0]].name;
+    }
+
+    // --- AUTO-SAVE GAME LOGIC ---
+    function saveGameLocally() {
+        const stateToSave = {
+            players: state.players,
+            course: state.course,
+            options: state.options,
+            currentHoleIndex: state.currentHoleIndex,
+            wolfSequence: state.wolfSequence,
+            gameData: state.gameData,
+            carryPool: state.carryPool
+        };
+        localStorage.setItem('wolf_saved_game_state', JSON.stringify(stateToSave));
+    }
+
+    function clearSavedGame() {
+        localStorage.removeItem('wolf_saved_game_state');
+    }
+
+    function startGame() {
+        const savedGameStr = localStorage.getItem('wolf_saved_game_state');
+        if (savedGameStr) {
+            const savedGame = JSON.parse(savedGameStr);
+            if (savedGame.gameData && savedGame.gameData.length > 0) {
+                if (confirm("¡Se ha detectado una partida sin terminar!\n\n¿Desea reanudar esta partida desde el último hoyo validado?\n\n(Haga clic en Cancelar para borrar la partida anterior y comenzar esta)")) {
+                    Object.assign(state, savedGame);
+                    loadHole();
+                    showScreen('screenGame');
+                    return;
+                }
+            }
+        }
+        
+        // Empezar nueva partida
+        clearSavedGame();
+        state.currentHoleIndex = 0;
+        state.players.forEach(p => { p.points = [0]; p.scores = []; });
+        state.gameData = [];
+        state.carryPool = 0;
+        
+        saveGameLocally();
+        loadHole();
+        showScreen('screenGame');
+    }
+
+    // --- MOTO DE RECALCULO ---
+    function recalculateAllScores() {
+        state.players.forEach(p => { p.points = [0]; p.scores = []; });
+        let currentCarry = 0;
+
+        for (let i = 0; i < state.gameData.length; i++) {
+            const record = state.gameData[i];
+            if (!record || record.isDraft) break; 
+
+            const hole = state.course[i];
+            let wolfIdx = state.wolfSequence[i % 4];
+            
+            const forcedHolesCount = (state.options.holes === '18') ? 2 : 1;
+            if (i >= state.course.length - forcedHolesCount) {
+                let minTotal = Infinity;
+                state.players.forEach(p => {
+                    const t = p.points.reduce((a, b) => a + b, 0);
+                    if (t < minTotal) { minTotal = t; wolfIdx = p.id; }
+                });
+            }
+
+            const inputScores = record.rawScores;
+            const partnerId = record.partner;
+            
+            const netScores = {};
+            const scoresRecordForState = {};
+            
+            state.players.forEach(p => {
+                const cr = calculateCR(p, hole);
+                let brutInput = inputScores[p.id];
+                let brut;
+                
+                if (brutInput === 'X') {
+                    brut = state.options.mode === 'net' ? (hole.par + 2 + cr) : (hole.par + 5);
+                } else {
+                    brut = parseInt(brutInput);
+                }
+
+                let net = brut - cr;
+                
+                if (state.options.mode === 'net' && net > hole.par + 2) {
+                    net = hole.par + 2;
+                    brut = net + cr;
+                }
+
+                netScores[p.id] = net;
+                const scoreObj = { brut: brut, net: net, display: brutInput === 'X' ? 'X' : brut };
+                p.scores[i] = scoreObj;
+                scoresRecordForState[p.id] = scoreObj;
+            });
+
+            let basePoints = 1 + currentCarry;
+            let pMap = {0:0, 1:0, 2:0, 3:0};
+            let newCarryPool = currentCarry;
+            
+            if(partnerId === 'solo' || partnerId === 'gold') {
+                const mult = partnerId === 'gold' ? 3 : 2;
+                const wolfScore = netScores[wolfIdx];
+                const others = state.players.filter(p => p.id !== wolfIdx).map(p => netScores[p.id]);
+                const bestOther = Math.min(...others);
+
+                if(wolfScore < bestOther) {
+                    pMap[wolfIdx] = basePoints * mult * 3;
+                    state.players.forEach(p => { if(p.id !== wolfIdx) pMap[p.id] = -basePoints * mult; });
+                    newCarryPool = 0;
+                } else if(wolfScore > bestOther) {
+                    pMap[wolfIdx] = -basePoints * mult * 3;
+                    state.players.forEach(p => { if(p.id !== wolfIdx) pMap[p.id] = basePoints * mult; });
+                    newCarryPool = 0;
+                } else {
+                    if(state.options.carryOver) newCarryPool++;
+                }
+            } else {
+                const teamWolfScore = Math.min(netScores[wolfIdx], netScores[partnerId]);
+                const teamOtherIdx = state.players.filter(p => p.id !== wolfIdx && p.id !== partnerId).map(p => p.id);
+                const teamOtherScore = Math.min(netScores[teamOtherIdx[0]], netScores[teamOtherIdx[1]]);
+
+                if(teamWolfScore < teamOtherScore) {
+                    pMap[wolfIdx] = basePoints;
+                    pMap[partnerId] = basePoints;
+                    pMap[teamOtherIdx[0]] = -basePoints; 
+                    pMap[teamOtherIdx[1]] = -basePoints;
+                    newCarryPool = 0;
+                } else if(teamWolfScore > teamOtherScore) {
+                    pMap[wolfIdx] = -basePoints;
+                    pMap[partnerId] = -basePoints;
+                    pMap[teamOtherIdx[0]] = basePoints; 
+                    pMap[teamOtherIdx[1]] = basePoints;
+                    newCarryPool = 0;
+                } else {
+                    if(state.options.carryOver) newCarryPool++;
+                }
+            }
+
+            state.players.forEach(p => p.points.push(pMap[p.id]));
+            
+            record.scores = scoresRecordForState;
+            record.netScores = netScores;
+            record.points = pMap;
+            record.carryBefore = currentCarry;
+            
+            currentCarry = newCarryPool;
+        }
+        state.carryPool = currentCarry;
+    }
+
+
+    // --- GAME UI ---
+    function loadHole() {
+        const hole = state.course[state.currentHoleIndex];
+        let wolfIdx = state.wolfSequence[state.currentHoleIndex % 4];
+        let isForcedWolf = false;
+
+        const forcedHolesCount = (state.options.holes === '18') ? 2 : 1;
+
+        if (state.currentHoleIndex >= state.course.length - forcedHolesCount) {
+            let minTotal = Infinity;
+            let minPlayerId = wolfIdx;
+            state.players.forEach(p => {
+                const total = p.points.reduce((a, b) => a + b, 0);
+                if (total < minTotal) {
+                    minTotal = total;
+                    minPlayerId = p.id;
+                }
+            });
+            wolfIdx = minPlayerId;
+            isForcedWolf = true;
+        }
+
+        const wolf = state.players[wolfIdx];
+        document.getElementById('stepIndicator').textContent = `Hoyo ${hole.num} (${state.currentHoleIndex+1}/${state.course.length})`;
+        
+        const bodyLive = document.getElementById('bodyLiveScore');
+        bodyLive.innerHTML = '';
+        state.players.forEach(p => {
+            const total = p.points.reduce((a, b) => a + b, 0);
+            const prev = state.currentHoleIndex > 0 ? p.points[p.points.length-1] : 0;
+            bodyLive.innerHTML += `
+                <tr>
+                    <td class="text-left"><span class="dot" style="background:${p.color}"></span> ${p.name.substring(0,10)}</td>
+                    <td style="text-align:center; color:#636e72;">${prev > 0 ? '+'+prev : prev}</td>
+                    <td style="text-align:center; background:#e8f5e9; font-weight:700; color:var(--primary-dark)">${total > 0 ? '+'+total : total}</td>
+                </tr>`;
+        });
+        
+        const ci = document.getElementById('carryIndicator');
+        if(state.options.carryOver && state.carryPool > 0) {
+            ci.style.display = 'block';
+            ci.innerHTML = `⚡ CARRY OVER: ¡+${state.carryPool} pt(s) en juego para este hoyo!`;
+        } else { ci.style.display = 'none'; }
+
+        document.getElementById('holeInfo').innerHTML = `
+            <span class="badge" style="background:var(--primary); font-size:0.9rem; padding:6px 12px;">HOYO ${hole.num}</span>
+            <span class="badge" style="background:#636e72; font-size:0.9rem; padding:6px 12px;">PAR ${hole.par}</span>
+            ${state.options.mode === 'net' ? `<span class="badge" style="background:var(--violet); font-size:0.9rem; padding:6px 12px;">HCP ${hole.hcp}</span>` : ''}
+        `;
+        const wolfText = isForcedWolf 
+            ? `🐺 <b>${wolf.name}</b> ¡es el Lobo designado (último en puntuación)!`
+            : `🐺 ¡Es el turno de cazar de <b>${wolf.name}</b>!`;
+        document.getElementById('wolfBanner').innerHTML = wolfText;
+
+        const prevPartner = state.gameData[state.currentHoleIndex] ? state.gameData[state.currentHoleIndex].partner : null;
+        let selectedPartnerId = prevPartner;
+
+        window.selectPartner = function(id, el) {
+            document.querySelectorAll('#partnerSelection .partner-btn').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            state.selectedPartnerId = id;
+        }
+        
+        state.selectedPartnerId = selectedPartnerId;
+
+        const partDiv = document.getElementById('partnerSelection');
+        partDiv.innerHTML = '';
+        state.players.forEach(p => {
+            if(p.id !== wolfIdx) {
+                partDiv.innerHTML += `<div class="partner-btn ${selectedPartnerId === p.id ? 'selected' : ''}" onclick="selectPartner(${p.id}, this)">Con ${p.name.substring(0,6)}</div>`;
+            }
+        });
+        partDiv.innerHTML += `<div class="partner-btn solo ${selectedPartnerId === 'solo' ? 'selected' : ''}" onclick="selectPartner('solo', this)">🐺 Solitario (x2)</div>`;
+        if(state.options.golden) {
+            partDiv.innerHTML += `<div class="partner-btn gold ${selectedPartnerId === 'gold' ? 'selected' : ''}" onclick="selectPartner('gold', this)">✨ Oro (x3)</div>`;
+        }
+
+        const inputDiv = document.getElementById('holeInputs');
+        inputDiv.innerHTML = '';
+        state.players.forEach(p => {
+            const cr = calculateCR(p, hole);
+            const pastScoreRecord = state.gameData[state.currentHoleIndex];
+            const pastScoreDisplay = (pastScoreRecord && pastScoreRecord.rawScores) ? pastScoreRecord.rawScores[p.id] : '';
+            
+            inputDiv.innerHTML += `
+                <div class="score-row">
+                    <span class="dot" style="background:${p.color}; margin:0;"></span>
+                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} ${p.id === wolfIdx ? '<b>(L)</b>' : ''}</span>
+                    <div style="display:flex; gap:4px;">
+                        <input type="text" inputmode="numeric" pattern="[0-9Xx]*" class="p-score-input" data-pid="${p.id}" placeholder="Golpes" value="${pastScoreDisplay}" style="width:100%; min-width:0; text-align:center; padding:8px 5px;">
+                        <button class="btn-secondary" style="padding:0; width:35px; font-weight:bold; color:var(--crimson); flex-shrink:0;" onclick="this.previousElementSibling.value='X'">X</button>
+                    </div>
+                    <div style="text-align:center; color:#636e72; background:#f1f2f6; padding:5px; border-radius:5px;">
+                        ${state.options.mode === 'net' ? cr : '🔒'}
+                    </div>
+                </div>`;
+        });
+        
+        const btnPrev = document.getElementById('btnPrevHole');
+        if (state.currentHoleIndex === 0) {
+            btnPrev.textContent = '← Resumen';
+            btnPrev.onclick = () => showScreen('screenRecap');
+        } else {
+            btnPrev.textContent = '← Anterior';
+            btnPrev.onclick = prevHole;
+        }
+
+        document.getElementById('btnNextHole').textContent = (state.currentHoleIndex === state.course.length - 1) ? 'Terminar 🏆' : 'Validar ➜';
+    }
+
+    function calculateCR(player, hole) {
+        if(state.options.mode === 'brut') return 0;
+        const hcpJeu = Math.max(0, player.playingHcp);
+        let cr = Math.floor(hcpJeu / 18);
+        if((hcpJeu % 18) >= hole.hcp) { cr++; }
+        return cr;
+    }
+
+    function prevHole() {
+        if(state.currentHoleIndex === 0) return;
+        
+        const inputs = document.querySelectorAll('.p-score-input');
+        let scores = {};
+        for(let input of inputs) {
+            scores[input.dataset.pid] = input.value.trim().toUpperCase();
+        }
+        
+        state.gameData[state.currentHoleIndex] = {
+            partner: state.selectedPartnerId,
+            rawScores: scores,
+            isDraft: true
+        };
+
+        state.currentHoleIndex--;
+        
+        recalculateAllScores(); 
+        saveGameLocally();
+        loadHole();
+    }
+
+    function nextHole() {
+        const inputs = document.querySelectorAll('.p-score-input');
+        let scores = {};
+        for(let input of inputs) {
+            let val = input.value.trim().toUpperCase();
+            if(!val || (val !== 'X' && isNaN(parseInt(val)))) { 
+                alert("Por favor, introduzca una puntuación válida o 'X' para todos los jugadores."); 
+                return; 
+            }
+            scores[input.dataset.pid] = val;
+        }
+
+        if(state.selectedPartnerId === null) { alert("Por favor, elija el compañero del Lobo o la opción de Lobo Solitario."); return; }
+
+        state.gameData[state.currentHoleIndex] = {
+            partner: state.selectedPartnerId,
+            rawScores: scores,
+            isDraft: false 
+        };
+        
+        recalculateAllScores();
+        saveGameLocally();
+
+        if(state.currentHoleIndex < state.course.length - 1) {
+            state.currentHoleIndex++;
+            loadHole();
+        } else {
+            finishGame();
+        }
+    }
+
+
+    // --- MODO DE EDICIÓN ---
+    function openEditMode() {
+        backupGameData = JSON.parse(JSON.stringify(state.gameData));
+        
+        const sel = document.getElementById('editHoleSelect');
+        sel.innerHTML = '';
+        for(let i=0; i < state.gameData.length; i++) {
+            sel.innerHTML += `<option value="${i}">Hoyo ${state.course[i].num}</option>`;
+        }
+        showScreen('screenEdit');
+        currentEditIndex = 0;
+        sel.value = 0;
+        loadEditHole(0);
+    }
+
+    function changeEditHole(index) {
+        if(!saveCurrentEditHoleLocally()) {
+            document.getElementById('editHoleSelect').value = currentEditIndex;
+            return;
+        }
+        currentEditIndex = parseInt(index);
+        loadEditHole(currentEditIndex);
+    }
+
+    function saveCurrentEditHoleLocally() {
+        const inputs = document.querySelectorAll('.edit-score-input');
+        let scores = {};
+        for(let input of inputs) {
+            let val = input.value.trim().toUpperCase();
+            if(!val || (val !== 'X' && isNaN(parseInt(val)))) { 
+                alert("Por favor, introduzca una puntuación válida o 'X' para todos los jugadores."); 
+                return false; 
+            }
+            scores[input.dataset.pid] = val;
+        }
+        if(editSelectedPartnerId === null) { 
+            alert("Por favor, elija el compañero."); 
+            return false; 
+        }
+
+        state.gameData[currentEditIndex].rawScores = scores;
+        state.gameData[currentEditIndex].partner = editSelectedPartnerId;
+        state.gameData[currentEditIndex].isDraft = false;
+        return true;
+    }
+
+    function loadEditHole(index) {
+        recalculateAllScores(); 
+
+        const hole = state.course[index];
+        const record = state.gameData[index];
+        
+        let wolfIdx = state.wolfSequence[index % 4];
+        let isForcedWolf = false;
+        const forcedHolesCount = (state.options.holes === '18') ? 2 : 1;
+
+        if (index >= state.course.length - forcedHolesCount) {
+            let minTotal = Infinity;
+            state.players.forEach(p => {
+                const t = p.points.slice(0, index + 1).reduce((a, b) => a + b, 0);
+                if (t < minTotal) { minTotal = t; wolfIdx = p.id; }
+            });
+            isForcedWolf = true;
+        }
+
+        const wolf = state.players[wolfIdx];
+        
+        document.getElementById('editHoleInfo').innerHTML = `
+            <span class="badge" style="background:var(--primary); font-size:0.9rem; padding:6px 12px;">HOYO ${hole.num}</span>
+            <span class="badge" style="background:#636e72; font-size:0.9rem; padding:6px 12px;">PAR ${hole.par}</span>
+            ${state.options.mode === 'net' ? `<span class="badge" style="background:var(--violet); font-size:0.9rem; padding:6px 12px;">HCP ${hole.hcp}</span>` : ''}
+        `;
+        
+        const wolfText = isForcedWolf 
+            ? `🐺 ¡<b>${wolf.name}</b> fue el Lobo designado!`
+            : `🐺 ¡<b>${wolf.name}</b> fue el Lobo!`;
+        document.getElementById('editWolfBanner').innerHTML = wolfText;
+
+        editSelectedPartnerId = record.partner;
+
+        const partDiv = document.getElementById('editPartnerSelection');
+        partDiv.innerHTML = '';
+        state.players.forEach(p => {
+            if(p.id !== wolfIdx) {
+                partDiv.innerHTML += `<div class="partner-btn ${editSelectedPartnerId === p.id ? 'selected' : ''}" onclick="selectEditPartner(${p.id}, this)">Con ${p.name.substring(0,6)}</div>`;
+            }
+        });
+        partDiv.innerHTML += `<div class="partner-btn solo ${editSelectedPartnerId === 'solo' ? 'selected' : ''}" onclick="selectEditPartner('solo', this)">🐺 Solitario (x2)</div>`;
+        if(state.options.golden) {
+            partDiv.innerHTML += `<div class="partner-btn gold ${editSelectedPartnerId === 'gold' ? 'selected' : ''}" onclick="selectEditPartner('gold', this)">✨ Oro (x3)</div>`;
+        }
+
+        const inputDiv = document.getElementById('editHoleInputs');
+        inputDiv.innerHTML = '';
+        state.players.forEach(p => {
+            const cr = calculateCR(p, hole);
+            const pastScoreInput = record.rawScores[p.id];
+            
+            inputDiv.innerHTML += `
+                <div class="score-row">
+                    <span class="dot" style="background:${p.color}; margin:0;"></span>
+                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} ${p.id === wolfIdx ? '<b>(L)</b>' : ''}</span>
+                    <div style="display:flex; gap:4px;">
+                        <input type="text" inputmode="numeric" pattern="[0-9Xx]*" class="edit-score-input" data-pid="${p.id}" placeholder="Golpes" value="${pastScoreInput}" style="width:100%; min-width:0; text-align:center; padding:8px 5px;">
+                        <button class="btn-secondary" style="padding:0; width:35px; font-weight:bold; color:var(--crimson); flex-shrink:0;" onclick="this.previousElementSibling.value='X'">X</button>
+                    </div>
+                    <div style="text-align:center; color:#636e72; background:#f1f2f6; padding:5px; border-radius:5px;">
+                        ${state.options.mode === 'net' ? cr : '🔒'}
+                    </div>
+                </div>`;
+        });
+    }
+
+    function selectEditPartner(id, el) {
+        document.querySelectorAll('#editPartnerSelection .partner-btn').forEach(b => b.classList.remove('selected'));
+        el.classList.add('selected');
+        editSelectedPartnerId = id;
+    }
+
+    function saveAndCloseEdit() {
+        if(!saveCurrentEditHoleLocally()) return;
+        recalculateAllScores(); 
+        saveGameLocally(); 
+        finishGame(); 
+    }
+
+    function cancelEdit() {
+        state.gameData = backupGameData; 
+        recalculateAllScores();
+        finishGame();
+    }
+
+
+    // --- RESULTADOS & GRÁFICOS ---
+    const getHexColor = (colorStr) => {
+        if (colorStr.startsWith('var(')) {
+            const varName = colorStr.slice(4, -1);
+            return getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
+        }
+        return colorStr;
+    };
+    
+    const hexToRgb = (hex) => {
+        hex = hex.replace(/^#/, '');
+        if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+        const int = parseInt(hex, 16);
+        return [(int >> 16) & 255, (int >> 8) & 255, int & 255];
+    };
+
+    function finishGame() {
+        clearSavedGame(); 
+        
+        showScreen('screenResults');
+        const totals = state.players.map(p => ({ 
+            ...p, 
+            total: p.points.reduce((a, b) => a + b, 0) 
+        })).sort((a,b) => b.total - a.total);
+
+        let rank = 1;
+        totals[0].rank = 1;
+        for (let i = 1; i < 4; i++) {
+            if (totals[i].total < totals[i-1].total) { rank++; }
+            totals[i].rank = rank;
+        }
+
+        const getMedal = (r) => {
+            if (r === 1) return '🥇';
+            if (r === 2) return '🥈';
+            if (r === 3) return '🥉';
+            return r + 'º';
+        };
+
+        const pod = document.getElementById('podium');
+        pod.innerHTML = '';
+        
+        const maxPts = totals[0].total;
+        const minPts = totals[3].total;
+        const range = (maxPts - minPts) === 0 ? 1 : (maxPts - minPts);
+        
+        const orderMap = [1, 0, 2, 3]; 
+        
+        orderMap.forEach((posIdx) => {
+            const p = totals[posIdx];
+            const proportion = (p.total - minPts) / range;
+            const heightPercent = 25 + (proportion * 75);
+            const shortName = p.name.substring(0,3).toUpperCase();
+
+            pod.innerHTML += `
+                <div class="podium-col">
+                    <div class="podium-name">${shortName}</div>
+                    <div class="podium-bar p-${posIdx+1}" style="height:${heightPercent}%;">
+                        <div class="podium-medal">${getMedal(p.rank)}</div>
+                        ${p.total > 0 ? '+'+p.total : p.total}
+                    </div>
+                </div>`;
+        });
+
+        const ctx = document.getElementById('chartResults').getContext('2d');
+        if(state.chart) state.chart.destroy();
+        
+        const labelsX = ['Salida', ...state.course.map(c => 'H'+c.num)];
+        
+        const datasets = totals.slice().reverse().map((p) => {
+            const baseColorHex = getHexColor(p.color) || '#b2bec3';
+            const rgb = hexToRgb(baseColorHex);
+            
+            let cum = 0;
+            const data = [0, ...p.points.slice(1).map(v => cum += v)];
+            
+            return {
+                label: p.name.substring(0,5).toUpperCase(),
+                data: data,
+                borderColor: baseColorHex,
+                backgroundColor: (context) => {
+                    const chart = context.chart;
+                    const {ctx, chartArea} = chart;
+                    if (!chartArea) return 'rgba(0,0,0,0)';
+                    
+                    const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+                    gradient.addColorStop(0, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.5)`);
+                    gradient.addColorStop(1, `rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, 0.0)`);
+                    return gradient;
+                },
+                fill: true,
+                tension: 0.4,
+                borderWidth: 3,
+                pointRadius: 5,
+                pointBackgroundColor: '#fff',
+                pointBorderColor: baseColorHex,
+                pointBorderWidth: 2
+            };
+        });
+
+        state.chart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: labelsX, datasets: datasets },
+            options: {
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { 
+                        reverse: true,
+                        position: 'bottom', 
+                        labels: { font: { family: 'Quicksand', weight: 'bold' }, usePointStyle: true, boxWidth: 10 } 
+                    },
+                    tooltip: { callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.raw > 0 ? '+'+ctx.raw : ctx.raw} pts` } }
+                },
+                scales: {
+                    y: { 
+                        grid: { borderDash: [4,4] },
+                        ticks: { stepSize: 1, callback: v => v > 0 ? '+'+v : v, font: { weight: 'bold' } }
+                    }
+                }
+            }
+        });
+
+        // --- RESUMEN DE PUNTUACIONES ---
+        const tSummary = document.getElementById('tableSummary');
+        let htmlSum = `<thead><tr>
+            <th class="text-left">Juga.</th>
+            <th>Hcp</th>
+            <th>Bruto</th>
+            <th>Stb</th>
+            <th>Neto</th>
+        </tr></thead><tbody>`;
+
+        state.players.forEach(p => {
+            let totB = 0;
+            let totStd = 0;
+            let totNet = 0;
+            
+            p.scores.forEach((s, idx) => {
+                if (s) {
+                    const holePar = state.course[idx].par;
+                    totB += s.brut;
+                    totNet += s.net;
+                    totStd += Math.max(0, 2 + holePar - s.net);
+                }
+            });
+
+            const shortName = p.name.substring(0, 5).toUpperCase();
+            const dispIndex = (p.hcp !== null && p.hcp !== undefined) ? p.hcp : '-';
+
+            htmlSum += `<tr>
+                <td class="text-left" style="font-weight:bold; color:${getHexColor(p.color)}">${shortName}</td>
+                <td>${dispIndex}</td>
+                <td class="score-brut">${totB}</td>
+                <td style="font-weight:600; color:var(--violet);">${totStd}</td>
+                <td class="score-net">${totNet}</td>
+            </tr>`;
+        });
+        htmlSum += `</tbody>`;
+        tSummary.innerHTML = htmlSum;
+
+        // --- TABLA FINAL COMPRIMIDA: Puntuaciones (Bruto / Pts Lobo) ---
+        const tScores = document.getElementById('tableFinalScores');
+        let htmlS = `<thead><tr><th style="width:16%">Hoyo</th>`;
+        state.players.forEach(p => {
+            htmlS += `<th style="border-bottom: 3px solid ${getHexColor(p.color)}; width:21%">${p.name.substring(0,3).toUpperCase()}</th>`;
+        });
+        htmlS += `</tr></thead><tbody>`;
+        
+        state.course.forEach((hole, i) => {
+            htmlS += `<tr><td style="font-weight:bold;">${hole.num}</td>`;
+            state.players.forEach(p => {
+                const scoreObj = p.scores[i];
+                if (scoreObj) {
+                    const pt = state.gameData[i].points[p.id];
+                    const ptStr = pt > 0 ? '+'+pt : pt;
+                    const ptColor = pt > 0 ? 'var(--primary-dark)' : (pt < 0 ? 'var(--crimson)' : '#636e72');
+                    htmlS += `<td><div class="score-brut">${scoreObj.display}</div><div class="score-net" style="font-size:0.95rem; margin-top:-2px; color:${ptColor}; font-weight:bold;">${ptStr}</div></td>`;
+                } else {
+                    htmlS += `<td>-</td>`;
+                }
+            });
+            htmlS += `</tr>`;
+        });
+
+        htmlS += `<tr style="background:#e8f5e9; font-weight:700;"><td>TOT</td>`;
+        state.players.forEach(p => {
+            const totB = p.scores.reduce((sum, s) => sum + s.brut, 0);
+            const totPts = p.points.reduce((sum, pt) => sum + pt, 0);
+            const ptStr = totPts > 0 ? '+'+totPts : totPts;
+            const ptColor = totPts > 0 ? 'var(--primary-dark)' : (totPts < 0 ? 'var(--crimson)' : '#636e72');
+            htmlS += `<td><div class="score-brut">${totB}</div><div class="score-net" style="font-size:1rem; margin-top:-2px; color:${ptColor};">${ptStr}</div></td>`;
+        });
+        htmlS += `</tr></tbody>`;
+        tScores.innerHTML = htmlS;
+    }
+
+    // --- EXPORT TOOLS ---
+    function exportCSV() {
+        let csv = "Hoyo,Par,Hcp," + state.players.map(p => `${p.name} Bruto,${p.name} STD,${p.name} Pts`).join(",") + "\n";
+        state.course.forEach((c, i) => {
+            let row = `${c.num},${c.par},${c.hcp || '-'},`;
+            let pData = state.players.map(p => {
+                const s = p.scores[i];
+                if (s) {
+                    const pt = state.gameData[i].points[p.id];
+                    const std = Math.max(0, 2 + c.par - s.net);
+                    return `${s.display},${std},${pt}`;
+                }
+                return "-,-,-";
+            });
+            csv += row + pData.join(",") + "\n";
+        });
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `wolf-golf-pro-export.csv`;
+        a.click();
+    }
+
+    function takeScreenshot() {
+        const target = document.getElementById('resultsCapture');
+        html2canvas(target, { scale: 2, backgroundColor: '#f7f8fa' }).then(canvas => {
+            const link = document.createElement('a');
+            
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            
+            const timestamp = `${year}${month}${day}-${hours}${minutes}`;
+            link.download = `wolf-resultados-${timestamp}.png`;
+            
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    }
+
+    // Start
+    window.onload = init;
+</script>
+
+</body>
+</html>
