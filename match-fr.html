@@ -233,11 +233,24 @@
 
         <div class="card">
             <h2>Le Parcours</h2>
+            
+            <div class="form-group" style="display:flex; flex-direction:column; align-items:stretch; background:#e3f2fd; padding:15px; border-radius:8px; margin-bottom:15px; border-bottom:none;">
+                <div class="form-label" style="font-weight:bold; color:var(--blue); margin-bottom: 10px;">🔍 Trouver mon golf</div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; width:100%;">
+                    <select id="regionSelect" onchange="loadRegionGolfs()" style="flex:1; min-width:150px; padding:8px; border:2px solid #dfe6e9; border-radius:8px; outline:none; font-family:inherit;">
+                        <option value="">-- Chargement régions... --</option>
+                    </select>
+                    <input type="text" id="golfSelect" list="golfDatalist" onchange="applySelectedGolf()" placeholder="Nom du golf et repères..." style="flex:2; min-width:200px; padding:8px 12px; border:2px solid #dfe6e9; border-radius:8px; outline:none; font-family:inherit;">
+                    <datalist id="golfDatalist"></datalist>
+                </div>
+                <div class="form-desc" style="margin-top: 5px;">Sélectionnez votre région, puis recherchez votre parcours dans la liste.</div>
+            </div>
+
             <div class="form-group" style="display:flex; flex-direction:column; align-items:stretch; background:#f8f9fa; padding:15px; border-radius:8px; margin-bottom:15px; border-bottom:none;">
                 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-                    <div class="form-label" style="font-weight:bold; color:var(--primary-dark); white-space:nowrap;">Mes parcours</div>
+                    <div class="form-label" style="font-weight:bold; color:var(--primary-dark); white-space:nowrap;">Mes parcours locaux</div>
                     <select id="savedCoursesDropdown" onchange="loadSavedCourse()" style="padding:5px; border-radius:5px; border:1px solid #dfe6e9; flex:1; min-width:0; font-size:0.9rem;">
-                        <option value="">-- Nouveau parcours --</option>
+                        <option value="">-- Nouveau parcours manuel --</option>
                     </select>
                     <button onclick="openDeleteModal()" class="btn-secondary" id="btnDeleteCourse" style="padding:6px 10px; background:var(--crimson); color:white; border:none; flex-shrink:0;" disabled>🗑️</button>
                 </div>
@@ -455,6 +468,9 @@
 
     let backupGameData = null;
     let currentEditIndex = 0;
+    
+    // NOUVEAU: Données dynamiques des golfs
+    let currentRegionData = {};
 
     // INITIALISATION
     function init() {
@@ -477,6 +493,7 @@
         updateCalcMode();
         updateCourseVisibility();
         checkSavedGame();
+        loadRegions(); // Chargement de la liste des régions (golfs-regions.csv)
     }
 
     function toggleRules() {
@@ -488,6 +505,113 @@
         } else {
             content.style.display = 'none';
             icon.innerHTML = '▶ Afficher';
+        }
+    }
+
+    // Gestion du fichier de régions pour la recherche des parcours
+    async function loadRegions() {
+        try {
+            const response = await fetch('golfs-regions.csv', { cache: "no-cache" });
+            const text = await response.text();
+            const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+            const select = document.getElementById('regionSelect');
+            select.innerHTML = '<option value="">-- Sélectionnez une région --</option>';
+            
+            for(let i=1; i<lines.length; i++) {
+                const parts = lines[i].split(',');
+                if (parts.length >= 2) {
+                    const opt = document.createElement('option');
+                    opt.value = parts[1].trim(); 
+                    opt.text = parts[0].trim(); 
+                    select.appendChild(opt);
+                }
+            }
+        } catch(e) {
+            console.error("Impossible de charger le fichier des régions", e);
+            document.getElementById('regionSelect').innerHTML = '<option value="">(Erreur de chargement)</option>';
+        }
+    }
+
+    async function loadRegionGolfs() {
+        const filename = document.getElementById('regionSelect').value;
+        const datalist = document.getElementById('golfDatalist');
+        const input = document.getElementById('golfSelect');
+        datalist.innerHTML = '';
+        input.value = '';
+        currentRegionData = {};
+
+        if (!filename) return;
+
+        try {
+            const response = await fetch(filename, { cache: "no-cache" });
+            const text = await response.text();
+            const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+            if (lines.length === 0) return;
+            
+            const headers = lines[0].split(';').map(h => h.trim());
+            
+            for(let i=1; i<lines.length; i++) {
+                const parts = lines[i].split(';');
+                if (parts.length < 18) continue;
+                
+                const row = {};
+                headers.forEach((h, idx) => {
+                    row[h] = parts[idx] ? parts[idx].trim() : '';
+                });
+                
+                const key = `${row.golf_name} - Repères ${row.tee_color}`;
+                if (!currentRegionData[key]) {
+                    currentRegionData[key] = {
+                        slope: parseFloat(row.slope_hommes) || 113,
+                        sss: parseFloat(row.sss_hommes) || 72,
+                        holes: []
+                    };
+                }
+                
+                currentRegionData[key].holes.push({
+                    num: parseInt(row.hole_num),
+                    par: parseInt(row.hole_par),
+                    hcp: parseInt(row.hole_hcp)
+                });
+            }
+            
+            // Trie des parcours de manière alphabétique
+            Object.keys(currentRegionData).sort().forEach(key => {
+                const opt = document.createElement('option');
+                opt.value = key;
+                datalist.appendChild(opt);
+            });
+
+        } catch(e) {
+            console.error("Impossible de charger le fichier " + filename, e);
+        }
+    }
+
+    function applySelectedGolf() {
+        const key = document.getElementById('golfSelect').value;
+        const data = currentRegionData[key];
+        if (data) {
+            // Effacer la sélection locale s'il y en avait une pour ne pas créer de conflit
+            document.getElementById('savedCoursesDropdown').value = "";
+            document.getElementById('btnDeleteCourse').disabled = true;
+
+            document.getElementById('optSlope').value = data.slope;
+            document.getElementById('optSss').value = data.sss;
+            
+            data.holes.forEach(h => {
+                const i = h.num;
+                if (document.getElementById('par'+i)) {
+                    document.getElementById('par'+i).value = h.par;
+                }
+                if (document.getElementById('hcp'+i)) {
+                    const hcpInput = document.getElementById('hcp'+i);
+                    if (document.getElementById('modeNet').checked) {
+                        hcpInput.value = h.hcp;
+                    } else {
+                        hcpInput.dataset.old = h.hcp; 
+                    }
+                }
+            });
         }
     }
 
@@ -503,8 +627,8 @@
                 <div class="form-group" style="display: flex; gap: 8px; padding: 5px 0; border: none; margin-bottom: 5px; flex-wrap: nowrap;">
                     <span class="dot" style="background:${state.players[i].color}; width:16px; height:16px; align-self: center;"></span>
                     <input type="text" id="pName${i}" placeholder="Joueur ${i+1}" maxlength="15" style="flex: 2; min-width: 0;">
-                    <input type="text" inputmode="decimal" id="pHcp${i}" placeholder="Index" style="flex: 1; min-width: 0;" class="hcp-input">
-                    <select id="pTeam${i}" style="flex: 1.5; min-width: 0; padding: 6px; font-size:0.9rem;">
+                    <input type="text" inputmode="decimal" id="pHcp${i}" placeholder="Index" style="flex: 0.8; min-width: 0;" class="hcp-input">
+                    <select id="pTeam${i}" style="flex: 1.7; min-width: 0; padding: 6px; font-size:0.9rem;">
                         <option value="1" ${defaultTeam === 1 ? 'selected' : ''}>${t1Name}</option>
                         <option value="2" ${defaultTeam === 2 ? 'selected' : ''}>${t2Name}</option>
                     </select>
@@ -568,7 +692,7 @@
     function updateCourseDropdown() {
         const courses = getSavedCourses();
         const select = document.getElementById('savedCoursesDropdown');
-        select.innerHTML = '<option value="">-- Nouveau parcours --</option>';
+        select.innerHTML = '<option value="">-- Nouveau parcours manuel --</option>';
         for(let name in courses) { select.innerHTML += `<option value="${name}">${name}</option>`; }
     }
 
@@ -577,6 +701,9 @@
         const btnDel = document.getElementById('btnDeleteCourse');
         if(!name) { btnDel.disabled = true; return; }
         
+        // Vider la sélection dynamique de golf pour éviter le conflit
+        document.getElementById('golfSelect').value = '';
+
         const data = getSavedCourses()[name];
         if(data) {
             document.getElementById('optSlope').value = data.slope || 113;
@@ -674,7 +801,7 @@
         window.scrollTo(0,0);
         
         let label = "Configuration";
-        if(id === 'screenRecap') label = "Récapitulatif";
+        if(id === 'screenRecap') label = "Parcours";
         if(id === 'screenGame' && state.course.length > 0) {
             label = `Trou ${state.course[state.currentHoleIndex].num} (${state.currentHoleIndex+1}/${state.course.length})`;
         }
@@ -785,11 +912,16 @@
     }
 
     function validateCourseAndStart() {
-        const selectedCourse = document.getElementById('savedCoursesDropdown').value;
-        if (!selectedCourse) {
+        const selectedLocalCourse = document.getElementById('savedCoursesDropdown').value;
+        const selectedDynamicGolf = document.getElementById('golfSelect').value;
+        
+        // Si aucun parcours local ni de la base de données n'est identifié comme "sélectionné"
+        if (!selectedLocalCourse && !selectedDynamicGolf) {
             document.getElementById('courseNameModal').style.display = 'flex';
         } else {
-            finalizeCourseAndStart(true, selectedCourse);
+            // Le nom choisi dépendra s'il a pris un golf de la liste dynamique ou locale
+            const existingName = selectedLocalCourse || selectedDynamicGolf;
+            finalizeCourseAndStart(false, existingName);
         }
     }
 
