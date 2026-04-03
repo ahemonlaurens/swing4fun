@@ -216,6 +216,21 @@
             <div id="playersList"></div>
         </div>
 
+        <div style="display:flex; gap:10px;">
+            <button class="btn-secondary" style="flex:1; padding:15px 5px; font-size:0.95rem; white-space:nowrap;" onclick="window.location.href='index.html'">← Retour</button>
+            <button class="btn-main" style="flex:2.2; padding:15px 5px; font-size:1rem; white-space:nowrap;" onclick="validateSetup()">Suivant ➜</button>
+        </div>
+    </div>
+
+    <div id="screenRecap" class="screen">
+        <div class="card">
+            <h2>Résumé de votre configuration</h2>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; background: #f8f9fa; padding: 15px; border-radius: 8px;" id="recapOptionsGrid"></div>
+            
+            <h3>Les Équipes</h3>
+            <div id="recapPlayersList" style="margin-bottom: 20px;"></div>
+        </div>
+
         <div class="card">
             <h2>Le Parcours</h2>
             <div class="form-group" style="display:flex; flex-direction:column; align-items:stretch; background:#f8f9fa; padding:15px; border-radius:8px; margin-bottom:15px; border-bottom:none;">
@@ -265,22 +280,8 @@
         </div>
 
         <div style="display:flex; gap:10px;">
-            <button class="btn-secondary" style="flex:1; padding:15px 5px; font-size:0.95rem; white-space:nowrap;" onclick="window.location.href='index.html'">← Retour</button>
-            <button class="btn-main" style="flex:2.2; padding:15px 5px; font-size:1rem; white-space:nowrap;" onclick="validateSetup()">Valider et Récapituler ➜</button>
-        </div>
-    </div>
-
-    <div id="screenRecap" class="screen">
-        <div class="card">
-            <h2>Résumé de votre configuration</h2>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 20px 0; background: #f8f9fa; padding: 15px; border-radius: 8px;" id="recapOptionsGrid"></div>
-            
-            <h3>Les Équipes</h3>
-            <div id="recapPlayersList" style="margin-bottom: 20px;"></div>
-        </div>
-        <div style="display:flex; gap:10px;">
             <button class="btn-secondary" style="flex:1;" onclick="showScreen('screenSetup')">← Modifier</button>
-            <button class="btn-main" style="flex:2;" onclick="startGame()">Commencer le Jeu ➜</button>
+            <button class="btn-main" style="flex:2;" onclick="validateCourseAndStart()">Commencer le Jeu ➜</button>
         </div>
     </div>
 
@@ -420,8 +421,8 @@
         <input type="text" id="newCourseNameInput" placeholder="Saisissez un nom (optionnel)" style="width: 100%; margin-bottom: 10px;">
         <p style="font-size: 0.85rem; color: #636e72; margin-bottom: 20px;">Voulez-vous sauvegarder ce parcours localement ?</p>
         <div class="modal-btns">
-            <button class="btn-secondary" style="flex:1;" onclick="finalizeSetupFlow(false)">Passer</button>
-            <button class="btn-main" style="flex:1;" onclick="finalizeSetupFlow(true)">Valider</button>
+            <button class="btn-secondary" style="flex:1;" onclick="finalizeCourseAndStart(false)">Passer</button>
+            <button class="btn-main" style="flex:1;" onclick="finalizeCourseAndStart(true)">Valider</button>
         </div>
     </div>
 </div>
@@ -717,7 +718,6 @@
     // SETUP & RECAP
     function validateSetup() {
         const isNet = document.getElementById('modeNet').checked;
-        const selectedCourse = document.getElementById('savedCoursesDropdown').value;
 
         // Validation qu'il y a au moins 1 joueur par équipe
         let t1c = 0, t2c = 0;
@@ -731,13 +731,8 @@
             return;
         }
 
-        // Validation des indexs
+        // Validation des indexs exacts
         state.players = [];
-        let totalCoursePar = 0;
-        for(let i=1; i<=18; i++) totalCoursePar += parseInt(document.getElementById('par'+i).value) || 4;
-        let slope = parseFloat(document.getElementById('optSlope').value) || 113;
-        let sss = parseFloat(document.getElementById('optSss').value) || 72;
-
         for(let i=0; i < state.playersCount; i++) {
             let name = document.getElementById('pName'+i).value.trim();
             let pObj = {
@@ -755,19 +750,50 @@
                     return; 
                 }
                 pObj.hcp = exactHcp;
-                pObj.playingHcp = Math.round((exactHcp * slope / 113) + (sss - totalCoursePar));
             }
             state.players.push(pObj);
         }
 
+        state.options.mode = isNet ? 'net' : 'brut';
+        state.options.holes = document.querySelector('input[name="holes"]:checked').value;
+        state.teams[0].name = document.getElementById('team1Name').value.trim() || 'Équipe 1';
+        state.teams[1].name = document.getElementById('team2Name').value.trim() || 'Équipe 2';
+
+        savePlayersLocally();
+        renderRecap();
+        showScreen('screenRecap');
+    }
+
+    function renderRecap() {
+        document.getElementById('recapOptionsGrid').innerHTML = `
+            <div><b>Mode :</b> <span style="text-transform:capitalize">${state.options.mode}</span></div>
+            <div><b>Trous :</b> ${state.options.holes.toUpperCase()}</div>
+        `;
+        
+        let pListHtml = '';
+        state.teams.forEach(team => {
+            const tPlayers = state.players.filter(p => p.team === team.id);
+            if (tPlayers.length > 0) {
+                pListHtml += `<div style="font-weight:bold; color:var(--primary-dark); margin-top:10px;">${team.name}</div>`;
+                tPlayers.forEach(p => {
+                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>)` : '';
+                    pListHtml += `<div style="padding:3px 0; margin-left:10px;"><span class="dot" style="background:${p.color}"></span> ${p.name} <span style="font-size:0.85rem; color:#636e72">${hcpText}</span></div>`;
+                });
+            }
+        });
+        document.getElementById('recapPlayersList').innerHTML = pListHtml;
+    }
+
+    function validateCourseAndStart() {
+        const selectedCourse = document.getElementById('savedCoursesDropdown').value;
         if (!selectedCourse) {
             document.getElementById('courseNameModal').style.display = 'flex';
         } else {
-            finalizeSetupFlow(true, selectedCourse);
+            finalizeCourseAndStart(true, selectedCourse);
         }
     }
 
-    function finalizeSetupFlow(saveCourseLocally, existingName = null) {
+    function finalizeCourseAndStart(saveCourseLocally, existingName = null) {
         document.getElementById('courseNameModal').style.display = 'none';
         
         let finalCourseName = existingName;
@@ -776,25 +802,28 @@
             if(finalCourseName) saveCurrentCourse(finalCourseName);
         }
 
-        const isNet = document.getElementById('modeNet').checked;
+        const isNet = state.options.mode === 'net';
 
-        state.options = {
-            mode: isNet ? 'net' : 'brut',
-            holes: document.querySelector('input[name="holes"]:checked').value,
-            slope: parseFloat(document.getElementById('optSlope').value) || 113,
-            sss: parseFloat(document.getElementById('optSss').value) || 72,
-            courseName: finalCourseName || ""
-        };
+        state.options.slope = parseFloat(document.getElementById('optSlope').value) || 113;
+        state.options.sss = parseFloat(document.getElementById('optSss').value) || 72;
+        state.options.courseName = finalCourseName || "";
 
-        state.teams[0].name = document.getElementById('team1Name').value.trim() || 'Équipe 1';
-        state.teams[1].name = document.getElementById('team2Name').value.trim() || 'Équipe 2';
+        let totalCoursePar = 0;
+        for(let i=1; i<=18; i++) {
+            totalCoursePar += parseInt(document.getElementById('par'+i).value) || 4;
+        }
 
-        savePlayersLocally();
+        if (isNet) {
+            state.players.forEach(p => {
+                p.playingHcp = Math.round((p.hcp * state.options.slope / 113) + (state.options.sss - totalCoursePar));
+            });
+        }
 
         state.course = [];
         let start = 1, end = 18;
         if(state.options.holes === 'front') end = 9;
         if(state.options.holes === 'back') start = 10;
+        
         for(let i=start; i<=end; i++) {
             let hcpInput = document.getElementById('hcp'+i);
             let hcpVal = hcpInput.value === '🔒' ? hcpInput.dataset.old : hcpInput.value;
@@ -806,33 +835,7 @@
             });
         }
 
-        renderRecap();
-        showScreen('screenRecap');
-    }
-
-    function renderRecap() {
-        const cName = state.options.courseName ? `<br><span style="font-size:0.9rem; color:#636e72">📍 ${state.options.courseName}</span>` : '';
-        document.getElementById('recapOptionsGrid').innerHTML = `
-            <div><b>Mode :</b> <span style="text-transform:capitalize">${state.options.mode}</span></div>
-            <div><b>Trous :</b> ${state.options.holes.toUpperCase()}${cName}</div>
-            ${state.options.mode === 'net' ? `
-            <div style="grid-column: 1 / -1; margin-top:5px; padding-top:10px; border-top:1px solid #ddd;">
-                <b>Étalonnage :</b> Slope ${state.options.slope} / SSS ${state.options.sss}
-            </div>` : ''}
-        `;
-        
-        let pListHtml = '';
-        state.teams.forEach(team => {
-            const tPlayers = state.players.filter(p => p.team === team.id);
-            if (tPlayers.length > 0) {
-                pListHtml += `<div style="font-weight:bold; color:var(--primary-dark); margin-top:10px;">${team.name}</div>`;
-                tPlayers.forEach(p => {
-                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b> ➜ Jeu: <b>${p.playingHcp}</b>)` : '';
-                    pListHtml += `<div style="padding:3px 0; margin-left:10px;"><span class="dot" style="background:${p.color}"></span> ${p.name} <span style="font-size:0.85rem; color:#636e72">${hcpText}</span></div>`;
-                });
-            }
-        });
-        document.getElementById('recapPlayersList').innerHTML = pListHtml;
+        startGame();
     }
 
     function startGame() {
