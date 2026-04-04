@@ -226,17 +226,11 @@
                     <input type="text" id="newLocalCourseName" placeholder="Entrez le nom de votre parcours..." style="display:none; width:100%; padding:10px; font-weight:bold; border:2px solid var(--primary); border-radius:8px; outline:none;">
                 </div>
             </div>
-            <div id="activeCourseDisplay" style="text-align:center; font-weight:bold; color:var(--primary-dark); font-size:1.1rem; min-height:1.5em;"></div>
+            <div id="activeCourseDisplay" style="text-align:center; font-weight:bold; color:var(--primary-dark); font-size:1.1rem; min-height:1.5em; margin-bottom:10px;"></div>
         </div>
 
         <div class="card">
-            <h2>2. Les Équipes et Départs</h2>
-            <div style="font-size: 0.9rem; color:#636e72; margin-bottom:15px;">Le repère est présélectionné en fonction du handicap. Les valeurs Slope/SSS s'ajustent automatiquement.</div>
-            <div id="recapPlayersList" style="margin-bottom: 10px;"></div>
-        </div>
-
-        <div class="card">
-            <h2>3. Détails des Trous</h2>
+            <h2>2. Détails des Trous</h2>
             <div style="font-size: 0.9rem; color:#636e72; margin-bottom:15px;">Vérifiez ou éditez le Par et le Handicap de chaque trou.</div>
             <div class="course-grid">
                 <div id="containerAller">
@@ -258,6 +252,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="card">
+            <h2>3. Les Équipes et Départs</h2>
+            <div style="font-size: 0.9rem; color:#636e72; margin-bottom:15px;">Le repère est présélectionné en fonction du handicap. Les valeurs Slope/SSS s'ajustent automatiquement (Homme/Femme).</div>
+            <div id="recapPlayersList" style="margin-bottom: 10px;"></div>
         </div>
 
         <div style="display:flex; gap:10px;">
@@ -392,10 +392,10 @@
         playersCount: 4,
         teams: [{ id: 1, name: 'Équipe 1' }, { id: 2, name: 'Équipe 2' }],
         players: [
-            { id: 0, name: '', hcp: 0, playingHcp: 0, color: 'var(--p1)', team: 1, scores: [] },
-            { id: 1, name: '', hcp: 0, playingHcp: 0, color: 'var(--p2)', team: 1, scores: [] },
-            { id: 2, name: '', hcp: 0, playingHcp: 0, color: 'var(--p3)', team: 2, scores: [] },
-            { id: 3, name: '', hcp: 0, playingHcp: 0, color: 'var(--p4)', team: 2, scores: [] }
+            { id: 0, name: '', hcp: 0, playingHcp: 0, color: 'var(--p1)', team: 1, scores: [], gender: 'M' },
+            { id: 1, name: '', hcp: 0, playingHcp: 0, color: 'var(--p2)', team: 1, scores: [], gender: 'M' },
+            { id: 2, name: '', hcp: 0, playingHcp: 0, color: 'var(--p3)', team: 2, scores: [], gender: 'M' },
+            { id: 3, name: '', hcp: 0, playingHcp: 0, color: 'var(--p4)', team: 2, scores: [], gender: 'M' }
         ],
         course: [],
         options: { mode: 'brut', holes: '18', courseName: '' },
@@ -409,7 +409,7 @@
     let currentEditIndex = 0;
     let courseToDelete = null;
     
-    // Données structurées : currentRegionData[golf_name] = { tees: { 'Blanc': { slope, sss, holes: [] }, ... } }
+    // currentRegionData[golf_name] = { tees: { 'Blanc': { slope_m, sss_m, slope_f, sss_f, holes: [] }, ... } }
     let currentRegionData = {};
     let currentSelectedGolfData = null;
 
@@ -516,9 +516,17 @@
                 if (!currentRegionData[gName]) currentRegionData[gName] = { tees: {} };
                 
                 if (!currentRegionData[gName].tees[teeColor]) {
+                    let s_f = parseFloat(row.slope_femmes);
+                    let sss_f = parseFloat(row.sss_femmes);
+                    let s_m = parseFloat(row.slope_hommes) || 113;
+                    let sss_m = parseFloat(row.sss_hommes) || 72;
+                    
                     currentRegionData[gName].tees[teeColor] = {
-                        slope: parseFloat(row.slope_hommes) || 113,
-                        sss: parseFloat(row.sss_hommes) || 72,
+                        slope_m: s_m,
+                        sss_m: sss_m,
+                        // Fallback vers les valeurs homme si les valeurs femme sont absentes ou 0
+                        slope_f: (isNaN(s_f) || s_f === 0) ? s_m : s_f,
+                        sss_f: (isNaN(sss_f) || sss_f === 0) ? sss_m : sss_f,
                         holes: []
                     };
                 }
@@ -562,7 +570,7 @@
                     else hcpInput.dataset.old = i; 
                 }
             }
-            updatePlayerTeeDropdowns(['Blanc', 'Jaune', 'Bleu', 'Rouge']);
+            updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']);
             return;
         }
 
@@ -585,7 +593,7 @@
                     }
                 });
             }
-            updatePlayerTeeDropdowns(['Blanc', 'Jaune', 'Bleu', 'Rouge']);
+            updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']);
             return;
         }
 
@@ -667,7 +675,7 @@
                     select.appendChild(opt);
                 });
 
-                // Pré-sélection automatique en fonction de l'index
+                // Pré-sélection automatique en fonction de l'index ET du genre (généralités)
                 let hcp = player ? player.hcp : 20;
                 let recommended = availableTees[0]; // Sécurité
                 
@@ -690,12 +698,15 @@
         
         if (!teeSelect || !slopeInput || !sssInput) return;
 
+        const player = state.players.find(p => p.id === playerId);
+        const gender = player ? player.gender : 'M';
+
         if (state.activeCourseType === 'db' && currentSelectedGolfData) {
             const teeColor = teeSelect.value;
             if (currentSelectedGolfData.tees[teeColor]) {
                 const tData = currentSelectedGolfData.tees[teeColor];
-                slopeInput.value = tData.slope;
-                sssInput.value = tData.sss;
+                slopeInput.value = gender === 'F' ? tData.slope_f : tData.slope_m;
+                sssInput.value = gender === 'F' ? tData.sss_f : tData.sss_m;
             }
         } else {
             // Parcours Local ou Nouveau (Valeurs standard)
@@ -714,12 +725,21 @@
 
         for (let i = 0; i < state.playersCount; i++) {
             const defaultTeam = (i < 2) ? 1 : 2; 
+            
+            // Design Bouton H/F pour le genre
+            const genderHtml = `
+            <div class="btn-group gender-toggle" style="flex: 0.8; min-width: 60px; display: none;">
+                <input type="radio" name="pGen${i}" id="pGenM${i}" value="M" checked><label for="pGenM${i}" style="padding: 6px 4px; font-size:0.85rem;">H</label>
+                <input type="radio" name="pGen${i}" id="pGenF${i}" value="F"><label for="pGenF${i}" style="padding: 6px 4px; font-size:0.85rem;">F</label>
+            </div>`;
+
             pList.innerHTML += `
-                <div class="form-group" style="display: flex; gap: 8px; padding: 5px 0; border: none; margin-bottom: 5px; flex-wrap: nowrap;">
-                    <span class="dot" style="background:${state.players[i].color}; width:16px; height:16px; align-self: center;"></span>
-                    <input type="text" id="pName${i}" placeholder="Joueur ${i+1}" maxlength="15" style="flex: 2; min-width: 0;">
-                    <input type="text" inputmode="decimal" id="pHcp${i}" placeholder="Index" style="flex: 0.8; min-width: 0;" class="hcp-input">
-                    <select id="pTeam${i}" style="flex: 1.7; min-width: 0; padding: 6px; font-size:0.9rem;">
+                <div class="form-group" style="display: flex; gap: 6px; padding: 5px 0; border: none; margin-bottom: 5px; flex-wrap: nowrap; align-items:center;">
+                    <span class="dot" style="background:${state.players[i].color}; width:16px; height:16px; align-self: center; flex-shrink:0;"></span>
+                    <input type="text" id="pName${i}" placeholder="Joueur ${i+1}" maxlength="15" style="flex: 2; min-width: 0; padding:8px 6px;">
+                    ${genderHtml}
+                    <input type="text" inputmode="decimal" id="pHcp${i}" placeholder="Index" style="flex: 0.8; min-width: 0; padding:8px 4px;" class="hcp-input">
+                    <select id="pTeam${i}" style="flex: 1.5; min-width: 0; padding: 8px 4px; font-size:0.9rem;">
                         <option value="1" ${defaultTeam === 1 ? 'selected' : ''}>${t1Name}</option>
                         <option value="2" ${defaultTeam === 2 ? 'selected' : ''}>${t2Name}</option>
                     </select>
@@ -753,6 +773,9 @@
                         if (saved[i].hcp !== null && saved[i].hcp !== '🔒') {
                             document.getElementById('pHcp'+i).value = saved[i].hcp;
                         }
+                        if (saved[i].gender === 'F' && document.getElementById(`pGenF${i}`)) {
+                            document.getElementById(`pGenF${i}`).checked = true;
+                        }
                     }
                 }
             }
@@ -764,9 +787,11 @@
         for(let i=0; i<4; i++) {
             let hcpEl = document.getElementById('pHcp'+i);
             let hcpVal = hcpEl ? hcpEl.value : '';
+            let genEl = document.querySelector(`input[name="pGen${i}"]:checked`);
             arr.push({
                 name: document.getElementById('pName'+i) ? document.getElementById('pName'+i).value.trim() : `Joueur ${i+1}`,
-                hcp: (hcpVal === '🔒') ? '' : hcpVal
+                hcp: (hcpVal === '🔒') ? '' : hcpVal,
+                gender: genEl ? genEl.value : 'M'
             });
         }
         localStorage.setItem('wolf_saved_players', JSON.stringify(arr));
@@ -774,11 +799,18 @@
 
     function updateCalcMode() {
         const isNet = document.getElementById('modeNet').checked;
+        
+        // Affiche/Cache le sélecteur H/F pour chaque joueur
+        document.querySelectorAll('.gender-toggle').forEach(el => {
+            el.style.display = isNet ? 'flex' : 'none';
+        });
+
         document.querySelectorAll('.hcp-input').forEach(el => {
             el.disabled = !isNet;
             if(!isNet) { el.value = '🔒'; el.style.color = '#b2bec3'; } 
             else { if(el.value === '🔒') el.value = ''; el.style.color = 'inherit'; }
         });
+
         document.querySelectorAll('.hcp-cell input').forEach(el => {
             el.disabled = !isNet;
             if(!isNet) {
@@ -857,11 +889,13 @@
         state.players = [];
         for(let i=0; i < state.playersCount; i++) {
             let name = document.getElementById('pName'+i).value.trim();
+            let genEl = document.querySelector(`input[name="pGen${i}"]:checked`);
             let pObj = {
                 id: i,
                 name: name || `Joueur ${i+1}`,
                 color: `var(--p${i+1})`,
                 team: parseInt(document.getElementById('pTeam'+i).value),
+                gender: isNet ? (genEl ? genEl.value : 'M') : 'M',
                 scores: [], hcp: 0, playingHcp: 0
             };
             
@@ -894,7 +928,7 @@
             if (tPlayers.length > 0) {
                 pListHtml += `<div style="font-weight:bold; color:var(--primary-dark); margin-top:15px; border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:10px;">${team.name}</div>`;
                 tPlayers.forEach(p => {
-                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>)` : '';
+                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>, ${p.gender === 'F' ? 'Femme' : 'Homme'})` : '';
                     
                     let whsHtml = '';
                     if (state.options.mode === 'net') {
@@ -934,7 +968,7 @@
         if (state.activeCourseType === 'db' && currentSelectedGolfData) {
             updatePlayerTeeDropdowns(Object.keys(currentSelectedGolfData.tees));
         } else {
-            updatePlayerTeeDropdowns(['Blanc', 'Jaune', 'Bleu', 'Rouge']);
+            updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']);
         }
     }
 
