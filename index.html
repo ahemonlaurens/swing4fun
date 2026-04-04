@@ -178,7 +178,7 @@
 <div class="container">
     <div class="welcome-section">
         <p class="welcome-text">
-            <span data-i18n="welcomePart1"><b>Swinguez en s'amusant,</b></span>
+            <span data-i18n="welcomePart1"><b>Swinguez entre amis !</b></span>
         </p>
     </div>
 
@@ -187,7 +187,7 @@
             <div class="app-icon">🤝</div>
             <div class="app-content">
                 <div class="app-info">
-                    <div class="app-name" data-i18n="matchTitle">Match en équipe</div>
+                    <div class="app-name" data-i18n="matchTitle">Matchplay par équipe</div>
                     <div class="app-desc" data-i18n="matchDesc">Joue en équipe à 3 ou 4 joueurs.</div>
                 </div>
                 <div class="btn-launch" data-i18n="launchBtn">Lancer</div>
@@ -237,8 +237,8 @@
     const translations = {
         fr: {
             installBtn: "📲 Installer",
-            welcomePart1: "<b>Swinguez en s'amusant !</b>",
-            matchTitle: "Match en équipe",
+            welcomePart1: "<b>Swinguez entre amis !</b>",
+            matchTitle: "Matchplay par équipe",
             matchDesc: "Joue en équipe à 3 ou 4 joueurs.",
             wolfTitle: "Le jeu du Loup",
             wolfDesc: "Le Loup choisit son partenaire ou joue seul. Fun à 4.",
@@ -394,7 +394,7 @@
             try {
                 await navigator.share({
                     title: 'Swing 4 Fun',
-                    text: 'Swinguez en s\'amusant, sans connexion !',
+                    text: 'Swinguez entre amis, sans connexion !',
                     url: window.location.href
                 });
             } catch (err) {
