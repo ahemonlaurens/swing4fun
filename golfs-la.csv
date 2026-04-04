@@ -1,667 +1,307 @@
-﻿region;dept;golf_name;city;zip;holes_count;par_total;architect;year;tee_color;tee_dist_total_m;slope_hommes;sss_hommes;slope_femmes;sss_femmes;hole_num;hole_par;hole_hcp;hole_dist_m
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;1;4;5;359
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;2;4;11;281
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;3;5;15;411
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;4;4;4;330
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;5;3;14;132
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;6;5;10;463
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;7;4;8;285
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;8;3;13;151
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;9;4;17;272
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;10;4;12;299
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;11;4;3;339
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;12;3;18;129
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;13;3;1;174
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;14;5;9;434
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;15;4;2;327
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;16;5;6;422
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;17;3;16;142
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Blanc;5271;136;77.0;127;71.1;18;4;7;321
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;1;4;5;338
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;2;4;11;265
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;3;5;15;387
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;4;4;4;311
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;5;3;14;124
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;6;5;10;436
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;7;4;8;268
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;8;3;13;142
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;9;4;17;256
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;10;4;12;282
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;11;4;3;319
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;12;3;18;121
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;13;3;1;164
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;14;5;9;409
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;15;4;2;308
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;16;5;6;397
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;17;3;16;134
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Jaune;4963;131;74.9;124;69.1;18;4;7;302
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;1;4;5;313
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;2;4;11;245
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;3;5;15;359
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;4;4;4;288
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;5;3;14;115
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;6;5;10;404
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;7;4;8;249
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;8;3;13;132
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;9;4;17;237
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;10;4;12;261
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;11;4;3;296
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;12;3;18;113
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;13;3;1;152
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;14;5;9;379
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;15;4;2;285
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;16;5;6;368
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;17;3;16;124
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Bleu;4599;126;72.5;120;67.1;18;4;7;280
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;1;4;5;284
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;2;4;11;223
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;3;5;15;326
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;4;4;4;261
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;5;3;14;105
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;6;5;10;367
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;7;4;8;226
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;8;3;13;120
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;9;4;17;215
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;10;4;12;237
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;11;4;3;269
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;12;3;18;102
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;13;3;1;138
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;14;5;9;344
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;15;4;2;259
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;16;5;6;334
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;17;3;16;113
-Pays de la Loire;44;Garden Golf Nantes Carquefou;Carquefou;44470;18;71;M. Adam;1988;Rouge;4176;121;70.0;117;65.3;18;4;7;254
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;1;4;9;334
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;2;4;7;395
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;3;3;15;134
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;4;4;11;305
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;5;4;13;307
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;6;4;8;328
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;7;3;18;123
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;8;4;2;376
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;9;5;10;405
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;10;3;16;129
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;11;4;12;303
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;12;3;14;158
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;13;4;4;363
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;14;5;6;431
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;15;4;3;363
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;16;3;17;143
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;17;5;5;415
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Blanc;5373;141;71.3;128;73.1;18;4;1;360
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;1;4;9;323
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;2;4;7;382
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;3;3;15;130
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;4;4;11;295
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;5;4;13;297
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;6;4;8;317
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;7;3;18;119
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;8;4;2;363
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;9;5;10;392
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;10;3;16;125
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;11;4;12;293
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;12;3;14;153
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;13;4;4;351
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;14;5;6;417
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;15;4;3;351
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;16;3;17;138
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;17;5;5;401
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Jaune;5194;130;69.2;126;72.1;18;4;1;348
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;1;4;9;297
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;2;4;7;351
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;3;3;15;119
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;4;4;11;271
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;5;4;13;273
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;6;4;8;292
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;7;3;18;109
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;8;4;2;334
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;9;5;10;360
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;10;3;16;115
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;11;4;12;269
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;12;3;14;141
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;13;4;4;323
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;14;5;6;383
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;15;4;3;323
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;16;3;17;127
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;17;5;5;369
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Bleu;4778;118;68.7;138;72.8;18;4;1;320
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;1;4;9;273
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;2;4;7;323
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;3;3;15;109
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;4;4;11;249
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;5;4;13;251
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;6;4;8;268
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;7;3;18;100
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;8;4;2;307
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;9;5;10;331
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;10;3;16;105
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;11;4;12;247
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;12;3;14;129
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;13;4;4;296
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;14;5;6;352
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;15;4;3;296
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;16;3;17;117
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;17;5;5;339
-Pays de la Loire;44;Golf Blue Green Nantes-Erdre;Nantes;44300;18;70;F. Hawtree;1969;Rouge;4388;114;66.8;131;70.8;18;4;1;294
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;1;4;15;347
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;2;4;5;366
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;3;3;17;150
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;4;5;9;443
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;5;4;11;383
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;6;3;13;200
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;7;4;1;401
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;8;4;3;383
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;9;5;7;443
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;10;4;14;328
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;11;4;2;379
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;12;4;6;358
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;13;5;4;478
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;14;4;16;319
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;15;3;12;159
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;16;5;8;452
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;17;3;10;159
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Blanc;6003;117;69.2;136;76.9;18;4;18;258
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;1;4;15;332
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;2;4;5;350
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;3;3;17;144
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;4;5;9;424
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;5;4;11;367
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;6;3;13;191
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;7;4;1;384
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;8;4;3;367
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;9;5;7;424
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;10;4;14;314
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;11;4;2;363
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;12;4;6;343
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;13;5;4;458
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;14;4;16;305
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;15;3;12;152
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;16;5;8;433
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;17;3;10;152
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Jaune;5746;114;68.5;133;75.4;18;4;18;247
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;1;4;15;295
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;2;4;5;311
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;3;3;17;128
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;4;5;9;377
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;5;4;11;326
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;6;3;13;170
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;7;4;1;341
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;8;4;3;326
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;9;5;7;377
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;10;4;14;279
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;11;4;2;322
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;12;4;6;304
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;13;5;4;406
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;14;4;16;271
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;15;3;12;135
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;16;5;8;384
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;17;3;10;135
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Bleu;5105;121;70.4;113;67.1;18;4;18;219
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;1;4;15;280
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;2;4;5;295
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;3;3;17;121
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;4;5;9;357
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;5;4;11;309
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;6;3;13;161
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;7;4;1;323
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;8;4;3;309
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;9;5;7;357
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;10;4;14;264
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;11;4;2;305
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;12;4;6;288
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;13;5;4;385
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;14;4;16;257
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;15;3;12;128
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;16;5;8;364
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;17;3;10;128
-Pays de la Loire;44;Golf de la Bretesche;Missillac;44780;18;72;Henry Cotton;1967;Rouge;4837;118;69.1;107;65.9;18;4;18;208
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;1;4;13;309
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;2;4;3;355
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;3;4;17;258
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;4;3;15;125
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;5;4;7;350
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;6;4;1;422
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;7;3;11;159
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;8;4;9;362
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;9;5;5;440
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;10;4;14;285
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;11;5;10;471
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;12;3;16;139
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;13;4;4;411
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;14;4;12;288
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;15;5;2;506
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;16;3;6;189
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;17;4;8;359
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Blanc;5851;139;72.1;128;73.0;18;5;18;423
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;1;4;13;291
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;2;4;3;335
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;3;4;17;243
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;4;3;15;118
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;5;4;7;330
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;6;4;1;398
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;7;3;11;150
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;8;4;9;341
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;9;5;5;415
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;10;4;14;269
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;11;5;10;444
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;12;3;16;131
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;13;4;4;387
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;14;4;12;271
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;15;5;2;477
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;16;3;6;178
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;17;4;8;338
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Jaune;5515;133;70.1;124;71.2;18;5;18;399
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;1;4;13;269
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;2;4;3;309
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;3;4;17;224
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;4;3;15;109
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;5;4;7;305
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;6;4;1;367
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;7;3;11;138
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;8;4;9;315
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;9;5;5;383
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;10;4;14;248
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;11;5;10;410
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;12;3;16;121
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;13;4;4;358
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;14;4;12;251
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;15;5;2;440
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;16;3;6;164
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;17;4;8;312
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Bleu;5091;116;68.0;136;73.1;18;5;18;368
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;1;4;13;257
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;2;4;3;295
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;3;4;17;214
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;4;3;15;104
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;5;4;7;291
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;6;4;1;350
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;7;3;11;132
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;8;4;9;301
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;9;5;5;365
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;10;4;14;237
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;11;5;10;391
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;12;3;16;115
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;13;4;4;341
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;14;4;12;239
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;15;5;2;420
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;16;3;6;157
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;17;4;8;298
-Pays de la Loire;44;Golf de Nantes Vigneux;Vigneux-de-Bretagne;44360;18;72;Frank Pennink;1969;Rouge;4859;115;67.0;130;71.8;18;5;18;351
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;1;4;7;350
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;2;5;3;471
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;3;3;15;166
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;4;4;1;416
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;5;4;11;349
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;6;4;5;383
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;7;3;17;155
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;8;5;9;479
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;9;4;13;286
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;10;4;14;321
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;11;5;2;498
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;12;3;16;159
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;13;5;8;471
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;14;4;10;349
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;15;4;6;368
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;16;4;4;367
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;17;3;18;143
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6055;134;73.5;138;76.0;18;4;12;324
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;1;4;7;330
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;2;5;3;445
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;3;3;15;157
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;4;4;1;393
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;5;4;11;329
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;6;4;5;361
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;7;3;17;146
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;8;5;9;452
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;9;4;13;270
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;10;4;14;303
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;11;5;2;470
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;12;3;16;150
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;13;5;8;445
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;14;4;10;329
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;15;4;6;347
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;16;4;4;346
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;17;3;18;135
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5715;129;71.8;133;74.2;18;4;12;306
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;1;4;7;304
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;2;5;3;409
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;3;3;15;144
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;4;4;1;361
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;5;4;11;303
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;6;4;5;333
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;7;3;17;135
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;8;5;9;416
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;9;4;13;248
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;10;4;14;279
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;11;5;2;433
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;12;3;16;138
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;13;5;8;409
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;14;4;10;303
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;15;4;6;320
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;16;4;4;319
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;17;3;18;124
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5260;122;69.5;126;71.5;18;4;12;281
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;1;4;7;282
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;2;5;3;379
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;3;3;15;134
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;4;4;1;335
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;5;4;11;281
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;6;4;5;308
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;7;3;17;125
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;8;5;9;385
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;9;4;13;230
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;10;4;14;258
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;11;5;2;401
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;12;3;16;128
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;13;5;8;379
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;14;4;10;281
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;15;4;6;296
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;16;4;4;295
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;17;3;18;115
-Pays de la Loire;44;Golf Int. Barriere La Baule - Rouge;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;4870;117;67.5;121;69.5;18;4;12;261
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;1;4;5;385
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;2;5;1;510
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;3;3;13;175
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;4;4;7;370
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;5;4;9;355
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;6;5;3;505
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;7;3;17;165
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;8;4;11;340
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;9;4;15;320
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;10;4;6;375
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;11;4;2;400
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;12;3;16;170
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;13;5;8;490
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;14;4;10;350
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;15;4;4;380
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;16;5;12;345
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;17;3;18;150
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Blanc;6301;140;74.2;142;77.5;18;4;14;416
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;1;4;5;364
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;2;5;1;482
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;3;3;13;166
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;4;4;7;350
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;5;4;9;336
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;6;5;3;478
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;7;3;17;156
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;8;4;11;322
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;9;4;15;303
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;10;4;6;355
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;11;4;2;378
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;12;3;16;161
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;13;5;8;464
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;14;4;10;331
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;15;4;4;359
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;16;5;12;326
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;17;3;18;142
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Jaune;5961;135;72.5;137;75.8;18;4;14;394
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;1;4;5;336
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;2;5;1;444
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;3;3;13;153
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;4;4;7;322
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;5;4;9;309
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;6;5;3;440
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;7;3;17;144
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;8;4;11;296
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;9;4;15;279
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;10;4;6;327
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;11;4;2;349
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;12;3;16;148
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;13;5;8;427
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;14;4;10;305
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;15;4;4;331
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;16;5;12;301
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;17;3;18;131
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Bleu;5491;128;70.0;130;73.0;18;4;14;363
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;1;4;5;310
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;2;5;1;410
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;3;3;13;141
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;4;4;7;298
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;5;4;9;286
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;6;5;3;406
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;7;3;17;133
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;8;4;11;274
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;9;4;15;257
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;10;4;6;302
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;11;4;2;322
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;12;3;16;137
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;13;5;8;394
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;14;4;10;282
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;15;4;4;306
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;16;5;12;278
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;17;3;18;121
-Pays de la Loire;44;Golf Int. Barriere La Baule - Bleu;Saint-Andre-des-Eaux;44117;18;72;P. Thevenin / M. Gayon;1976;Rouge;5070;122;68.0;124;71.0;18;4;14;335
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;1;4;9;350
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;2;5;3;465
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;3;4;7;345
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;4;4;1;390
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;5;3;15;155
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;6;5;5;480
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;7;4;11;330
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;8;4;13;310
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;9;5;17;440
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;10;4;10;355
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;11;4;2;380
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;12;3;16;160
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;13;5;4;490
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;14;4;8;365
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;15;4;6;375
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;16;4;14;320
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;17;3;18;145
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Blanc;6250;141;73.5;0;0;18;4;12;345
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;1;4;9;334
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;2;5;3;444
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;3;4;7;330
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;4;4;1;373
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;5;3;15;148
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;6;5;5;458
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;7;4;11;315
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;8;4;13;296
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;9;5;17;420
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;10;4;10;339
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;11;4;2;363
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;12;3;16;153
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;13;5;4;468
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;14;4;8;349
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;15;4;6;358
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;16;4;14;306
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;17;3;18;139
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Jaune;5970;137;72.0;0;0;18;4;12;330
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;1;4;9;299
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;2;5;3;398
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;3;4;7;295
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;4;4;1;334
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;5;3;15;133
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;6;5;5;411
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;7;4;11;282
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;8;4;13;265
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;9;5;17;376
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;10;4;10;304
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;11;4;2;325
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;12;3;16;137
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;13;5;4;419
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;14;4;8;312
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;15;4;6;321
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;16;4;14;274
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;17;3;18;124
-Pays de la Loire;44;Golf Blue Green Savenay;Savenay;44260;18;73;Michel Gayon;1990;Bleu;5348;133;70.0;133;73.0;18;4;12;295
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;1;5;15;449
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;2;4;4;331
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;3;4;10;318
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;4;3;18;134
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;5;5;2;533
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;6;3;17;165
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;7;4;7;353
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;8;3;12;169
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;9;4;1;356
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;10;4;14;308
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;11;4;8;341
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;12;5;5;453
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;13;4;13;288
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;14;4;11;364
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;15;4;3;341
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;16;4;6;279
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;17;3;9;142
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Blanc;5755;130;71.2;132;73.5;18;5;16;433
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;1;5;15;423
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;2;4;4;312
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;3;4;10;299
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;4;3;18;126
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;5;5;2;502
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;6;3;17;155
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;7;4;7;332
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;8;3;12;159
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;9;4;1;335
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;10;4;14;290
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;11;4;8;321
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;12;5;5;427
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;13;4;13;271
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;14;4;11;343
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;15;4;3;321
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;16;4;6;263
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;17;3;9;134
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Jaune;5420;125;69.5;127;71.5;18;5;16;408
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;1;5;15;386
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;2;4;4;285
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;3;4;10;274
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;4;3;18;115
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;5;5;2;458
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;6;3;17;142
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;7;4;7;304
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;8;3;12;145
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;9;4;1;306
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;10;4;14;265
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;11;4;8;293
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;12;5;5;390
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;13;4;13;248
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;14;4;11;313
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;15;4;3;293
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;16;4;6;240
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;17;3;9;122
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Bleu;4950;119;67.5;121;69.5;18;5;16;372
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;1;5;15;355
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;2;4;4;262
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;3;4;10;252
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;4;3;18;106
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;5;5;2;422
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;6;3;17;131
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;7;4;7;279
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;8;3;12;134
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;9;4;1;282
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;10;4;14;244
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;11;4;8;270
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;12;5;5;359
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;13;4;13;228
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;14;4;11;288
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;15;4;3;270
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;16;4;6;221
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;17;3;9;112
-Pays de la Loire;44;Golf Blue Green Pornic;Pornic;44210;18;72;;1912;Rouge;4555;114;66.0;116;68.0;18;5;16;343
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;1;4;5;320
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;2;4;1;345
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;3;3;13;135
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;4;4;9;300
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;5;5;3;430
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;6;3;7;155
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;7;4;17;265
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;8;4;11;285
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;9;3;15;130
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;10;4;6;310
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;11;4;2;330
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;12;3;16;125
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;13;5;4;415
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;14;4;10;290
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;15;4;8;305
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;16;3;18;120
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;17;4;12;275
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Blanc;4903;129;67.0;131;70.0;18;3;14;268
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;1;4;5;300
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;2;4;1;324
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;3;3;13;127
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;4;4;9;281
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;5;5;3;403
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;6;3;7;145
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;7;4;17;249
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;8;4;11;267
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;9;3;15;122
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;10;4;6;291
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;11;4;2;310
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;12;3;16;117
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;13;5;4;389
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;14;4;10;272
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;15;4;8;286
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;16;3;18;113
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;17;4;12;258
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Jaune;4600;124;65.5;126;68.5;18;3;14;251
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;1;4;5;274
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;2;4;1;296
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;3;3;13;116
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;4;4;9;257
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;5;5;3;368
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;6;3;7;133
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;7;4;17;227
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;8;4;11;244
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;9;3;15;111
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;10;4;6;266
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;11;4;2;283
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;12;3;16;107
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;13;5;4;355
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;14;4;10;248
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;15;4;8;261
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;16;3;18;103
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;17;4;12;236
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Bleu;4200;118;63.5;120;66.5;18;3;14;230
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;1;4;5;251
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;2;4;1;271
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;3;3;13;106
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;4;4;9;236
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;5;5;3;338
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;6;3;7;122
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;7;4;17;208
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;8;4;11;224
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;9;3;15;102
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;10;4;6;243
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;11;4;2;259
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;12;3;16;98
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;13;5;4;326
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;14;4;10;228
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;15;4;8;239
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;16;3;18;94
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;17;4;12;216
-Pays de la Loire;44;Golf de Guerande;Guerande;44350;18;68;;1989;Rouge;3850;113;61.5;115;64.5;18;3;14;210
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Blanc;2054;104;32.0;106;34.0;1;4;3;285
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Blanc;2054;104;32.0;106;34.0;2;4;1;310
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Blanc;2054;104;32.0;106;34.0;3;3;9;120
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Blanc;2054;104;32.0;106;34.0;4;4;5;270
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Blanc;2054;104;32.0;106;34.0;5;3;7;140
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Blanc;2054;104;32.0;106;34.0;6;4;2;295
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Blanc;2054;104;32.0;106;34.0;7;3;8;125
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Blanc;2054;104;32.0;106;34.0;8;4;4;280
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Blanc;2054;104;32.0;106;34.0;9;4;6;229
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Jaune;1900;100;31.0;102;33.0;1;4;3;264
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Jaune;1900;100;31.0;102;33.0;2;4;1;287
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Jaune;1900;100;31.0;102;33.0;3;3;9;111
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Jaune;1900;100;31.0;102;33.0;4;4;5;250
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Jaune;1900;100;31.0;102;33.0;5;3;7;130
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Jaune;1900;100;31.0;102;33.0;6;4;2;273
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Jaune;1900;100;31.0;102;33.0;7;3;8;116
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Jaune;1900;100;31.0;102;33.0;8;4;4;259
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Jaune;1900;100;31.0;102;33.0;9;4;6;212
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Bleu;1700;95;30.0;97;32.0;1;4;3;236
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Bleu;1700;95;30.0;97;32.0;2;4;1;257
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Bleu;1700;95;30.0;97;32.0;3;3;9;99
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Bleu;1700;95;30.0;97;32.0;4;4;5;223
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Bleu;1700;95;30.0;97;32.0;5;3;7;116
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Bleu;1700;95;30.0;97;32.0;6;4;2;244
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Bleu;1700;95;30.0;97;32.0;7;3;8;103
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Bleu;1700;95;30.0;97;32.0;8;4;4;232
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Bleu;1700;95;30.0;97;32.0;9;4;6;190
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Rouge;1550;90;29.0;92;31.0;1;4;3;215
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Rouge;1550;90;29.0;92;31.0;2;4;1;234
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Rouge;1550;90;29.0;92;31.0;3;3;9;91
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Rouge;1550;90;29.0;92;31.0;4;4;5;204
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Rouge;1550;90;29.0;92;31.0;5;3;7;106
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Rouge;1550;90;29.0;92;31.0;6;4;2;223
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Rouge;1550;90;29.0;92;31.0;7;3;8;94
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Rouge;1550;90;29.0;92;31.0;8;4;4;211
-Pays de la Loire;44;Golf Blue Green Le Croisic;Le Croisic;44490;9;33;;1988;Rouge;1550;90;29.0;92;31.0;9;4;6;173
+﻿region;nom-golf;numero-trou;par;hcp;sss-homme;sss-femme;slope-homme;slope-femme
+Pays de la Loire;Golf de Cholet;1;4;4;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;2;3;10;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;3;4;7;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;4;4;1;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;5;3;18;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;6;5;8;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;7;4;2;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;8;3;9;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;9;4;6;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;10;5;17;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;11;4;14;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;12;5;5;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;13;4;3;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;14;4;11;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;15;3;16;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;16;4;13;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;17;4;15;72.0;73.5;124;129
+Pays de la Loire;Golf de Cholet;18;4;12;72.0;73.5;124;129
+Pays de la Loire;Golf des Fontenelles;1;4;8;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;2;3;18;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;3;4;2;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;4;5;4;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;5;4;6;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;6;3;16;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;7;4;10;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;8;4;12;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;9;5;14;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;10;4;5;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;11;4;15;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;12;3;7;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;13;5;11;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;14;3;17;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;15;5;1;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;16;4;9;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;17;5;3;71.8;73.7;134;129
+Pays de la Loire;Golf des Fontenelles;18;3;13;71.8;73.7;134;129
+Pays de la Loire;Golf dAngers;1;4;8;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;2;4;6;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;3;4;9;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;4;4;13;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;5;3;18;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;6;4;5;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;7;3;14;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;8;4;15;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;9;5;12;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;10;5;17;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;11;4;1;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;12;3;4;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;13;4;7;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;14;4;2;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;15;3;10;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;16;5;3;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;17;3;16;69.7;70.4;132;122
+Pays de la Loire;Golf dAngers;18;4;11;69.7;70.4;132;122
+Pays de la Loire;Anjou Golf and Country Club;1;4;8;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;2;4;2;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;3;4;10;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;4;3;12;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;5;4;18;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;6;5;14;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;7;3;16;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;8;5;4;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;9;4;6;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;10;4;15;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;11;4;7;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;12;5;9;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;13;4;1;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;14;3;17;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;15;4;5;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;16;3;13;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;17;5;11;70.7;75.3;121;133
+Pays de la Loire;Anjou Golf and Country Club;18;4;3;70.7;75.3;121;133
+Pays de la Loire;Golf de lIle dOr;1;5;9;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;2;3;13;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;3;4;5;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;4;4;7;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;5;4;11;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;6;4;1;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;7;3;15;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;8;5;3;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;9;4;17;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;10;5;18;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;11;4;2;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;12;3;14;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;13;4;8;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;14;4;6;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;15;4;12;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;16;4;4;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;17;3;10;76.5;78.7;132;140
+Pays de la Loire;Golf de lIle dOr;18;5;16;76.5;78.7;132;140
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;1;3;17;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;2;5;7;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;3;4;9;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;4;5;1;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;5;4;5;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;6;4;11;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;7;3;15;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;8;5;3;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;9;3;13;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;10;4;14;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;11;5;2;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;12;3;16;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;13;5;8;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;14;4;10;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;15;4;6;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;16;4;4;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;17;3;18;73.5;74.1;134;130
+Pays de la Loire;Golf Int. Barriere La Baule - Lucien Barriere;18;4;12;73.5;74.1;134;130
+Pays de la Loire;Garden Golf Nantes Carquefou;1;4;5;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;2;4;11;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;3;5;15;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;4;4;4;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;5;3;14;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;6;5;10;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;7;4;8;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;8;3;13;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;9;4;17;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;10;4;12;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;11;4;3;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;12;3;18;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;13;3;1;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;14;5;9;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;15;4;2;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;16;5;6;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;17;3;16;77.0;71.1;136;127
+Pays de la Loire;Garden Golf Nantes Carquefou;18;4;7;77.0;71.1;136;127
+Pays de la Loire;Golf Blue Green Nantes-Erdre;1;4;9;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;2;4;7;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;3;3;15;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;4;4;11;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;5;4;13;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;6;4;8;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;7;3;18;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;8;4;2;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;9;5;10;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;10;3;16;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;11;4;12;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;12;3;14;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;13;4;4;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;14;5;6;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;15;4;3;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;16;3;17;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;17;5;5;71.3;73.1;141;128
+Pays de la Loire;Golf Blue Green Nantes-Erdre;18;4;1;71.3;73.1;141;128
+Pays de la Loire;Golf de Nantes Vigneux;1;4;13;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;2;4;3;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;3;4;17;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;4;3;15;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;5;4;7;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;6;4;1;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;7;3;11;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;8;4;9;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;9;5;5;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;10;4;14;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;11;5;10;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;12;3;16;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;13;4;4;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;14;4;12;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;15;5;2;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;16;3;6;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;17;4;8;72.1;73.0;139;128
+Pays de la Loire;Golf de Nantes Vigneux;18;5;18;72.1;73.0;139;128
+Pays de la Loire;Golf des Olonnes;1;4;15;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;2;5;3;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;3;3;1;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;4;4;11;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;5;4;17;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;6;3;7;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;7;5;5;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;8;4;9;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;9;4;13;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;10;4;2;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;11;4;6;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;12;4;8;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;13;3;10;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;14;5;18;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;15;4;12;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;16;3;14;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;17;5;4;73.1;77.4;123;138
+Pays de la Loire;Golf des Olonnes;18;4;16;73.1;77.4;123;138
+Pays de la Loire;Golf Orleans Limere;1;4;5;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;2;3;15;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;3;5;9;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;4;4;7;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;5;4;3;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;6;5;1;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;7;3;17;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;8;4;11;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;9;4;13;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;10;4;16;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;11;5;12;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;12;3;14;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;13;5;6;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;14;4;10;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;15;4;4;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;16;3;18;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;17;4;8;73.5;74.8;139;132
+Pays de la Loire;Golf Orleans Limere;18;4;2;73.5;74.8;139;132
+Pays de la Loire;Golf de Pornic;1;5;16;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;2;4;5;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;3;4;8;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;4;3;18;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;5;5;1;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;6;3;13;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;7;4;9;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;8;3;12;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;9;4;2;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;10;4;15;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;11;4;6;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;12;5;7;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;13;4;14;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;14;4;11;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;15;4;4;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;16;4;3;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;17;3;10;72.6;74.2;125;131
+Pays de la Loire;Golf de Pornic;18;5;17;72.6;74.2;125;131
+Pays de la Loire;Golf de Bauge;1;4;13;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;2;5;6;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;3;4;4;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;4;3;18;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;5;4;14;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;6;5;2;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;7;3;17;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;8;4;16;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;9;4;3;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;10;5;10;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;11;4;15;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;12;4;5;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;13;3;9;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;14;4;1;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;15;5;7;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;16;4;12;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;17;3;11;73.9;75.3;133;133
+Pays de la Loire;Golf de Bauge;18;4;8;73.9;75.3;133;133
+Pays de la Loire;Golf de Guerande;1;4;15;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;2;4;11;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;3;4;9;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;4;5;3;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;5;3;13;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;6;4;5;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;7;5;1;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;8;3;17;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;9;4;7;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;10;4;6;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;11;3;18;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;12;4;2;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;13;4;8;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;14;4;10;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;15;3;12;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;16;3;16;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;17;4;4;68.5;72.9;121;128
+Pays de la Loire;Golf de Guerande;18;4;14;68.5;72.9;121;128
+Pays de la Loire;Golf de la Bretesche;1;4;15;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;2;4;5;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;3;3;17;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;4;5;9;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;5;4;11;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;6;3;13;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;7;4;1;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;8;4;3;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;9;5;7;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;10;4;14;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;11;4;2;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;12;4;6;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;13;5;4;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;14;4;16;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;15;3;12;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;16;5;8;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;17;3;10;69.2;76.9;117;136
+Pays de la Loire;Golf de la Bretesche;18;4;18;69.2;76.9;117;136
+Pays de la Loire;Neo Golf;1;3;13;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;2;3;5;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;3;3;11;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;4;3;15;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;5;3;1;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;6;3;17;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;7;3;7;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;8;3;9;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;9;3;3;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;10;3;14;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;11;3;6;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;12;3;12;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;13;3;16;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;14;3;2;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;15;3;18;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;16;3;8;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;17;3;10;27.2;27.9;85;90
+Pays de la Loire;Neo Golf;18;3;4;27.2;27.9;85;90
+Pays de la Loire;Golf Blue Green Savenay;1;4;1;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;2;5;3;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;3;5;15;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;4;3;11;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;5;4;5;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;6;5;17;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;7;4;9;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;8;3;13;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;9;4;7;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;10;4;14;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;11;5;4;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;12;3;18;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;13;4;16;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;14;4;10;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;15;5;2;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;16;3;12;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;17;4;6;71.7;75.1;123;133
+Pays de la Loire;Golf Blue Green Savenay;18;4;8;71.7;75.1;123;133

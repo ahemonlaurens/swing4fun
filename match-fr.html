@@ -409,7 +409,7 @@
     let currentEditIndex = 0;
     let courseToDelete = null;
     
-    // currentRegionData[golf_name] = { tees: { 'Blanc': { slope_m, sss_m, slope_f, sss_f, holes: [] }, ... } }
+    // NOUVEAU FORMAT : currentRegionData[nom-golf] = { slope_m, sss_m, slope_f, sss_f, holes: [] }
     let currentRegionData = {};
     let currentSelectedGolfData = null;
 
@@ -494,34 +494,33 @@
             return;
         }
 
-        // Chargement base de données CSV
+        // Chargement base de données CSV avec le nouveau format
         try {
             const response = await fetch(regionVal, { cache: "no-cache" });
             const text = await response.text();
             const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
             if (lines.length === 0) return;
             
+            // Nouveau Header : nom-golf;numero-trou;par;hcp;sss-homme;sss-femme;slope-homme;slope-femme
             const headers = lines[0].split(';').map(h => h.trim());
             
             for(let i=1; i<lines.length; i++) {
                 const parts = lines[i].split(';');
-                if (parts.length < 18) continue;
+                if (parts.length < 8) continue; // Minimum colonnes pour le nouveau format
                 
                 const row = {};
                 headers.forEach((h, idx) => { row[h] = parts[idx] ? parts[idx].trim() : ''; });
                 
-                const gName = row.golf_name;
-                const teeColor = row.tee_color;
+                const gName = row['nom-golf'];
+                if (!gName) continue;
 
-                if (!currentRegionData[gName]) currentRegionData[gName] = { tees: {} };
-                
-                if (!currentRegionData[gName].tees[teeColor]) {
-                    let s_f = parseFloat(row.slope_femmes);
-                    let sss_f = parseFloat(row.sss_femmes);
-                    let s_m = parseFloat(row.slope_hommes) || 113;
-                    let sss_m = parseFloat(row.sss_hommes) || 72;
+                if (!currentRegionData[gName]) {
+                    let s_m = parseFloat(row['slope-homme']) || 113;
+                    let sss_m = parseFloat(row['sss-homme']) || 72.0;
+                    let s_f = parseFloat(row['slope-femme']);
+                    let sss_f = parseFloat(row['sss-femme']);
                     
-                    currentRegionData[gName].tees[teeColor] = {
+                    currentRegionData[gName] = {
                         slope_m: s_m,
                         sss_m: sss_m,
                         slope_f: (isNaN(s_f) || s_f === 0) ? s_m : s_f,
@@ -530,10 +529,10 @@
                     };
                 }
                 
-                currentRegionData[gName].tees[teeColor].holes.push({
-                    num: parseInt(row.hole_num),
-                    par: parseInt(row.hole_par),
-                    hcp: parseInt(row.hole_hcp)
+                currentRegionData[gName].holes.push({
+                    num: parseInt(row['numero-trou']),
+                    par: parseInt(row['par']),
+                    hcp: parseInt(row['hcp'])
                 });
             }
             
@@ -606,10 +605,7 @@
         currentSelectedGolfData = data;
 
         if (data) {
-            const firstTeeKey = Object.keys(data.tees)[0];
-            const firstTeeData = data.tees[firstTeeKey];
-            
-            firstTeeData.holes.forEach(h => {
+            data.holes.forEach(h => {
                 const i = h.num;
                 if (document.getElementById('par'+i)) document.getElementById('par'+i).value = h.par;
                 if (document.getElementById('hcp'+i)) {
@@ -618,8 +614,7 @@
                     else hcpInput.dataset.old = h.hcp; 
                 }
             });
-
-            updatePlayerTeeDropdowns(Object.keys(data.tees));
+            updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']);
         }
     }
 
@@ -662,9 +657,7 @@
     function checkAndExportDBUpdates() {
         if (state.activeCourseType !== 'db' || !currentSelectedGolfData) return;
 
-        const firstTeeKey = Object.keys(currentSelectedGolfData.tees)[0];
-        const originalHoles = currentSelectedGolfData.tees[firstTeeKey].holes;
-        
+        const originalHoles = currentSelectedGolfData.holes;
         let updates = [];
         let isNet = document.getElementById('modeNet').checked;
 
@@ -747,12 +740,9 @@
         const gender = player ? player.gender : 'M';
 
         if (state.activeCourseType === 'db' && currentSelectedGolfData) {
-            const teeColor = teeSelect.value;
-            if (currentSelectedGolfData.tees[teeColor]) {
-                const tData = currentSelectedGolfData.tees[teeColor];
-                slopeInput.value = gender === 'F' ? tData.slope_f : tData.slope_m;
-                sssInput.value = gender === 'F' ? tData.sss_f : tData.sss_m;
-            }
+            // Le slope/sss dépend uniquement du genre selon le nouveau format CSV
+            slopeInput.value = gender === 'F' ? currentSelectedGolfData.slope_f : currentSelectedGolfData.slope_m;
+            sssInput.value = gender === 'F' ? currentSelectedGolfData.sss_f : currentSelectedGolfData.sss_m;
         } else {
             // Parcours Local ou Nouveau (Valeurs standard)
             slopeInput.value = 113;
@@ -1008,11 +998,7 @@
         pListContainer.innerHTML = pListHtml;
 
         // Mise à jour initiale des sélecteurs
-        if (state.activeCourseType === 'db' && currentSelectedGolfData) {
-            updatePlayerTeeDropdowns(Object.keys(currentSelectedGolfData.tees));
-        } else {
-            updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']);
-        }
+        updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']);
     }
 
     function validateCourseAndStart() {
