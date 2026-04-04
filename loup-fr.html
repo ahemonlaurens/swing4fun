@@ -333,8 +333,9 @@
             <div class="podium" id="podium"></div>
             
             <div class="card" style="box-shadow:none; border: 1px solid #eee;">
-                <h3>Récapitulatif</h3>
+                <h3>Récapitulatif des scores</h3>
                 <div class="table-responsive"><table id="tableSummary"></table></div>
+                <div style="font-size:0.8rem; color:#636e72; font-style:italic; margin-top:5px;">* Stb = Stableford</div>
             </div>
             <div class="card" style="box-shadow:none; border: 1px solid #eee; padding: 10px;">
                 <h3 style="margin-top:5px; margin-bottom: 15px;">Scores par trou <span style="font-size:0.75rem; font-weight:normal; color:#636e72;">(<span style="color:var(--text); font-weight:bold;">Brut</span> / <span style="color:#5dade2; font-weight:bold;">Net</span>)</span></h3>
@@ -342,6 +343,7 @@
             </div>
         </div>
         <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
+            <button class="btn-secondary" style="flex:1" onclick="exportCSV()">📥 CSV</button>
             <button class="btn-secondary" style="flex:1" onclick="takeScreenshot()">📸 Capture</button>
             <button class="btn-secondary" style="flex:100%; border: 2px solid var(--primary); color:var(--primary-dark); font-weight:700;" onclick="openEditMode()">✏️ Éditer les scores</button>
             <button class="btn-main" style="flex:100%; margin-top:5px;" onclick="window.location.href='index.html'">🔄 Nouvelle Partie / Accueil</button>
@@ -438,7 +440,6 @@
         }
     }
 
-    // --- REUTILISATION LOGIQUE DB GOLFS ---
     async function loadRegions() {
         try {
             const select = document.getElementById('regionSelect');
@@ -601,7 +602,6 @@
         }
     }
 
-    // --- CONFIG PLAYERS ---
     function renderPlayerInputs() {
         const pList = document.getElementById('playersList');
         pList.innerHTML = '';
@@ -792,7 +792,6 @@
         return cr;
     }
 
-    // --- GAME ENGINE ---
     function startGame() {
         state.currentHoleIndex = 0; state.gameData = []; state.carryPool = 0;
         state.players.forEach(p => { p.scores = []; p.points = []; });
@@ -859,8 +858,8 @@
             let pMap = {0:0, 1:0, 2:0, 3:0};
             let newCarryPool = currentCarry;
             
-            if(record.partner === 'solo' || record.partner === 'gold') {
-                const mult = record.partner === 'gold' ? 3 : 2;
+            if(String(record.partner) === 'solo' || String(record.partner) === 'gold') {
+                const mult = String(record.partner) === 'gold' ? 3 : 2;
                 const wolfScore = netScores[wolfIdx];
                 const others = state.players.filter(p => p.id !== wolfIdx).map(p => netScores[p.id]);
                 const bestOther = Math.min(...others);
@@ -967,10 +966,19 @@
         const partDiv = document.getElementById('partnerSelection');
         partDiv.innerHTML = '';
         state.players.forEach(p => {
-            if(p.id !== wolfIdx) partDiv.innerHTML += `<div class="partner-btn ${selectedPartnerId == p.id ? 'selected' : ''}" onclick="selectPartner(${p.id}, this, false)">Avec ${p.name.substring(0,8)}</div>`;
+            if(p.id !== wolfIdx) {
+                const isSelected = String(selectedPartnerId) === String(p.id);
+                partDiv.innerHTML += `<div class="partner-btn ${isSelected ? 'selected' : ''}" onclick="selectPartner(${p.id}, this, false)">${p.name.substring(0,8)}</div>`;
+            }
         });
-        partDiv.innerHTML += `<div class="partner-btn solo ${selectedPartnerId === 'solo' ? 'selected' : ''}" onclick="selectPartner('solo', this, false)">🐺 Solitaire (x2)</div>`;
-        if(state.options.golden) partDiv.innerHTML += `<div class="partner-btn gold ${selectedPartnerId === 'gold' ? 'selected' : ''}" onclick="selectPartner('gold', this, false)">✨ Or (x3)</div>`;
+        
+        const isSolo = String(selectedPartnerId) === 'solo';
+        partDiv.innerHTML += `<div class="partner-btn solo ${isSolo ? 'selected' : ''}" onclick="selectPartner('solo', this, false)">🐺 Solitaire (x2)</div>`;
+        
+        if(state.options.golden) {
+            const isGold = String(selectedPartnerId) === 'gold';
+            partDiv.innerHTML += `<div class="partner-btn gold ${isGold ? 'selected' : ''}" onclick="selectPartner('gold', this, false)">✨ Or (x3)</div>`;
+        }
 
         const inputDiv = document.getElementById('holeInputs');
         inputDiv.innerHTML = '';
@@ -1010,7 +1018,7 @@
             record.scores[input.dataset.pid] = val;
         }
         
-        if (hasError || window.currentSelectedPartnerId === null || window.currentSelectedPartnerId === undefined || window.currentSelectedPartnerId === '') { 
+        if (hasError || (window.currentSelectedPartnerId !== 0 && !window.currentSelectedPartnerId)) { 
             document.getElementById('validationModal').style.display = 'flex'; 
             return; 
         }
@@ -1050,7 +1058,7 @@
             if(!val || (val !== 'X' && isNaN(parseInt(val)))) { document.getElementById('validationModal').style.display = 'flex'; return false; }
             record.scores[input.dataset.pid] = val;
         }
-        if (window.editSelectedPartnerId === null || window.editSelectedPartnerId === undefined || window.editSelectedPartnerId === '') { 
+        if (window.editSelectedPartnerId !== 0 && !window.editSelectedPartnerId) { 
             document.getElementById('validationModal').style.display = 'flex'; 
             return false; 
         }
@@ -1082,10 +1090,17 @@
         const partDiv = document.getElementById('editPartnerSelection');
         partDiv.innerHTML = '';
         state.players.forEach(p => {
-            if(p.id !== wolfIdx) partDiv.innerHTML += `<div class="partner-btn ${window.editSelectedPartnerId == p.id ? 'selected' : ''}" onclick="selectPartner(${p.id}, this, true)">Avec ${p.name.substring(0,8)}</div>`;
+            if(p.id !== wolfIdx) {
+                const isSelected = String(window.editSelectedPartnerId) === String(p.id);
+                partDiv.innerHTML += `<div class="partner-btn ${isSelected ? 'selected' : ''}" onclick="selectPartner(${p.id}, this, true)">${p.name.substring(0,8)}</div>`;
+            }
         });
-        partDiv.innerHTML += `<div class="partner-btn solo ${window.editSelectedPartnerId === 'solo' ? 'selected' : ''}" onclick="selectPartner('solo', this, true)">🐺 Solitaire (x2)</div>`;
-        if(state.options.golden) partDiv.innerHTML += `<div class="partner-btn gold ${window.editSelectedPartnerId === 'gold' ? 'selected' : ''}" onclick="selectPartner('gold', this, true)">✨ Or (x3)</div>`;
+        const isSolo = String(window.editSelectedPartnerId) === 'solo';
+        partDiv.innerHTML += `<div class="partner-btn solo ${isSolo ? 'selected' : ''}" onclick="selectPartner('solo', this, true)">🐺 Solitaire (x2)</div>`;
+        if(state.options.golden) {
+            const isGold = String(window.editSelectedPartnerId) === 'gold';
+            partDiv.innerHTML += `<div class="partner-btn gold ${isGold ? 'selected' : ''}" onclick="selectPartner('gold', this, true)">✨ Or (x3)</div>`;
+        }
 
         const inputDiv = document.getElementById('editHoleInputs'); inputDiv.innerHTML = '';
         state.players.forEach(p => {
@@ -1110,7 +1125,6 @@
     function saveAndCloseEdit() { if(saveCurrentEditHoleLocally()) { recalculateAllScores(); finishGame(); } }
     function cancelEdit() { state.gameData = backupGameData; recalculateAllScores(); finishGame(); }
 
-    // --- REUTILISATION IMAGE TABLE MATCH-FR ---
     function generateHolesTableImageStyle(holesSubArray, startIndex) {
         if(holesSubArray.length === 0) return '';
         let groups = [], grandTotalPar = 0;
@@ -1182,16 +1196,15 @@
         });
 
         const tSummary = document.getElementById('tableSummary');
-        let htmlSum = `<thead><tr><th class="text-left">Joueur</th><th>Brut</th>${state.options.mode === 'net' ? `<th>Net</th><th>Stb</th>` : ''}<th>Pts</th></tr></thead><tbody>`;
+        let htmlSum = `<thead><tr><th class="text-left">Joueur</th><th>Brut</th>${state.options.mode === 'net' ? `<th>Net</th><th>Stb*</th>` : ''}</tr></thead><tbody>`;
         state.players.forEach(p => {
-            let totB = 0, totNet = 0, totStb = 0, totPts = p.points.reduce((a,b)=>a+b,0);
+            let totB = 0, totNet = 0, totStb = 0;
             p.scores.slice(0, holesPlayed).forEach(s => { totB += s.brut; totNet += s.net; totStb += s.stb; });
-            let ptColor = totPts > 0 ? 'var(--primary-dark)' : (totPts < 0 ? 'var(--crimson)' : 'inherit');
             htmlSum += `<tr>
                 <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,8)}</td>
                 <td class="score-brut">${totB > 0 ? totB : '-'}</td>`;
             if(state.options.mode === 'net') htmlSum += `<td class="score-net">${totNet > 0 ? totNet : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
-            htmlSum += `<td style="font-weight:bold; color:${ptColor};">${totPts > 0 ? '+'+totPts : totPts}</td></tr>`;
+            htmlSum += `</tr>`;
         });
         tSummary.innerHTML = htmlSum + `</tbody>`;
 
@@ -1201,6 +1214,25 @@
         const retourHoles = coursePlayed.filter(h => h.num > 9);
         if(allerHoles.length > 0) container.innerHTML += generateHolesTableImageStyle(allerHoles, 0);
         if(retourHoles.length > 0) container.innerHTML += `<div style="margin-top:20px;"></div>` + generateHolesTableImageStyle(retourHoles, allerHoles.length);
+    }
+
+    function exportCSV() {
+        let headers = "Trou,Par,Hcp," + state.players.map(p => `${p.name} Brut` + (state.options.mode === 'net' ? `,${p.name} Net,${p.name} Stb` : '') + `,${p.name} Pts Loup`).join(",") + "\n";
+        let csv = headers;
+        state.course.slice(0, state.gameData.length).forEach((c, i) => {
+            let row = `${c.num},${c.par},${c.hcp || '-'},`;
+            let pData = state.players.map(p => {
+                const s = p.scores[i];
+                const pts = p.points[i];
+                if(!s) return state.options.mode === 'net' ? "-,-,-,-" : "-,-";
+                return state.options.mode === 'net' ? `${s.brut},${s.net},${s.stb},${pts}` : `${s.brut},${pts}`;
+            });
+            csv += row + pData.join(",") + "\n";
+        });
+        const a = document.createElement('a'); 
+        a.href = window.URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' })); 
+        a.download = `loup-resultats.csv`; 
+        a.click();
     }
 
     function takeScreenshot() {
