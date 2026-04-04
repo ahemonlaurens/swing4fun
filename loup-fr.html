@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Wolf Golf</title>
+    <title>Loup - Gestionnaire Pro</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -11,27 +11,40 @@
 
     <style>
         :root {
+            /* Couleurs adaptées au thème Loup */
             --primary: #72bf44;
             --primary-dark: #5a9936;
             --orange: #ff4200; --violet: #7536f0;
-            --teal: #1acfbf; --blue: #1e88e5;
+            --teal: #1acfbf; --blue: #05b9f0;
             --crimson: #d6084d; --lime: #d9fa4f;
             --green: #43a047;
             --bg: #f7f8fa; --card-bg: #ffffff;
             --text: #2d3436;
             --shadow: 0 4px 15px rgba(0,0,0,0.08);
+            
+            /* Couleurs des joueurs */
             --p1: #1e88e5; --p2: #e53935; --p3: #43a047; --p4: #fb8c00;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { overscroll-behavior: none; font-family: 'Quicksand', sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.5; font-size: 1.06rem; }
+        
+        html, body { 
+            overscroll-behavior: none; 
+            font-family: 'Quicksand', sans-serif; 
+            background: var(--bg); color: var(--text); 
+            margin: 0; line-height: 1.5; font-size: 1.06rem; 
+        }
 
         .container { max-width: 900px; margin: 0 auto; padding: 80px 15px 40px; }
         .screen { display: none; animation: fadeIn 0.4s ease-out; }
         .screen.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        header { position: fixed; top: 0; width: 100%; height: 65px; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 1000; }
+        header {
+            position: fixed; top: 0; width: 100%; height: 65px; background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; align-items: center;
+            justify-content: space-between; padding: 0 20px; z-index: 1000;
+        }
         .logo { font-weight: 700; font-size: 1.2rem; color: var(--primary-dark); }
         .step-indicator { font-weight: 600; color: #636e72; font-size: 0.95rem; }
 
@@ -43,56 +56,99 @@
         .form-label { flex: 1; font-weight: 500;}
         .form-desc { font-size: 0.92rem; color: #636e72; display: block; font-weight: 400;}
         
-        input[type="text"], input[type="number"], select { border: 2px solid #dfe6e9; border-radius: 8px; padding: 8px 12px; font-family: inherit; font-size: 1rem; outline: none; transition: 0.2s; }
+        input[type="text"], input[type="number"], select {
+            border: 2px solid #dfe6e9; border-radius: 8px; padding: 8px 12px;
+            font-family: inherit; font-size: 1rem; outline: none; transition: 0.2s;
+        }
+        input[type="number"] { text-align: center; }
         input:focus, select:focus { border-color: var(--primary); }
         input:disabled { background: #f1f2f6; cursor: not-allowed; color: #b2bec3; border-color: #eee; text-align: center; }
-        
+        .hcp-input { text-align: center !important; font-size: 1.1rem; }
+
         .btn-group { display: flex; gap: 5px; background: #f1f2f6; padding: 4px; border-radius: 10px; }
         .btn-group input { display: none; }
         .btn-group label { padding: 6px 10px; cursor: pointer; border-radius: 8px; font-weight: 600; font-size: 0.95rem; transition: 0.2s; text-align: center; flex: 1; white-space: nowrap;}
         .btn-group input:checked + label { background: var(--primary); color: white; }
+
+        .switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(26px); }
 
         .table-responsive { overflow-x: auto; width: 100%; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.95rem; }
         th { font-size: 0.85rem; text-transform: uppercase; color: #636e72; padding: 10px 5px; text-align: center; }
         td { padding: 8px 5px; border-bottom: 1px solid #f1f2f6; text-align: center; vertical-align: middle; }
         .text-left { text-align: left; }
+        .disabled-cell { background: #f9f9f9; }
         
+        #tableAller th:nth-child(2), #tableAller th:nth-child(3),
+        #tableRetour th:nth-child(2), #tableRetour th:nth-child(3),
+        #tableAller td:nth-child(2), #tableAller td:nth-child(3),
+        #tableRetour td:nth-child(2), #tableRetour td:nth-child(3) { width: 40%; }
+        
+        .score-brut { font-weight: 700; color: var(--text); }
+        .score-net { font-weight: 600; color: var(--blue); }
+
+        #tableSummary { table-layout: fixed; width: 100%; font-size: 0.9rem; }
+        #tableSummary th, #tableSummary td { padding: 6px 2px; word-wrap: break-word; }
+
+        .table-image-style { width: 100%; border-collapse: collapse; font-family: 'Quicksand', sans-serif; font-size: 0.9rem; }
+        .table-image-style th { border-bottom: 2px solid #eee; padding: 10px 2px; color: #2d3436; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;}
+        .table-image-style td { border-bottom: 1px solid #f8f9fa; padding: 8px 2px; text-align: center; vertical-align: middle; }
+        .table-image-style .net-score { color: #5dade2; font-size: 0.85rem; font-weight: 600;}
+        .table-image-style .brut-score { color: #2d3436; font-weight: 700; font-size: 0.9rem;}
+        .table-image-style .player-name { text-align: left; font-weight: 700; font-size: 0.9rem; padding-left: 8px; border-radius: 4px; }
+
+        .course-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .course-grid { grid-template-columns: 1fr; } }
+
         .btn-main { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--primary), var(--teal)); color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: transform 0.1s; }
         .btn-main:active { transform: scale(0.98); }
-        .btn-secondary { background: #dfe6e9; color: #2d3436; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; }
-        .btn-ghost { background: transparent; color: #b2bec3; border: 2px dashed #dfe6e9; padding: 12px; border-radius: 8px; font-weight: 600; width: 100%; cursor: pointer; margin-top: 15px;}
+        .btn-secondary { background: #dfe6e9; color: #2d3436; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; display: inline-block; }
+        .btn-ghost { background: transparent; color: #b2bec3; border: 2px dashed #dfe6e9; padding: 12px; border-radius: 8px; font-weight: 600; width: 100%; cursor: pointer; transition: 0.2s; margin-top: 15px;}
         
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: white; }
         .dot { height: 14px; width: 14px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 8px; flex-shrink: 0; }
         
-        .score-row { display: grid; grid-template-columns: 14px 1fr 115px 35px 35px; align-items: center; gap: 8px; margin-bottom: 15px; }
-        .stepper-container { display: flex; align-items: center; justify-content: space-between; background: #f1f2f6; border-radius: 20px; padding: 3px; }
-        .btn-stepper { width: 30px; height: 30px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 600; cursor: pointer; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .btn-stepper.minus { color: var(--green); }
-        .btn-stepper.plus { color: var(--crimson); }
-
-        /* Podium & Wolf Specific */
-        .wolf-banner { background: linear-gradient(45deg, #fff3e0, #ffe0b2); padding: 12px; border-radius: 10px; border: 2px solid var(--orange); margin-bottom: 15px; text-align: center; font-weight: 700; font-size: 0.95rem; }
-        .partner-selector { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .partner-btn { flex: 1; min-width: 80px; padding: 10px 5px; border: 2px solid #dfe6e9; border-radius: 8px; background: white; cursor: pointer; font-weight: 700; text-align: center; font-size: 0.85rem; }
+        /* Spécifique Loup */
+        .wolf-banner { background: linear-gradient(45deg, #fff3e0, #ffe0b2); padding: 15px; border-radius: 12px; border: 2px solid var(--orange); margin-bottom: 15px; text-align: center; font-size: 1.05rem; font-weight: 700; }
+        .partner-selector { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+        .partner-btn { flex: 1; min-width: 80px; padding: 12px 5px; border: 2px solid #dfe6e9; border-radius: 10px; background: white; cursor: pointer; font-weight: 700; text-align: center; font-size: 0.9rem; transition: 0.2s; }
         .partner-btn.selected { border-color: var(--primary); background: #f0f9eb; }
         .partner-btn.solo { border-color: var(--orange); color: var(--orange); }
         .partner-btn.gold { border-color: #ffd700; background: linear-gradient(45deg, #fff, #fff9e6); }
         .partner-btn.gold.selected { background: linear-gradient(45deg, var(--orange), var(--lime)); color: black; border-color: transparent; }
 
-        .podium { display: flex; align-items: flex-end; justify-content: center; gap: 15px; margin: 40px 0 20px 0; height: 200px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
-        .podium-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; max-width: 100px;}
-        .podium-bar { width: 100%; border-radius: 8px 8px 0 0; color: white; font-weight: 700; text-align: center; padding-top: 10px; }
-        .p-bar { background: linear-gradient(45deg, var(--primary), var(--teal)); }
+        /* Grille Score */
+        .score-row { display: grid; grid-template-columns: 14px 1fr 115px 35px 35px; align-items: center; gap: 8px; margin-bottom: 15px; }
+        .stepper-container { display: flex; align-items: center; justify-content: space-between; background: #f1f2f6; border-radius: 20px; padding: 3px; }
+        .btn-stepper { width: 30px; height: 30px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 600; cursor: pointer; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .btn-stepper.minus { color: var(--green); border: 1px solid rgba(67,160,71,0.3); }
+        .btn-stepper.plus { color: var(--crimson); border: 1px solid rgba(214,8,77,0.3); }
+        
+        #resultsCapture { padding: 20px; background: var(--bg); border-radius: 12px; }
+        .podium { display: flex; align-items: flex-end; justify-content: center; gap: 10px; margin: 40px 0 20px 0; height: 250px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+        .podium-col { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; transition: height 0.5s ease; max-width: 100px;}
+        .podium-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; text-align: center; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%;}
+        .podium-bar { width: 100%; border-radius: 8px 8px 0 0; display: flex; flex-direction: column; justify-content: flex-start; padding-top: 10px; color: white; font-weight: 700; text-align: center; }
+        .podium-medal { font-size: 1.5rem; margin-bottom: 5px; }
+        
+        .p-1 { background: linear-gradient(45deg, var(--orange), var(--lime)); color: #000; box-shadow: 0 -4px 15px rgba(255,66,0,0.3); }
+        .p-2 { background: var(--violet); }
+        .p-3 { background: var(--teal); }
+        .p-4 { background: #b2bec3; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal-title { font-size: 1.25rem; font-weight: bold; color: var(--primary-dark); margin-bottom: 15px; }
+        .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
 
-        .table-image-style { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        .table-image-style th { border-bottom: 2px solid #eee; padding: 8px 2px; font-weight: 700; text-transform: uppercase; }
-        .table-image-style td { border-bottom: 1px solid #f8f9fa; padding: 6px 2px; text-align: center; }
-        .table-image-style .pts-loup { color: var(--orange); font-weight: 700; font-size: 0.8rem; }
+        .rules-content { font-size: 1.05rem; line-height: 1.6; color: #444; background: #fdfdfd; padding: 18px; border-radius: 8px; border: 1px solid #eee; margin-top: 10px; }
+        .rules-content p { margin-top: 0; margin-bottom: 10px; }
+        .rules-content ul { margin: 0; padding-left: 20px; }
     </style>
 </head>
 <body>
@@ -109,35 +165,44 @@
             <h2 onclick="toggleRules()" style="cursor:pointer; display:flex; justify-content:space-between; align-items:center;">
                 Règles du Loup <span id="rulesToggleIcon" style="font-size:0.9rem;">▶ Afficher</span>
             </h2>
-            <div id="rulesContent" style="display:none; font-size:0.95rem; color:#444; margin-top:10px;">
-                <p>Le <b>Loup</b> change à chaque trou. Il choisit un partenaire (2v2) ou joue seul (1v3).</p>
-                <p><b>Scores :</b> On compare le meilleur score de chaque camp. <br><b>Points :</b> +1 en 2v2. +6/-6 en Solo (x2). +9/-9 en Or (x3).</p>
+            <div id="rulesContent" class="rules-content" style="display:none;">
+                <p>Le jeu se joue à 4. À chaque trou, un joueur différent est désigné <b>"Loup"</b>.</p>
+                <p>Le Loup choisit un partenaire (2v2) ou affronte les 3 autres (1v3). On compare le <b>meilleur score</b> (Net ou Brut) de chaque camp pour déterminer le vainqueur.</p>
+                <ul>
+                    <li><b>2 contre 2 :</b> Les gagnants marquent +1 pt, les perdants -1 pt.</li>
+                    <li><b>Loup Solitaire (x2) :</b> S'il gagne : +6 pts (autres -2). S'il perd : -6 pts (autres +2).</li>
+                    <li><b>Loup d'Or (x3) :</b> Annoncé avant le 1er drive. Gain: +9/-9, autres -3/+3.</li>
+                    <li><b>Carry Over :</b> En cas d'égalité parfaite, les points sont reportés au trou suivant.</li>
+                </ul>
             </div>
         </div>
         
         <div class="card">
             <h2>Options de Jeu</h2>
             <div class="form-group">
-                <div class="form-label">Mode de calcul<span class="form-desc">Brut ou Net (Hcp)</span></div>
+                <div class="form-label">Mode de calcul<span class="form-desc">Brut ou Net (Index de jeu)</span></div>
                 <div class="btn-group">
                     <input type="radio" name="calcMode" id="modeBrut" value="brut" checked onchange="updateCalcMode()"><label for="modeBrut">Brut</label>
                     <input type="radio" name="calcMode" id="modeNet" value="net" onchange="updateCalcMode()"><label for="modeNet">Net</label>
                 </div>
             </div>
+            
             <div class="form-group">
                 <div class="form-label">Parcours<span class="form-desc">Sélection des trous</span></div>
                 <div class="btn-group">
-                    <input type="radio" name="holes" id="h18" value="18" checked><label for="h18">18</label>
-                    <input type="radio" name="holes" id="hFront" value="front"><label for="hFront">Aller</label>
-                    <input type="radio" name="holes" id="hBack" value="back"><label for="hBack">Retour</label>
+                    <input type="radio" name="holes" id="h18" value="18" checked onchange="updateCourseVisibility()"><label for="h18">18</label>
+                    <input type="radio" name="holes" id="hFront" value="front" onchange="updateCourseVisibility()"><label for="hFront">Aller</label>
+                    <input type="radio" name="holes" id="hBack" value="back" onchange="updateCourseVisibility()"><label for="hBack">Retour</label>
                 </div>
             </div>
+
             <div class="form-group">
                 <div class="form-label">Carry Over<span class="form-desc">Report en cas d'égalité</span></div>
-                <div class="btn-group">
-                    <input type="radio" name="carry" id="carryOff" value="0" checked><label for="carryOff">Non</label>
-                    <input type="radio" name="carry" id="carryOn" value="1"><label for="carryOn">Oui</label>
-                </div>
+                <label class="switch"><input type="checkbox" id="optCarry"><span class="slider"></span></label>
+            </div>
+            <div class="form-group" style="margin-bottom:0; border-bottom:none;">
+                <div class="form-label">Loup d'Or<span class="form-desc">Mode Solitaire extrême (x3)</span></div>
+                <label class="switch"><input type="checkbox" id="optGolden"><span class="slider"></span></label>
             </div>
         </div>
 
@@ -146,46 +211,76 @@
             <div id="playersList"></div>
         </div>
 
-        <button class="btn-main" onclick="validateSetup()">Suivant ➜</button>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-secondary" style="flex:1; padding:15px 5px; font-size:0.95rem; white-space:nowrap;" onclick="window.location.href='index.html'">← Retour</button>
+            <button class="btn-main" style="flex:2.2; padding:15px 5px; font-size:1rem; white-space:nowrap;" onclick="validateSetup()">Suivant ➜</button>
+        </div>
     </div>
 
     <div id="screenRecap" class="screen">
         <div class="card">
             <h2>1. Le Parcours</h2>
-            <div style="background:#e3f2fd; padding:15px; border-radius:8px; margin-bottom:15px;">
+            <div id="courseSelectionArea" style="background:#e3f2fd; padding:15px; border-radius:8px; margin-bottom:15px;">
+                <div class="form-label" style="font-weight:bold; color:var(--blue); margin-bottom: 12px;">🔍 Trouver mon golf</div>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                    <select id="regionSelect" onchange="loadRegionGolfs()" style="width:100%;">
+                    <select id="regionSelect" onchange="loadRegionGolfs()" style="width:100%; padding:8px; border:2px solid #dfe6e9; border-radius:8px;">
                         <option value="">-- Sélectionnez une région --</option>
                     </select>
-                    <select id="golfSelect" onchange="applySelectedGolf()" style="width:100%;">
-                        <option value="">-- Sélectionnez un golf --</option>
+                    <select id="golfSelect" onchange="applySelectedGolf()" style="width:100%; padding:8px; border:2px solid #dfe6e9; border-radius:8px;">
+                        <option value="">-- Sélectionnez d'abord une région --</option>
                     </select>
-                    <input type="text" id="newLocalCourseName" placeholder="Nom du parcours..." style="display:none; width:100%;">
+                    <input type="text" id="newLocalCourseName" placeholder="Entrez le nom de votre parcours..." style="display:none; width:100%; padding:10px; font-weight:bold; border:2px solid var(--primary); border-radius:8px; outline:none;">
                 </div>
             </div>
-            <div id="activeCourseDisplay" style="text-align:center; font-weight:bold; color:var(--primary-dark);"></div>
+            <div id="activeCourseDisplay" style="text-align:center; font-weight:bold; color:var(--primary-dark); font-size:1.1rem; min-height:1.5em; margin-bottom:10px;"></div>
         </div>
 
         <div class="card">
-            <h2>2. Étalonnage et Départs</h2>
-            <div id="recapPlayersList"></div>
+            <h2>2. Détails des Trous</h2>
+            <div class="course-grid">
+                <div id="containerAller">
+                    <h3>ALLER (1-9)</h3>
+                    <div class="table-responsive">
+                        <table id="tableAller">
+                            <thead><tr><th>T</th><th>Par</th><th>Hcp</th></tr></thead>
+                            <tbody id="bodyAller"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="containerRetour">
+                    <h3>RETOUR (10-18)</h3>
+                    <div class="table-responsive">
+                        <table id="tableRetour">
+                            <thead><tr><th>T</th><th>Par</th><th>Hcp</th></tr></thead>
+                            <tbody id="bodyRetour"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>3. Étalonnage et Départs</h2>
+            <div id="recapPlayersList" style="margin-bottom: 10px;"></div>
         </div>
 
         <div style="display:flex; gap:10px;">
-            <button class="btn-secondary" style="flex:1;" onclick="showScreen('screenSetup')">← Retour</button>
-            <button class="btn-main" style="flex:2;" onclick="validateCourseAndStart()">Commencer ➜</button>
+            <button class="btn-secondary" style="flex:1;" onclick="showScreen('screenSetup')">← Modifier</button>
+            <button class="btn-main" style="flex:2;" onclick="validateCourseAndStart()">Commencer le Jeu ➜</button>
         </div>
     </div>
 
     <div id="screenGame" class="screen">
         <div class="card" style="padding:15px;">
-            <h3 style="margin-top:0; color:#2d3436; text-align:left; font-size:1rem;">📊 Classement (Pts Loup)</h3>
-            <div id="liveDashboard" style="display:none;">
+            <h3 style="margin-top:0; color:#2d3436; text-align:left; font-size:1rem;">📊 Classement (Points Loup)</h3>
+            <div id="prevHoleDashboard" style="display:none;">
                 <table style="margin:0;">
+                    <thead><tr><th class="text-left">Joueur</th><th>T-1</th><th>Total Pts</th></tr></thead>
                     <tbody id="bodyLiveDashboard"></tbody>
                 </table>
+                <div id="carryIndicator" style="display:none; background:#fff3e0; color:var(--orange); padding:8px; text-align:center; font-weight:700; margin-top:10px; border-radius:8px; font-size:0.9rem;"></div>
             </div>
-            <div id="dashboardEmpty" style="color:#636e72; font-size:0.9rem; font-style:italic;">En attente du premier score...</div>
+            <div id="prevHoleEmpty" style="color:#636e72; font-size:0.9rem; font-style:italic;">En attente du premier score...</div>
         </div>
 
         <div class="card">
@@ -193,42 +288,83 @@
             
             <div class="wolf-banner" id="wolfBanner"></div>
             
-            <div class="form-label" style="font-size:0.85rem; font-weight:700; margin-bottom:8px;">PARTENAIRE DU LOUP :</div>
+            <p style="font-size:0.95rem; font-weight:700; color:#2d3436; margin-bottom:10px;">Partenaire du Loup :</p>
             <div class="partner-selector" id="partnerSelection"></div>
 
-            <div style="display:grid; grid-template-columns: 14px 1fr 110px 35px 35px; gap:8px; margin-bottom:5px; font-size:0.8rem; font-weight:700; color:#636e72;">
-                <div></div><div>Joueur</div><div>Score</div><div></div><div>CR</div>
+            <div style="display:grid; grid-template-columns: 14px 1fr 110px 35px 35px; gap:8px; margin-top:10px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72; text-align:center;">
+                <div></div><div style="text-align:left;">Joueur</div><div>Score</div><div></div><div>CR</div>
             </div>
             <div id="holeInputs"></div>
 
             <div style="display:flex; gap:10px; margin-top:25px;">
-                <button class="btn-secondary" id="btnPrevHole" onclick="prevHole()" style="flex:1;">← Préc.</button>
+                <button class="btn-secondary" id="btnPrevHole" onclick="prevHole()" style="flex:1;">← Précédent</button>
                 <button class="btn-main" id="btnNextHole" onclick="nextHole()" style="flex:2;">Valider ➜</button>
             </div>
         </div>
-        <button class="btn-ghost" onclick="openEndGameModal()">🛑 Terminer la partie</button>
+        <button class="btn-ghost" onclick="openEndGameModal()">🛑 Terminer prématurément</button>
+    </div>
+
+    <div id="screenEdit" class="screen">
+        <div class="card">
+            <h2>Édition des scores</h2>
+            <div class="form-group" style="flex-direction:column; align-items:flex-start;">
+                <label class="form-label" style="margin-bottom:8px; font-weight:bold; color:var(--primary-dark)">Sélectionnez le trou à modifier :</label>
+                <select id="editHoleSelect" onchange="changeEditHole(this.value)" style="width:100%; font-size:1.05rem; padding:10px;"></select>
+            </div>
+        </div>
+        <div class="card">
+            <div id="editHoleInfo" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"></div>
+            <div class="wolf-banner" id="editWolfBanner"></div>
+            <p style="font-size:0.95rem; font-weight:700; color:#2d3436; margin-bottom:10px;">Partenaire du Loup :</p>
+            <div class="partner-selector" id="editPartnerSelection"></div>
+
+            <div style="display:grid; grid-template-columns: 14px 1fr 110px 35px 35px; gap:8px; margin-top:20px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72; text-align:center;">
+                <div></div><div style="text-align:left;">Joueur</div><div>Score</div><div></div><div>CR</div>
+            </div>
+            <div id="editHoleInputs"></div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:25px;">
+            <button class="btn-secondary" style="flex:1;" onclick="cancelEdit()">Annuler</button>
+            <button class="btn-main" style="flex:2;" onclick="saveAndCloseEdit()">Enregistrer & Recalculer ➜</button>
+        </div>
     </div>
 
     <div id="screenResults" class="screen">
         <div id="resultsCapture">
-            <h2 style="text-align:center; border:none;">Classement Final</h2>
+            <h2 style="text-align:center; border:none; padding:0; margin-bottom:10px; color:var(--primary-dark)">Score Final</h2>
             <div class="podium" id="podium"></div>
             
-            <div class="card" style="box-shadow:none; border: 1px solid #eee; padding:10px;">
-                <h3>Scores par trou</h3>
-                <div id="finalTableContainer"></div>
+            <div class="card" style="box-shadow:none; border: 1px solid #eee;">
+                <h3>Récapitulatif</h3>
+                <div class="table-responsive"><table id="tableSummary"></table></div>
+            </div>
+            <div class="card" style="box-shadow:none; border: 1px solid #eee; padding: 10px;">
+                <h3 style="margin-top:5px; margin-bottom: 15px;">Scores par trou <span style="font-size:0.75rem; font-weight:normal; color:#636e72;">(<span style="color:var(--text); font-weight:bold;">Brut</span> / <span style="color:#5dade2; font-weight:bold;">Net</span>)</span></h3>
+                <div id="groupedHolesContainer"></div>
             </div>
         </div>
-        <button class="btn-main" onclick="window.location.href='index.html'">Nouvelle Partie</button>
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
+            <button class="btn-secondary" style="flex:1" onclick="takeScreenshot()">📸 Capture</button>
+            <button class="btn-secondary" style="flex:100%; border: 2px solid var(--primary); color:var(--primary-dark); font-weight:700;" onclick="openEditMode()">✏️ Éditer les scores</button>
+            <button class="btn-main" style="flex:100%; margin-top:5px;" onclick="window.location.href='index.html'">🔄 Nouvelle Partie / Accueil</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="validationModal">
+    <div class="modal-content">
+        <div class="modal-title" style="color: var(--orange);">⚠️ Attention</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Entrez les scores et choisissez le partenaire du Loup pour valider.</p>
+        <button class="btn-main" style="width: 100%;" onclick="closeValidationModal()">OK</button>
     </div>
 </div>
 
 <div class="modal-overlay" id="endGameModal">
     <div class="modal-content">
-        <h3>Terminer la partie ?</h3>
-        <div style="display:flex; gap:10px; margin-top:20px;">
-            <button class="btn-secondary" style="flex:1;" onclick="document.getElementById('endGameModal').style.display='none'">Annuler</button>
-            <button class="btn-main" style="flex:1; background:var(--crimson);" onclick="finishGame()">Terminer</button>
+        <div class="modal-title">Voulez-vous terminer la partie ?</div>
+        <div class="modal-btns">
+            <button class="btn-secondary" style="flex:1;" onclick="closeEndGameModal()">Annuler</button>
+            <button class="btn-main" style="flex:1; background:var(--crimson);" onclick="forceFinishGame()">Terminer</button>
         </div>
     </div>
 </div>
@@ -236,34 +372,235 @@
 <script>
     const state = {
         playersCount: 4,
-        players: [],
+        players: [
+            { id: 0, name: '', hcp: 0, playingHcp: 0, color: 'var(--p1)', scores: [], points: [], gender: 'M' },
+            { id: 1, name: '', hcp: 0, playingHcp: 0, color: 'var(--p2)', scores: [], points: [], gender: 'M' },
+            { id: 2, name: '', hcp: 0, playingHcp: 0, color: 'var(--p3)', scores: [], points: [], gender: 'M' },
+            { id: 3, name: '', hcp: 0, playingHcp: 0, color: 'var(--p4)', scores: [], points: [], gender: 'M' }
+        ],
         course: [],
-        options: { mode: 'brut', holes: '18', carry: false },
+        options: { mode: 'brut', holes: '18', carryOver: false, golden: false, courseName: '' },
         currentHoleIndex: 0,
-        gameData: [], // { scores: {pid: val}, partner: pid/solo/gold }
+        gameData: [],
         wolfSequence: [0, 1, 2, 3],
-        activeCourseName: "",
-        carryPool: 0
+        carryPool: 0,
+        activeCourseType: null,
+        activeCourseName: null
     };
+
+    let backupGameData = null;
+    let currentEditIndex = 0;
+    let currentRegionData = {};
+    let currentSelectedGolfData = null;
 
     function init() {
         renderPlayerInputs();
+        
+        const bAller = document.getElementById('bodyAller');
+        const bRetour = document.getElementById('bodyRetour');
+        for(let i=1; i<=18; i++) {
+            const row = `<tr>
+                <td style="font-weight:700; color:#636e72;">${i}</td>
+                <td><input type="number" id="par${i}" value="4" min="3" max="6" style="width:100%"></td>
+                <td class="hcp-cell"><input type="number" id="hcp${i}" value="${i}" min="1" max="18" style="width:100%"></td>
+            </tr>`;
+            if(i <= 9) bAller.innerHTML += row;
+            else bRetour.innerHTML += row;
+        }
+        
+        loadPlayersLocally();
+        updateCalcMode();
+        updateCourseVisibility();
         loadRegions();
     }
 
+    function toggleRules() {
+        const content = document.getElementById('rulesContent');
+        const icon = document.getElementById('rulesToggleIcon');
+        if (content.style.display === 'none') {
+            content.style.display = 'block'; icon.innerHTML = '▼ Masquer';
+        } else {
+            content.style.display = 'none'; icon.innerHTML = '▶ Afficher';
+        }
+    }
+
+    // --- REUTILISATION LOGIQUE DB GOLFS (MATCH-FR) ---
+    async function loadRegions() {
+        try {
+            const select = document.getElementById('regionSelect');
+            select.innerHTML = '<option value="">-- Sélectionnez une région --</option>';
+            select.innerHTML += '<option value="local">📁 Mes parcours</option>';
+            const response = await fetch('golfs-regions.csv', { cache: "no-cache" });
+            const text = await response.text();
+            const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+            for(let i=1; i<lines.length; i++) {
+                const parts = lines[i].split(',');
+                if (parts.length >= 2) {
+                    const opt = document.createElement('option');
+                    opt.value = parts[1].trim(); opt.text = parts[0].trim(); select.appendChild(opt);
+                }
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    function getSavedCourses() { try { return JSON.parse(localStorage.getItem('wolf_saved_courses')) || {}; } catch(e) { return {}; } }
+
+    async function loadRegionGolfs() {
+        const regionVal = document.getElementById('regionSelect').value;
+        const select = document.getElementById('golfSelect');
+        document.getElementById('newLocalCourseName').style.display = 'none';
+        select.innerHTML = '<option value="">-- Sélectionnez un parcours --</option>';
+        currentRegionData = {}; currentSelectedGolfData = null;
+
+        if (!regionVal) return;
+        if (regionVal === 'local') {
+            select.innerHTML += '<option value="new_local">➕ Nouveau parcours</option>';
+            const courses = getSavedCourses();
+            Object.keys(courses).sort().forEach(k => {
+                const opt = document.createElement('option'); opt.value = 'local_' + k; opt.text = k; select.appendChild(opt);
+            });
+            return;
+        }
+
+        try {
+            const response = await fetch(regionVal, { cache: "no-cache" });
+            const text = await response.text();
+            const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
+            if (lines.length === 0) return;
+            const headers = lines[0].split(';').map(h => h.trim());
+            
+            for(let i=1; i<lines.length; i++) {
+                const parts = lines[i].split(';');
+                if (parts.length < 8) continue; 
+                const row = {};
+                headers.forEach((h, idx) => { row[h] = parts[idx] ? parts[idx].trim() : ''; });
+                const gName = row['nom-golf'];
+                if (!gName) continue;
+
+                if (!currentRegionData[gName]) {
+                    let s_m = parseFloat(row['slope-homme']) || 113, sss_m = parseFloat(row['sss-homme']) || 72.0;
+                    let s_f = parseFloat(row['slope-femme']), sss_f = parseFloat(row['sss-femme']);
+                    currentRegionData[gName] = { slope_m: s_m, sss_m: sss_m, slope_f: (isNaN(s_f)||s_f===0)?s_m:s_f, sss_f: (isNaN(sss_f)||sss_f===0)?sss_m:sss_f, holes: [] };
+                }
+                currentRegionData[gName].holes.push({ num: parseInt(row['numero-trou']), par: parseInt(row['par']), hcp: parseInt(row['hcp']) });
+            }
+            
+            Object.keys(currentRegionData).sort().forEach(gName => {
+                const opt = document.createElement('option'); opt.value = gName; opt.text = gName; select.appendChild(opt);
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    function applySelectedGolf() {
+        const val = document.getElementById('golfSelect').value;
+        const newNameInput = document.getElementById('newLocalCourseName');
+        newNameInput.style.display = 'none';
+        document.getElementById('activeCourseDisplay').innerHTML = '';
+
+        if (!val) return;
+        if (val === 'new_local') {
+            newNameInput.style.display = 'block'; newNameInput.value = '';
+            state.activeCourseType = 'local'; state.activeCourseName = null;
+            updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']); return;
+        }
+        if (val.startsWith('local_')) {
+            const gName = val.substring(6);
+            state.activeCourseType = 'local'; state.activeCourseName = gName;
+            document.getElementById('activeCourseDisplay').innerHTML = `📍 ${gName}`;
+            const data = getSavedCourses()[gName];
+            if (data) {
+                data.holes.forEach((h, idx) => {
+                    const i = idx + 1;
+                    if (document.getElementById('par'+i)) document.getElementById('par'+i).value = h.par;
+                    if (document.getElementById('hcp'+i)) {
+                        const hcpInput = document.getElementById('hcp'+i);
+                        if (document.getElementById('modeNet').checked) hcpInput.value = h.hcp;
+                        else hcpInput.dataset.old = h.hcp; 
+                    }
+                });
+            }
+            updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']); return;
+        }
+
+        const gName = val;
+        state.activeCourseType = 'db'; state.activeCourseName = gName;
+        document.getElementById('activeCourseDisplay').innerHTML = `📍 ${gName}`;
+        const data = currentRegionData[gName];
+        currentSelectedGolfData = data;
+        if (data) {
+            data.holes.forEach(h => {
+                const i = h.num;
+                if (document.getElementById('par'+i)) document.getElementById('par'+i).value = h.par;
+                if (document.getElementById('hcp'+i)) {
+                    const hcpInput = document.getElementById('hcp'+i);
+                    if (document.getElementById('modeNet').checked) hcpInput.value = h.hcp;
+                    else hcpInput.dataset.old = h.hcp; 
+                }
+            });
+            updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']);
+        }
+    }
+
+    function saveCurrentCourseLocally() {
+        if(!state.activeCourseName) return;
+        const courseData = { holes: [] };
+        for(let i=1; i<=18; i++) {
+            let hcpInput = document.getElementById('hcp'+i);
+            let hcpVal = hcpInput.value === '🔒' ? hcpInput.dataset.old || '' : hcpInput.value;
+            courseData.holes.push({ par: document.getElementById('par'+i).value, hcp: hcpVal });
+        }
+        const courses = getSavedCourses(); courses[state.activeCourseName] = courseData;
+        localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
+    }
+
+    function updatePlayerTeeDropdowns(availableTees) {
+        for (let i = 0; i < state.playersCount; i++) {
+            const select = document.getElementById('pTee' + i);
+            const player = state.players.find(p => p.id === i);
+            if (select) {
+                select.innerHTML = '';
+                availableTees.forEach(t => { select.appendChild(new Option(t, t)); });
+                let hcp = player ? player.hcp : 20;
+                let recommended = availableTees[0];
+                if (hcp <= 15.0 && availableTees.includes('Blanc')) recommended = 'Blanc';
+                else if (hcp > 15.0 && hcp <= 28.0 && availableTees.includes('Jaune')) recommended = 'Jaune';
+                else if (hcp > 28.0 && availableTees.includes('Rouge')) recommended = 'Rouge';
+                select.value = recommended;
+                applyPlayerTeeStats(i);
+            }
+        }
+    }
+
+    function applyPlayerTeeStats(playerId) {
+        const teeSelect = document.getElementById('pTee' + playerId);
+        const slopeInput = document.getElementById('pSlope' + playerId);
+        const sssInput = document.getElementById('pSss' + playerId);
+        if (!teeSelect || !slopeInput || !sssInput) return;
+        const player = state.players.find(p => p.id === playerId);
+        const gender = player ? player.gender : 'M';
+
+        if (state.activeCourseType === 'db' && currentSelectedGolfData) {
+            slopeInput.value = gender === 'F' ? currentSelectedGolfData.slope_f : currentSelectedGolfData.slope_m;
+            sssInput.value = gender === 'F' ? currentSelectedGolfData.sss_f : currentSelectedGolfData.sss_m;
+        } else {
+            slopeInput.value = 113; sssInput.value = 72.0;
+        }
+    }
+
+    // --- REUTILISATION DESIGN & PLAYERS SETUP ---
     function renderPlayerInputs() {
         const pList = document.getElementById('playersList');
         pList.innerHTML = '';
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < state.playersCount; i++) {
             pList.innerHTML += `
-                <div class="form-group" style="border:none; margin-bottom:5px;">
-                    <span class="dot" style="background:var(--p${i+1});"></span>
-                    <input type="text" id="pName${i}" placeholder="Joueur ${i+1}" style="flex:2; margin-right:5px;">
-                    <div class="btn-group gender-toggle" style="display:none; flex:0.8;">
-                        <input type="radio" name="pGen${i}" id="pGenM${i}" value="M" checked><label for="pGenM${i}">H</label>
-                        <input type="radio" name="pGen${i}" id="pGenF${i}" value="F"><label for="pGenF${i}">F</label>
+                <div class="form-group" style="display: flex; gap: 6px; padding: 5px 0; border: none; margin-bottom: 5px; flex-wrap: nowrap; align-items:center;">
+                    <span class="dot" style="background:${state.players[i].color}; width:16px; height:16px; align-self: center; flex-shrink:0;"></span>
+                    <input type="text" id="pName${i}" placeholder="Joueur ${i+1}" maxlength="15" style="flex: 2.5; min-width: 0; padding:8px 6px;">
+                    <div class="btn-group gender-toggle" style="flex: 0.8; min-width: 60px; display: none;">
+                        <input type="radio" name="pGen${i}" id="pGenM${i}" value="M" checked><label for="pGenM${i}" style="padding: 6px 4px; font-size:0.85rem;">H</label>
+                        <input type="radio" name="pGen${i}" id="pGenF${i}" value="F"><label for="pGenF${i}" style="padding: 6px 4px; font-size:0.85rem;">F</label>
                     </div>
-                    <input type="text" inputmode="decimal" id="pHcp${i}" placeholder="Idx" class="hcp-input" style="flex:0.7;">
+                    <input type="text" inputmode="decimal" id="pHcp${i}" placeholder="Index" style="flex: 1; min-width: 0; padding:8px 4px;" class="hcp-input">
                 </div>`;
         }
         updateCalcMode();
@@ -274,180 +611,578 @@
         document.querySelectorAll('.gender-toggle').forEach(el => el.style.display = isNet ? 'flex' : 'none');
         document.querySelectorAll('.hcp-input').forEach(el => {
             el.disabled = !isNet;
-            el.value = isNet ? (el.value === '🔒' ? '' : el.value) : '🔒';
+            if(!isNet) { el.value = '🔒'; el.style.color = '#b2bec3'; } 
+            else { if(el.value === '🔒') el.value = ''; el.style.color = 'inherit'; }
+        });
+        document.querySelectorAll('.hcp-cell input').forEach(el => {
+            el.disabled = !isNet;
+            if(!isNet) {
+                if (el.value !== '🔒') el.dataset.old = el.value;
+                el.type = 'text'; el.value = '🔒';
+            } else {
+                el.type = 'number';
+                if(el.dataset.old) el.value = el.dataset.old;
+                else if (el.value === '🔒') el.value = '';
+            }
         });
     }
 
-    async function loadRegions() {
-        const select = document.getElementById('regionSelect');
+    function updateCourseVisibility() {
+        const holes = document.querySelector('input[name="holes"]:checked').value;
+        document.getElementById('containerAller').style.display = (holes === '18' || holes === 'front') ? 'block' : 'none';
+        document.getElementById('containerRetour').style.display = (holes === '18' || holes === 'back') ? 'block' : 'none';
+    }
+
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+        let label = "Configuration";
+        if(id === 'screenRecap') label = "Configuration";
+        if(id === 'screenGame' && state.course.length > 0) label = `Trou ${state.course[state.currentHoleIndex].num} (${state.currentHoleIndex+1}/${state.course.length})`;
+        if(id === 'screenResults') label = "Résultats";
+        if(id === 'screenEdit') label = "Édition des scores";
+        document.getElementById('stepIndicator').textContent = label;
+    }
+
+    function loadPlayersLocally() {
         try {
-            const response = await fetch('golfs-regions.csv');
-            const text = await response.text();
-            text.split('\n').slice(1).forEach(line => {
-                const parts = line.split(',');
-                if (parts.length >= 2) {
-                    let opt = new Option(parts[0].trim(), parts[1].trim());
-                    select.add(opt);
+            const saved = JSON.parse(localStorage.getItem('wolf_game_players'));
+            if(saved && saved.length > 0) {
+                for(let i=0; i < state.playersCount; i++) {
+                    if (saved[i]) {
+                        document.getElementById('pName'+i).value = saved[i].name || '';
+                        if (saved[i].hcp !== null && saved[i].hcp !== '🔒') document.getElementById('pHcp'+i).value = saved[i].hcp;
+                        if (saved[i].gender === 'F' && document.getElementById(`pGenF${i}`)) document.getElementById(`pGenF${i}`).checked = true;
+                    }
                 }
-            });
+            }
         } catch(e) {}
     }
 
-    // --- LOGIQUE DE JEU ---
+    function savePlayersLocally() {
+        const arr = [];
+        for(let i=0; i<4; i++) {
+            let hcpEl = document.getElementById('pHcp'+i);
+            let genEl = document.querySelector(`input[name="pGen${i}"]:checked`);
+            arr.push({ name: document.getElementById('pName'+i).value.trim() || `Joueur ${i+1}`, hcp: (hcpEl.value === '🔒') ? '' : hcpEl.value, gender: genEl ? genEl.value : 'M' });
+        }
+        localStorage.setItem('wolf_game_players', JSON.stringify(arr));
+    }
 
     function validateSetup() {
-        state.players = [];
         const isNet = document.getElementById('modeNet').checked;
-        for(let i=0; i<4; i++) {
-            let name = document.getElementById('pName${i}').value || `J${i+1}`;
-            state.players.push({
-                id: i, name: name, color: `var(--p${i+1})`,
-                gender: document.querySelector(`input[name="pGen${i}"]:checked`)?.value || 'M',
-                hcp: parseFloat(document.getElementById(`pHcp${i}`).value) || 0,
-                playingHcp: 0, points: 0
-            });
+        for(let i=0; i < state.playersCount; i++) {
+            let name = document.getElementById('pName'+i).value.trim();
+            let genEl = document.querySelector(`input[name="pGen${i}"]:checked`);
+            state.players[i].name = name || `Joueur ${i+1}`;
+            state.players[i].gender = isNet ? (genEl ? genEl.value : 'M') : 'M';
+            if(isNet) {
+                let exactHcp = parseFloat(document.getElementById('pHcp'+i).value.replace(',', '.'));
+                if(isNaN(exactHcp)) { alert("Veuillez entrer un index valide."); return; }
+                state.players[i].hcp = exactHcp;
+            }
         }
+
         state.options.mode = isNet ? 'net' : 'brut';
         state.options.holes = document.querySelector('input[name="holes"]:checked').value;
-        state.options.carry = document.getElementById('carryOn').checked;
-        
-        renderRecapPlayers();
+        state.options.carryOver = document.getElementById('optCarry').checked;
+        state.options.golden = document.getElementById('optGolden').checked;
+
+        savePlayersLocally();
+        renderPlayersListRecap();
+        updateCourseVisibility();
         showScreen('screenRecap');
     }
 
-    function renderRecapPlayers() {
-        const div = document.getElementById('recapPlayersList');
-        div.innerHTML = '';
+    function renderPlayersListRecap() {
+        const pListContainer = document.getElementById('recapPlayersList');
+        let pListHtml = '';
         state.players.forEach(p => {
-            div.innerHTML += `
-                <div style="margin-bottom:10px;">
-                    <span class="dot" style="background:${p.color}"></span> <b>${p.name}</b>
-                    ${state.options.mode === 'net' ? `
-                    <div style="display:flex; gap:5px; margin-top:5px;">
-                        <input type="number" id="pSlope${p.id}" value="113" style="width:70px; font-size:0.8rem;" placeholder="Slope">
-                        <input type="number" id="pSss${p.id}" value="72.0" style="width:70px; font-size:0.8rem;" placeholder="SSS">
-                    </div>` : ''}
+            const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>)` : '';
+            let whsHtml = '';
+            if (state.options.mode === 'net') {
+                whsHtml = `
+                <div style="display:flex; gap:10px; margin-top:8px; padding-left:24px;">
+                    <div style="flex:1"><div style="font-size:0.75rem; color:#636e72; font-weight:bold;">Repère</div>
+                        <select id="pTee${p.id}" onchange="applyPlayerTeeStats(${p.id})" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;"></select>
+                    </div>
+                    <div style="flex:0.8"><div style="font-size:0.75rem; color:#636e72; font-weight:bold;">Slope</div>
+                        <input type="number" id="pSlope${p.id}" value="113" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
+                    </div>
+                    <div style="flex:0.8"><div style="font-size:0.75rem; color:#636e72; font-weight:bold;">SSS</div>
+                        <input type="number" id="pSss${p.id}" value="72.0" step="0.1" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
+                    </div>
                 </div>`;
+            }
+            pListHtml += `<div style="margin-bottom: 15px;"><div style="display:flex; align-items:center;"><span class="dot" style="background:${p.color}"></span> <span style="font-weight:600;">${p.name}</span> <span style="font-size:0.85rem; color:#636e72; margin-left:8px;">${hcpText}</span></div>${whsHtml}</div>`;
         });
+        pListContainer.innerHTML = pListHtml;
+        updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']);
     }
 
     function validateCourseAndStart() {
-        // Calcul Playing Hcp simplifé pour l'exemple
-        state.players.forEach(p => {
-            if(state.options.mode === 'net') {
-                let slope = parseFloat(document.getElementById(`pSlope${p.id}`).value) || 113;
-                p.playingHcp = Math.round(p.hcp * (slope/113));
-            }
-        });
-
-        // Génération parcours (simplifié, normalement via CSV)
-        state.course = [];
-        for(let i=1; i<=18; i++) state.course.push({ num: i, par: 4, hcp: i });
-
-        // Shuffle Wolf
-        state.wolfSequence = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
+        const val = document.getElementById('golfSelect').value;
+        if (!val) { alert("Sélectionnez un golf avant de commencer."); return; }
         
-        state.currentHoleIndex = 0;
+        if (val === 'new_local') {
+            const newName = document.getElementById('newLocalCourseName').value.trim();
+            if (!newName) { alert("Veuillez entrer un nom pour votre nouveau parcours."); return; }
+            state.activeCourseName = newName; state.activeCourseType = 'local';
+            saveCurrentCourseLocally(); 
+        } else if (state.activeCourseType === 'local') { saveCurrentCourseLocally(); }
+        
+        state.options.courseName = state.activeCourseName || "";
+        const isNet = state.options.mode === 'net';
+        let total18Par = 0;
+        for(let i=1; i<=18; i++) total18Par += parseInt(document.getElementById('par'+i).value) || 4;
+
+        if (isNet) {
+            state.players.forEach(p => {
+                const slope = parseFloat(document.getElementById('pSlope'+p.id).value) || 113;
+                const sss = parseFloat(document.getElementById('pSss'+p.id).value) || 72;
+                p.playingHcp = Math.round((p.hcp * slope / 113) + (sss - total18Par));
+            });
+        }
+
+        state.course = [];
+        let start = 1, end = 18;
+        if(state.options.holes === 'front') end = 9;
+        if(state.options.holes === 'back') start = 10;
+        
+        for(let i=start; i<=end; i++) {
+            let hcpInput = document.getElementById('hcp'+i);
+            let hcpVal = parseInt(hcpInput.value === '🔒' ? hcpInput.dataset.old : hcpInput.value);
+            state.course.push({ num: i, par: parseInt(document.getElementById('par'+i).value) || 4, hcp: isNet ? (isNaN(hcpVal) ? 1 : hcpVal) : null });
+        }
+
+        // Loup order logic
+        state.wolfSequence = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
+
+        startGame();
+    }
+
+    function calculateCR(player, hole) {
+        if(state.options.mode === 'brut') return 0;
+        const hcpJeu = Math.max(0, player.playingHcp);
+        let cr = Math.floor(hcpJeu / 18);
+        if((hcpJeu % 18) >= hole.hcp) { cr++; }
+        return cr;
+    }
+
+    // --- GAME ENGINE (LOUP LOGIC) ---
+    function startGame() {
+        state.currentHoleIndex = 0; state.gameData = []; state.carryPool = 0;
+        state.players.forEach(p => { p.scores = []; p.points = []; });
         loadHole();
         showScreen('screenGame');
     }
 
+    function stepScore(pid, delta, defaultPar, isEdit = false) {
+        const inputClass = isEdit ? '.edit-score-input' : '.p-score-input';
+        const input = document.querySelector(`${inputClass}[data-pid="${pid}"]`);
+        if (!input) return;
+        let current = input.value.toUpperCase();
+        if (current === 'X' || current === '') input.value = defaultPar;
+        else {
+            let newVal = parseInt(current) + delta;
+            if (isNaN(newVal)) newVal = defaultPar;
+            if (newVal < 1) newVal = 1;
+            input.value = newVal;
+        }
+    }
+
+    function setScoreX(pid, isEdit = false) {
+        const inputClass = isEdit ? '.edit-score-input' : '.p-score-input';
+        const input = document.querySelector(`${inputClass}[data-pid="${pid}"]`);
+        if (input) input.value = 'X';
+    }
+
+    function recalculateAllScores() {
+        state.players.forEach(p => { p.scores = []; p.points = []; });
+        let currentCarry = 0;
+
+        for (let i = 0; i < state.gameData.length; i++) {
+            const record = state.gameData[i];
+            const hole = state.course[i];
+            
+            // Forced wolf on last holes if needed
+            let wolfIdx = state.wolfSequence[i % 4];
+            const forcedHolesCount = (state.options.holes === '18') ? 2 : 1;
+            if (i >= state.course.length - forcedHolesCount) {
+                let minTotal = Infinity;
+                state.players.forEach(p => {
+                    const t = p.points.reduce((a, b) => a + b, 0);
+                    if (t < minTotal) { minTotal = t; wolfIdx = p.id; }
+                });
+            }
+
+            const netScores = {};
+            state.players.forEach(p => {
+                let val = record.scores[p.id];
+                const cr = calculateCR(p, hole);
+                let isCross = (val === 'X');
+                let brut_saisi = isCross ? (hole.par + 4) : parseInt(val);
+                let net_calcule = brut_saisi - cr;
+
+                if (state.options.mode === 'net') {
+                    let maxNet = hole.par + 2; 
+                    if (isCross || net_calcule > maxNet) { net_calcule = maxNet; brut_saisi = maxNet + cr; }
+                }
+                
+                netScores[p.id] = net_calcule;
+                p.scores[i] = { brut: brut_saisi, net: net_calcule, stb: Math.max(0, 2 + hole.par - net_calcule), display: isCross ? 'X' : parseInt(val), isCross: isCross };
+            });
+
+            // Wolf Points Logic
+            let basePoints = 1 + currentCarry;
+            let pMap = {0:0, 1:0, 2:0, 3:0};
+            let newCarryPool = currentCarry;
+            
+            if(record.partner === 'solo' || record.partner === 'gold') {
+                const mult = record.partner === 'gold' ? 3 : 2;
+                const wolfScore = netScores[wolfIdx];
+                const others = state.players.filter(p => p.id !== wolfIdx).map(p => netScores[p.id]);
+                const bestOther = Math.min(...others);
+
+                if(wolfScore < bestOther) {
+                    pMap[wolfIdx] = basePoints * mult * 3;
+                    state.players.forEach(p => { if(p.id !== wolfIdx) pMap[p.id] = -basePoints * mult; });
+                    newCarryPool = 0;
+                } else if(wolfScore > bestOther) {
+                    pMap[wolfIdx] = -basePoints * mult * 3;
+                    state.players.forEach(p => { if(p.id !== wolfIdx) pMap[p.id] = basePoints * mult; });
+                    newCarryPool = 0;
+                } else {
+                    if(state.options.carryOver) newCarryPool++;
+                }
+            } else {
+                const partnerId = parseInt(record.partner);
+                const teamWolfScore = Math.min(netScores[wolfIdx], netScores[partnerId]);
+                const teamOtherIdx = state.players.filter(p => p.id !== wolfIdx && p.id !== partnerId).map(p => p.id);
+                const teamOtherScore = Math.min(netScores[teamOtherIdx[0]], netScores[teamOtherIdx[1]]);
+
+                if(teamWolfScore < teamOtherScore) {
+                    pMap[wolfIdx] = basePoints; pMap[partnerId] = basePoints;
+                    pMap[teamOtherIdx[0]] = -basePoints; pMap[teamOtherIdx[1]] = -basePoints;
+                    newCarryPool = 0;
+                } else if(teamWolfScore > teamOtherScore) {
+                    pMap[wolfIdx] = -basePoints; pMap[partnerId] = -basePoints;
+                    pMap[teamOtherIdx[0]] = basePoints; pMap[teamOtherIdx[1]] = basePoints;
+                    newCarryPool = 0;
+                } else {
+                    if(state.options.carryOver) newCarryPool++;
+                }
+            }
+            state.players.forEach(p => p.points.push(pMap[p.id]));
+            currentCarry = newCarryPool;
+        }
+        state.carryPool = currentCarry;
+    }
+
+    function updateDashboard() {
+        if(state.currentHoleIndex === 0) {
+            document.getElementById('prevHoleDashboard').style.display = 'none';
+            document.getElementById('prevHoleEmpty').style.display = 'block'; return;
+        }
+        document.getElementById('prevHoleDashboard').style.display = 'block';
+        document.getElementById('prevHoleEmpty').style.display = 'none';
+        
+        const bLive = document.getElementById('bodyLiveDashboard');
+        bLive.innerHTML = '';
+        state.players.forEach(p => {
+            const ptsHole = p.points[state.currentHoleIndex - 1] || 0;
+            const total = p.points.reduce((a,b)=>a+b,0);
+            bLive.innerHTML += `<tr>
+                <td class="text-left" style="color:${p.color}; font-weight:bold;">${p.name.substring(0,10)}</td>
+                <td style="color:#636e72;">${ptsHole > 0 ? '+'+ptsHole : ptsHole}</td>
+                <td style="font-weight:bold; font-size:1.1rem; color:${total > 0 ? 'var(--primary-dark)' : (total < 0 ? 'var(--crimson)' : 'inherit')}">${total > 0 ? '+'+total : total}</td>
+            </tr>`;
+        });
+        
+        const ci = document.getElementById('carryIndicator');
+        if(state.options.carryOver && state.carryPool > 0) {
+            ci.style.display = 'block'; ci.innerHTML = `⚡ REPORT : +${state.carryPool} pt(s) en jeu pour ce trou !`;
+        } else { ci.style.display = 'none'; }
+    }
+
     function loadHole() {
+        if(state.currentHoleIndex >= state.course.length) { finishGame(); return; }
+        
         const hole = state.course[state.currentHoleIndex];
-        const wolfId = state.wolfSequence[state.currentHoleIndex % 4];
-        const wolf = state.players[wolfId];
+        document.getElementById('stepIndicator').textContent = `Trou ${hole.num} (${state.currentHoleIndex+1}/${state.course.length})`;
+        updateDashboard();
 
         document.getElementById('holeInfo').innerHTML = `
-            <span class="badge" style="background:var(--primary)">TROU ${hole.num}</span>
-            <span class="badge" style="background:#636e72">PAR ${hole.par}</span>
+            <span class="badge" style="background:var(--primary); font-size:0.9rem; padding:6px 12px;">TROU ${hole.num}</span>
+            <span class="badge" style="background:#636e72; font-size:0.9rem; padding:6px 12px;">PAR ${hole.par}</span>
+            ${state.options.mode === 'net' ? `<span class="badge" style="background:var(--violet); font-size:0.9rem; padding:6px 12px;">HCP ${hole.hcp}</span>` : ''}
         `;
-        document.getElementById('wolfBanner').innerHTML = `🐺 Le Loup est <b>${wolf.name}</b>`;
 
-        // Partner selection
+        let wolfIdx = state.wolfSequence[state.currentHoleIndex % 4];
+        const forcedHolesCount = (state.options.holes === '18') ? 2 : 1;
+        if (state.currentHoleIndex >= state.course.length - forcedHolesCount) {
+            let minTotal = Infinity;
+            state.players.forEach(p => {
+                const total = p.points.reduce((a, b) => a + b, 0);
+                if (total < minTotal) { minTotal = total; wolfIdx = p.id; }
+            });
+        }
+        const wolf = state.players[wolfIdx];
+        document.getElementById('wolfBanner').innerHTML = `🐺 C'est à <b>${wolf.name}</b> de chasser !`;
+
+        const pastRecord = state.gameData[state.currentHoleIndex] || {};
+        let selectedPartnerId = pastRecord.partner;
+
+        window.selectPartner = function(id, el, isEdit=false) {
+            const parentId = isEdit ? 'editPartnerSelection' : 'partnerSelection';
+            document.querySelectorAll(`#${parentId} .partner-btn`).forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+            if(isEdit) window.editSelectedPartnerId = id;
+            else window.currentSelectedPartnerId = id;
+        }
+        window.currentSelectedPartnerId = selectedPartnerId;
+
         const partDiv = document.getElementById('partnerSelection');
         partDiv.innerHTML = '';
         state.players.forEach(p => {
-            if(p.id !== wolfId) partDiv.innerHTML += `<div class="partner-btn" onclick="selectPartner(${p.id}, this)">Avec ${p.name}</div>`;
+            if(p.id !== wolfIdx) partDiv.innerHTML += `<div class="partner-btn ${selectedPartnerId == p.id ? 'selected' : ''}" onclick="selectPartner(${p.id}, this, false)">Avec ${p.name.substring(0,8)}</div>`;
         });
-        partDiv.innerHTML += `<div class="partner-btn solo" onclick="selectPartner('solo', this)">Solitaire (x2)</div>`;
-        partDiv.innerHTML += `<div class="partner-btn gold" onclick="selectPartner('gold', this)">Or (x3)</div>`;
+        partDiv.innerHTML += `<div class="partner-btn solo ${selectedPartnerId === 'solo' ? 'selected' : ''}" onclick="selectPartner('solo', this, false)">🐺 Solitaire (x2)</div>`;
+        if(state.options.golden) partDiv.innerHTML += `<div class="partner-btn gold ${selectedPartnerId === 'gold' ? 'selected' : ''}" onclick="selectPartner('gold', this, false)">✨ Or (x3)</div>`;
 
-        // Inputs
         const inputDiv = document.getElementById('holeInputs');
         inputDiv.innerHTML = '';
         state.players.forEach(p => {
+            const cr = calculateCR(p, hole);
+            let val = (pastRecord.scores && pastRecord.scores[p.id]) ? pastRecord.scores[p.id] : hole.par;
+            
             inputDiv.innerHTML += `
                 <div class="score-row">
-                    <span class="dot" style="background:${p.color}"></span>
-                    <span style="font-size:0.85rem;">${p.name}</span>
+                    <span class="dot" style="background:${p.color}; margin:0;"></span>
+                    <span style="font-size:0.95rem; line-height:1.2;" class="text-left">${p.name.substring(0,10)} ${p.id === wolfIdx ? '<b>(L)</b>' : ''}</span>
                     <div class="stepper-container">
-                        <button class="btn-stepper minus" onclick="stepScore(${p.id}, -1)">−</button>
-                        <input type="text" class="p-score" id="score${p.id}" value="4" style="width:30px; text-align:center; border:none; background:transparent; font-weight:700;">
-                        <button class="btn-stepper plus" onclick="stepScore(${p.id}, 1)">+</button>
+                        <button class="btn-stepper minus" onclick="stepScore(${p.id}, -1, ${hole.par}, false)">−</button>
+                        <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="p-score-input" data-pid="${p.id}" value="${val}" style="width:30px; text-align:center; padding:0; border:none; background:transparent; font-weight:bold; font-size:1.1rem; outline:none; color:var(--text);">
+                        <button class="btn-stepper plus" onclick="stepScore(${p.id}, 1, ${hole.par}, false)">+</button>
                     </div>
-                    <button class="btn-secondary" style="padding:0; height:32px; color:var(--crimson);" onclick="document.getElementById('score${p.id}').value='X'">X</button>
-                    <div style="background:#eee; border-radius:4px; font-size:0.8rem; font-weight:700;">0</div>
+                    <button class="btn-secondary" style="padding:0; width:100%; height:32px; font-weight:bold; color:var(--crimson); border-radius:8px; border: 1px solid rgba(214,8,77,0.2);" onclick="setScoreX(${p.id}, false)">X</button>
+                    <div style="text-align:center; color:#636e72; background:#dfe6e9; height:32px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.85rem; font-weight:bold;">${state.options.mode === 'net' ? cr : '🔒'}</div>
                 </div>`;
         });
-        updateLiveDashboard();
+        
+        const btnPrev = document.getElementById('btnPrevHole');
+        if (state.currentHoleIndex === 0) { btnPrev.textContent = '← Récap'; btnPrev.onclick = () => showScreen('screenRecap'); } 
+        else { btnPrev.textContent = '← Précédent'; btnPrev.onclick = prevHole; }
+        document.getElementById('btnNextHole').textContent = (state.currentHoleIndex === state.course.length - 1) ? 'Terminer 🏆' : 'Valider ➜';
     }
 
-    function stepScore(id, delta) {
-        let el = document.getElementById(`score${id}`);
-        if(el.value === 'X') el.value = 4;
-        else el.value = Math.max(1, parseInt(el.value) + delta);
-    }
-
-    function selectPartner(id, btn) {
-        document.querySelectorAll('.partner-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        state.selectedPartner = id;
-    }
+    function prevHole() { if(state.currentHoleIndex > 0) { state.currentHoleIndex--; loadHole(); } }
 
     function nextHole() {
-        if(!state.selectedPartner) { alert("Choisissez un partenaire !"); return; }
+        const inputs = document.querySelectorAll('.p-score-input');
+        let record = { scores: {} }; let hasError = false;
         
-        let holeScores = {};
-        state.players.forEach(p => {
-            let val = document.getElementById(`score${p.id}`).value;
-            holeScores[p.id] = val === 'X' ? 10 : parseInt(val); // Simplifié
-        });
+        for(let input of inputs) {
+            let val = input.value.trim().toUpperCase();
+            if(!val || (val !== 'X' && isNaN(parseInt(val)))) { hasError = true; break; }
+            record.scores[input.dataset.pid] = val;
+        }
+        if (hasError || !window.currentSelectedPartnerId) { document.getElementById('validationModal').style.display = 'flex'; return; }
+        record.partner = window.currentSelectedPartnerId;
 
-        // Logique de points simplifiée pour la démo
-        // (Dans une version réelle, on comparerait les scores net/brut selon les équipes)
-        state.players.forEach(p => p.points += Math.floor(Math.random() * 3)); 
-
+        state.gameData[state.currentHoleIndex] = record;
+        recalculateAllScores();
         state.currentHoleIndex++;
-        if(state.currentHoleIndex < 18) loadHole();
-        else finishGame();
+        loadHole();
     }
 
-    function updateLiveDashboard() {
-        const body = document.getElementById('bodyLiveDashboard');
-        if(state.currentHoleIndex === 0) return;
-        document.getElementById('liveDashboard').style.display = 'block';
-        document.getElementById('dashboardEmpty').style.display = 'none';
-        body.innerHTML = '';
-        state.players.sort((a,b) => b.points - a.points).forEach(p => {
-            body.innerHTML += `<tr><td class="text-left"><span class="dot" style="background:${p.color}"></span>${p.name}</td><td><b>${p.points} pts</b></td></tr>`;
+    function closeValidationModal() { document.getElementById('validationModal').style.display = 'none'; }
+    function openEndGameModal() { document.getElementById('endGameModal').style.display = 'flex'; }
+    function closeEndGameModal() { document.getElementById('endGameModal').style.display = 'none'; }
+    function forceFinishGame() { closeEndGameModal(); finishGame(); }
+
+    // --- EDITION ---
+    function openEditMode() {
+        backupGameData = JSON.parse(JSON.stringify(state.gameData));
+        const sel = document.getElementById('editHoleSelect');
+        sel.innerHTML = '';
+        for(let i=0; i < state.gameData.length; i++) { sel.innerHTML += `<option value="${i}">Trou ${state.course[i].num}</option>`; }
+        showScreen('screenEdit');
+        currentEditIndex = 0; sel.value = 0; loadEditHole(0);
+    }
+
+    function changeEditHole(index) {
+        if(!saveCurrentEditHoleLocally()) { document.getElementById('editHoleSelect').value = currentEditIndex; return; }
+        currentEditIndex = parseInt(index); loadEditHole(currentEditIndex);
+    }
+
+    function saveCurrentEditHoleLocally() {
+        const inputs = document.querySelectorAll('.edit-score-input');
+        let record = { scores: {} };
+        for(let input of inputs) {
+            let val = input.value.trim().toUpperCase();
+            if(!val || (val !== 'X' && isNaN(parseInt(val)))) { document.getElementById('validationModal').style.display = 'flex'; return false; }
+            record.scores[input.dataset.pid] = val;
+        }
+        if (!window.editSelectedPartnerId) { document.getElementById('validationModal').style.display = 'flex'; return false; }
+        record.partner = window.editSelectedPartnerId;
+        state.gameData[currentEditIndex] = record;
+        return true;
+    }
+
+    function loadEditHole(index) {
+        const hole = state.course[index]; const record = state.gameData[index];
+        document.getElementById('editHoleInfo').innerHTML = `
+            <span class="badge" style="background:var(--primary); font-size:0.9rem; padding:6px 12px;">TROU ${hole.num}</span>
+            <span class="badge" style="background:#636e72; font-size:0.9rem; padding:6px 12px;">PAR ${hole.par}</span>
+        `;
+        
+        let wolfIdx = state.wolfSequence[index % 4];
+        const forcedHolesCount = (state.options.holes === '18') ? 2 : 1;
+        if (index >= state.course.length - forcedHolesCount) {
+            let minTotal = Infinity;
+            state.players.forEach(p => {
+                const total = p.points.slice(0, index).reduce((a, b) => a + b, 0); // up to this hole
+                if (total < minTotal) { minTotal = total; wolfIdx = p.id; }
+            });
+        }
+        document.getElementById('editWolfBanner').innerHTML = `🐺 C'est à <b>${state.players[wolfIdx].name}</b> de chasser !`;
+
+        window.editSelectedPartnerId = record.partner;
+        const partDiv = document.getElementById('editPartnerSelection');
+        partDiv.innerHTML = '';
+        state.players.forEach(p => {
+            if(p.id !== wolfIdx) partDiv.innerHTML += `<div class="partner-btn ${window.editSelectedPartnerId == p.id ? 'selected' : ''}" onclick="selectPartner(${p.id}, this, true)">Avec ${p.name.substring(0,8)}</div>`;
         });
+        partDiv.innerHTML += `<div class="partner-btn solo ${window.editSelectedPartnerId === 'solo' ? 'selected' : ''}" onclick="selectPartner('solo', this, true)">🐺 Solitaire (x2)</div>`;
+        if(state.options.golden) partDiv.innerHTML += `<div class="partner-btn gold ${window.editSelectedPartnerId === 'gold' ? 'selected' : ''}" onclick="selectPartner('gold', this, true)">✨ Or (x3)</div>`;
+
+        const inputDiv = document.getElementById('editHoleInputs'); inputDiv.innerHTML = '';
+        state.players.forEach(p => {
+            const cr = calculateCR(p, hole);
+            let pastVal = record.scores[p.id] || hole.par;
+            
+            inputDiv.innerHTML += `
+                <div class="score-row">
+                    <span class="dot" style="background:${p.color}; margin:0;"></span>
+                    <span style="font-size:0.95rem; line-height:1.2;" class="text-left">${p.name.substring(0,10)} ${p.id === wolfIdx ? '<b>(L)</b>' : ''}</span>
+                    <div class="stepper-container">
+                        <button class="btn-stepper minus" onclick="stepScore(${p.id}, -1, ${hole.par}, true)">−</button>
+                        <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="edit-score-input" data-pid="${p.id}" value="${pastVal}" style="width:30px; text-align:center; padding:0; border:none; background:transparent; font-weight:bold; font-size:1.1rem; outline:none; color:var(--text);">
+                        <button class="btn-stepper plus" onclick="stepScore(${p.id}, 1, ${hole.par}, true)">+</button>
+                    </div>
+                    <button class="btn-secondary" style="padding:0; width:100%; height:32px; font-weight:bold; color:var(--crimson); border-radius:8px; border: 1px solid rgba(214,8,77,0.2);" onclick="setScoreX(${p.id}, true)">X</button>
+                    <div style="text-align:center; color:#636e72; background:#dfe6e9; height:32px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.85rem; font-weight:bold;">${state.options.mode === 'net' ? cr : '🔒'}</div>
+                </div>`;
+        });
+    }
+
+    function saveAndCloseEdit() { if(saveCurrentEditHoleLocally()) { recalculateAllScores(); finishGame(); } }
+    function cancelEdit() { state.gameData = backupGameData; recalculateAllScores(); finishGame(); }
+
+    // --- REUTILISATION IMAGE TABLE MATCH-FR ---
+    function generateHolesTableImageStyle(holesSubArray, startIndex) {
+        if(holesSubArray.length === 0) return '';
+        let groups = [], grandTotalPar = 0;
+        const holeSep = '<span style="color:#b2bec3; margin:0;">/</span>';
+        for(let i=0; i<holesSubArray.length; i+=3) {
+            let end = Math.min(i+2, holesSubArray.length-1);
+            let labelArr = [], parHtml = "";
+            for(let j=i; j<=end; j++) {
+                labelArr.push(holesSubArray[j].num); 
+                parHtml += `<span style="display:inline-block; width:15px; text-align:center;">${holesSubArray[j].par}</span>`;
+                grandTotalPar += holesSubArray[j].par;
+            }
+            groups.push({ s: i, e: end, label: `<span style="white-space:nowrap;">${labelArr.join(holeSep)}</span>`, parHtml: `<div style="display:flex; justify-content:center; gap:2px;">${parHtml}</div>` });
+        }
+        let colGroupHtml = `<colgroup><col style="width:23%;">`;
+        let groupWidth = 63 / (groups.length || 1);
+        groups.forEach(() => { colGroupHtml += `<col style="width:${groupWidth}%;">`; });
+        colGroupHtml += `<col style="width:14%;"></colgroup>`;
+
+        let html = `<div class="table-responsive"><table class="table-image-style" style="table-layout:fixed; width:100%; min-width:300px;">${colGroupHtml}<thead><tr><th style="text-align:left; border-bottom:none; padding-bottom:0;">Trous</th>`;
+        groups.forEach((g, i) => { let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : ''; html += `<th style="border-bottom:none; padding-bottom:0; text-align:center; ${borderStyle}">${g.label}</th>`; });
+        html += `<th style="border-bottom:none; padding-bottom:0; text-align:center; border-left:1px dashed #e2e8f0;">Tot.</th></tr><tr><th style="text-align:left; color:#636e72; font-size:0.75rem; padding-top:2px;">Par</th>`;
+        groups.forEach((g, i) => { let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : ''; html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; letter-spacing:0; text-align:center; ${borderStyle}">${g.parHtml}</th>`; });
+        html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; text-align:center; border-left:1px dashed #e2e8f0;">${grandTotalPar}</th></tr></thead><tbody>`;
+
+        state.players.forEach(p => {
+            html += `<tr><td class="player-name" style="color:${p.color}; border-left: 4px solid ${p.color}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.85rem; padding-right:4px;">${p.name.substring(0,6)}</td>`;
+            let blockBrut = 0, blockStd = 0;
+            groups.forEach((g, i) => {
+                let sBrutHtml = "", sStdHtml = "";
+                for(let idx = g.s; idx <= g.e; idx++) {
+                    const s = p.scores[startIndex + idx];
+                    let brutVal = s ? s.brut : '-'; let stdVal = s ? s.stb : '-';
+                    sBrutHtml += `<span style="display:inline-block; width:15px; text-align:center;">${brutVal}</span>`;
+                    sStdHtml += `<span style="display:inline-block; width:15px; text-align:center;">${stdVal}</span>`;
+                    if(s) { blockBrut += s.brut; blockStd += s.stb; }
+                }
+                let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : '';
+                html += `<td style="text-align:center; ${borderStyle}"><div class="brut-score" style="display:flex; justify-content:center; gap:2px; letter-spacing:0;">${sBrutHtml}</div>${state.options.mode === 'net' ? `<div class="net-score" style="display:flex; justify-content:center; gap:2px; margin-top:-2px; letter-spacing:0;">${sStdHtml}</div>` : ''}</td>`;
+            });
+            html += `<td style="text-align:center; border-left:1px dashed #e2e8f0;"><div class="brut-score">${blockBrut > 0 ? blockBrut : '-'}</div>${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px;">${blockStd > 0 ? blockStd : '-'}</div>` : ''}</td></tr>`;
+        });
+        return html + `</tbody></table></div>`;
     }
 
     function finishGame() {
         showScreen('screenResults');
-        const pod = document.getElementById('podium');
-        pod.innerHTML = '';
-        state.players.sort((a,b) => b.points - a.points).forEach((p, i) => {
-            let h = 40 + (i === 0 ? 60 : (i === 1 ? 40 : 20));
+        const holesPlayed = state.gameData.length;
+        
+        const sortedPlayers = state.players.map(p => {
+            return { name: p.name, pts: p.points.reduce((a,b)=>a+b,0) };
+        }).sort((a,b) => b.pts - a.pts);
+
+        const pod = document.getElementById('podium'); pod.innerHTML = '';
+        const range = Math.max(1, sortedPlayers[0].pts - sortedPlayers[3].pts);
+        
+        const orderMap = [1, 0, 2, 3]; // 2nd, 1st, 3rd, 4th
+        orderMap.forEach(idx => {
+            const p = sortedPlayers[idx];
+            let height = 30 + ((p.pts - sortedPlayers[3].pts)/range * 70);
+            const medal = idx === 0 ? '🏆' : (idx === 1 ? '🥈' : (idx === 2 ? '🥉' : ''));
             pod.innerHTML += `
                 <div class="podium-col">
-                    <div style="font-weight:700; font-size:0.7rem;">${p.name}</div>
-                    <div class="podium-bar p-bar" style="height:${h}px;">${p.points}</div>
+                    <div class="podium-name">${p.name}</div>
+                    <div class="podium-bar p-${idx+1}" style="height:${height}%;">
+                        <div class="podium-medal">${medal}</div>${p.pts > 0 ? '+'+p.pts : p.pts}
+                    </div>
                 </div>`;
+        });
+
+        const tSummary = document.getElementById('tableSummary');
+        let htmlSum = `<thead><tr><th class="text-left">Joueur</th><th>Brut</th>${state.options.mode === 'net' ? `<th>Net</th><th>Stb</th>` : ''}<th>Pts</th></tr></thead><tbody>`;
+        state.players.forEach(p => {
+            let totB = 0, totNet = 0, totStb = 0, totPts = p.points.reduce((a,b)=>a+b,0);
+            p.scores.slice(0, holesPlayed).forEach(s => { totB += s.brut; totNet += s.net; totStb += s.stb; });
+            let ptColor = totPts > 0 ? 'var(--primary-dark)' : (totPts < 0 ? 'var(--crimson)' : 'inherit');
+            htmlSum += `<tr>
+                <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,8)}</td>
+                <td class="score-brut">${totB > 0 ? totB : '-'}</td>`;
+            if(state.options.mode === 'net') htmlSum += `<td class="score-net">${totNet > 0 ? totNet : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
+            htmlSum += `<td style="font-weight:bold; color:${ptColor};">${totPts > 0 ? '+'+totPts : totPts}</td></tr>`;
+        });
+        tSummary.innerHTML = htmlSum + `</tbody>`;
+
+        const container = document.getElementById('groupedHolesContainer'); container.innerHTML = '';
+        const coursePlayed = state.course.slice(0, holesPlayed);
+        const allerHoles = coursePlayed.filter(h => h.num <= 9);
+        const retourHoles = coursePlayed.filter(h => h.num > 9);
+        if(allerHoles.length > 0) container.innerHTML += generateHolesTableImageStyle(allerHoles, 0);
+        if(retourHoles.length > 0) container.innerHTML += `<div style="margin-top:20px;"></div>` + generateHolesTableImageStyle(retourHoles, allerHoles.length);
+    }
+
+    function takeScreenshot() {
+        html2canvas(document.getElementById('resultsCapture'), { scale: 2, backgroundColor: '#f7f8fa' }).then(canvas => {
+            const link = document.createElement('a'); link.download = `loup-resultats-${new Date().getTime()}.png`;
+            link.href = canvas.toDataURL(); link.click();
         });
     }
 
     window.onload = init;
 </script>
+
 </body>
 </html>
