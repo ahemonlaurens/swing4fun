@@ -109,7 +109,15 @@
         
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: white; }
         .dot { height: 14px; width: 14px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 8px; flex-shrink: 0; }
-        .score-row { display: grid; grid-template-columns: auto 1fr 100px 50px; align-items: center; gap: 8px; margin-bottom: 15px; }
+        
+        /* Nouveau Design Grille de Score */
+        .score-row { display: grid; grid-template-columns: 14px 1fr 115px 35px 35px; align-items: center; gap: 8px; margin-bottom: 15px; }
+        
+        .stepper-container { display: flex; align-items: center; justify-content: space-between; background: #f1f2f6; border-radius: 20px; padding: 3px; }
+        .btn-stepper { width: 30px; height: 30px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 600; cursor: pointer; transition: transform 0.1s, background 0.2s; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .btn-stepper:active { transform: scale(0.9); }
+        .btn-stepper.minus { color: var(--crimson); border: 1px solid rgba(214,8,77,0.3); }
+        .btn-stepper.plus { color: var(--teal); border: 1px solid rgba(26,207,191,0.3); }
         
         #resultsCapture { padding: 20px; background: var(--bg); border-radius: 12px; }
         .podium { display: flex; align-items: flex-end; justify-content: center; gap: 15px; margin: 40px 0 20px 0; height: 250px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
@@ -283,8 +291,9 @@
 
         <div class="card">
             <div id="holeInfo" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"></div>
-            <div style="display:grid; grid-template-columns: auto 1fr 100px 50px; gap:8px; margin-top:10px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72;">
-                <div></div><div>Joueur</div><div style="text-align:center">Score</div><div style="text-align:center">CR</div>
+            
+            <div style="display:grid; grid-template-columns: 14px 1fr 110px 35px 35px; gap:8px; margin-top:10px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72; text-align:center;">
+                <div></div><div style="text-align:left;">Joueur</div><div>Score</div><div></div><div>CR</div>
             </div>
             <div id="holeInputs"></div>
 
@@ -306,8 +315,9 @@
         </div>
         <div class="card">
             <div id="editHoleInfo" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"></div>
-            <div style="display:grid; grid-template-columns: auto 1fr 100px 50px; gap:8px; margin-top:20px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72;">
-                <div></div><div>Joueur</div><div style="text-align:center">Score</div><div style="text-align:center">CR</div>
+            
+            <div style="display:grid; grid-template-columns: 14px 1fr 110px 35px 35px; gap:8px; margin-top:20px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72; text-align:center;">
+                <div></div><div style="text-align:left;">Joueur</div><div>Score</div><div></div><div>CR</div>
             </div>
             <div id="editHoleInputs"></div>
         </div>
@@ -506,7 +516,7 @@
             
             for(let i=1; i<lines.length; i++) {
                 const parts = lines[i].split(';');
-                if (parts.length < 8) continue; // Minimum colonnes pour le nouveau format
+                if (parts.length < 8) continue; 
                 
                 const row = {};
                 headers.forEach((h, idx) => { row[h] = parts[idx] ? parts[idx].trim() : ''; });
@@ -750,6 +760,30 @@
         }
     }
 
+    /* ---- GESTION DU SCORE (STEPPER) ---- */
+
+    function stepScore(pid, delta, defaultPar, isEdit = false) {
+        const inputClass = isEdit ? '.edit-score-input' : '.p-score-input';
+        const input = document.querySelector(`${inputClass}[data-pid="${pid}"]`);
+        if (!input) return;
+        
+        let current = input.value.toUpperCase();
+        if (current === 'X' || current === '') {
+            input.value = defaultPar;
+        } else {
+            let newVal = parseInt(current) + delta;
+            if (isNaN(newVal)) newVal = defaultPar;
+            if (newVal < 1) newVal = 1;
+            input.value = newVal;
+        }
+    }
+
+    function setScoreX(pid, isEdit = false) {
+        const inputClass = isEdit ? '.edit-score-input' : '.p-score-input';
+        const input = document.querySelector(`${inputClass}[data-pid="${pid}"]`);
+        if (input) input.value = 'X';
+    }
+
     /* ---- LOGIQUE PRINCIPALE ---- */
 
     function renderPlayerInputs() {
@@ -961,7 +995,7 @@
             if (tPlayers.length > 0) {
                 pListHtml += `<div style="font-weight:bold; color:var(--primary-dark); margin-top:15px; border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:10px;">${team.name}</div>`;
                 tPlayers.forEach(p => {
-                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>, ${p.gender === 'F' ? 'Femme' : 'Homme'})` : '';
+                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>)` : '';
                     
                     let whsHtml = '';
                     if (state.options.mode === 'net') {
@@ -1232,18 +1266,25 @@
         
         state.players.forEach(p => {
             const cr = calculateCR(p, hole);
-            const val = pastRecord[p.id] || '';
+            let val = pastRecord[p.id];
+            if (val === undefined) val = hole.par; // Défaut = Par
+            
             const tColor = p.team === 1 ? 'var(--blue)' : 'var(--orange)';
             
             inputDiv.innerHTML += `
                 <div class="score-row">
                     <span class="dot" style="background:${p.color}; margin:0;"></span>
-                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} <span style="font-size:0.75rem; color:${tColor};">(${p.team === 1 ? 'Eq. 1' : 'Eq. 2'})</span></span>
-                    <div style="display:flex; gap:4px;">
-                        <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="p-score-input" data-pid="${p.id}" placeholder="Score" value="${val}" style="width:100%; min-width:0; text-align:center; padding:8px 5px;">
-                        <button class="btn-secondary" style="padding:0; width:35px; font-weight:bold; color:var(--crimson); flex-shrink:0;" onclick="this.previousElementSibling.value='X'">X</button>
+                    <span style="font-size:0.95rem; line-height:1.2;" class="text-left">
+                        ${p.name.substring(0,10)}<br>
+                        <span style="font-size:0.7rem; color:${tColor};">(${p.team === 1 ? 'Eq. 1' : 'Eq. 2'})</span>
+                    </span>
+                    <div class="stepper-container">
+                        <button class="btn-stepper minus" onclick="stepScore(${p.id}, -1, ${hole.par}, false)">−</button>
+                        <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="p-score-input" data-pid="${p.id}" value="${val}" style="width:30px; text-align:center; padding:0; border:none; background:transparent; font-weight:bold; font-size:1.1rem; outline:none; color:var(--text);">
+                        <button class="btn-stepper plus" onclick="stepScore(${p.id}, 1, ${hole.par}, false)">+</button>
                     </div>
-                    <div style="text-align:center; color:#636e72; background:#f1f2f6; padding:5px; border-radius:5px;">
+                    <button class="btn-secondary" style="padding:0; width:100%; height:32px; font-weight:bold; color:var(--crimson); border-radius:8px; border: 1px solid rgba(214,8,77,0.2);" onclick="setScoreX(${p.id}, false)">X</button>
+                    <div style="text-align:center; color:#636e72; background:#dfe6e9; height:32px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.85rem; font-weight:bold;">
                         ${state.options.mode === 'net' ? cr : '🔒'}
                     </div>
                 </div>`;
@@ -1314,18 +1355,24 @@
         
         state.players.forEach(p => {
             const cr = calculateCR(p, hole);
-            const pastVal = record[p.id] || '';
+            let pastVal = record[p.id];
+            if (pastVal === undefined) pastVal = hole.par;
             const tColor = p.team === 1 ? 'var(--blue)' : 'var(--orange)';
             
             inputDiv.innerHTML += `
                 <div class="score-row">
                     <span class="dot" style="background:${p.color}; margin:0;"></span>
-                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} <span style="font-size:0.75rem; color:${tColor};">(${p.team === 1 ? 'Eq. 1' : 'Eq. 2'})</span></span>
-                    <div style="display:flex; gap:4px;">
-                        <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="edit-score-input" data-pid="${p.id}" placeholder="Score" value="${pastVal}" style="width:100%; min-width:0; text-align:center; padding:8px 5px;">
-                        <button class="btn-secondary" style="padding:0; width:35px; font-weight:bold; color:var(--crimson); flex-shrink:0;" onclick="this.previousElementSibling.value='X'">X</button>
+                    <span style="font-size:0.95rem; line-height:1.2;" class="text-left">
+                        ${p.name.substring(0,10)}<br>
+                        <span style="font-size:0.7rem; color:${tColor};">(${p.team === 1 ? 'Eq. 1' : 'Eq. 2'})</span>
+                    </span>
+                    <div class="stepper-container">
+                        <button class="btn-stepper minus" onclick="stepScore(${p.id}, -1, ${hole.par}, true)">−</button>
+                        <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="edit-score-input" data-pid="${p.id}" placeholder="Score" value="${pastVal}" style="width:30px; text-align:center; padding:0; border:none; background:transparent; font-weight:bold; font-size:1.1rem; outline:none; color:var(--text);">
+                        <button class="btn-stepper plus" onclick="stepScore(${p.id}, 1, ${hole.par}, true)">+</button>
                     </div>
-                    <div style="text-align:center; color:#636e72; background:#f1f2f6; padding:5px; border-radius:5px;">
+                    <button class="btn-secondary" style="padding:0; width:100%; height:32px; font-weight:bold; color:var(--crimson); border-radius:8px; border: 1px solid rgba(214,8,77,0.2);" onclick="setScoreX(${p.id}, true)">X</button>
+                    <div style="text-align:center; color:#636e72; background:#dfe6e9; height:32px; display:flex; align-items:center; justify-content:center; border-radius:5px; font-size:0.85rem; font-weight:bold;">
                         ${state.options.mode === 'net' ? cr : '🔒'}
                     </div>
                 </div>`;
