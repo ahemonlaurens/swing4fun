@@ -215,10 +215,7 @@
         <div class="card">
             <h2>1. Le Parcours</h2>
             <div id="courseSelectionArea" style="background:#e3f2fd; padding:15px; border-radius:8px; margin-bottom:15px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; flex-wrap:wrap; gap:10px;">
-                    <div class="form-label" style="font-weight:bold; color:var(--blue); margin:0;">🔍 Trouver mon golf</div>
-                    <button class="btn-secondary" style="padding:6px 12px; font-size:0.9rem; font-weight:bold;" onclick="openLocalCoursesModal()">📂 Mes parcours locaux</button>
-                </div>
+                <div class="form-label" style="font-weight:bold; color:var(--blue); margin-bottom: 12px;">🔍 Trouver mon golf</div>
                 <div style="display:flex; flex-direction:column; gap:10px;">
                     <select id="regionSelect" onchange="loadRegionGolfs()" style="width:100%; padding:8px; border:2px solid #dfe6e9; border-radius:8px;">
                         <option value="">-- Sélectionnez une région --</option>
@@ -226,6 +223,7 @@
                     <select id="golfSelect" onchange="applySelectedGolf()" style="width:100%; padding:8px; border:2px solid #dfe6e9; border-radius:8px;">
                         <option value="">-- Sélectionnez d'abord une région --</option>
                     </select>
+                    <input type="text" id="newLocalCourseName" placeholder="Entrez le nom de votre parcours..." style="display:none; width:100%; padding:10px; font-weight:bold; border:2px solid var(--primary); border-radius:8px; outline:none;">
                 </div>
             </div>
             <div id="activeCourseDisplay" style="text-align:center; font-weight:bold; color:var(--primary-dark); font-size:1.1rem; min-height:1.5em;"></div>
@@ -233,7 +231,7 @@
 
         <div class="card">
             <h2>2. Les Équipes et Départs</h2>
-            <div style="font-size: 0.9rem; color:#636e72; margin-bottom:15px;">Sélectionnez le repère de départ de chaque joueur. Les valeurs Slope/SSS s'ajustent automatiquement.</div>
+            <div style="font-size: 0.9rem; color:#636e72; margin-bottom:15px;">Le repère est présélectionné en fonction du handicap. Les valeurs Slope/SSS s'ajustent automatiquement.</div>
             <div id="recapPlayersList" style="margin-bottom: 10px;"></div>
         </div>
 
@@ -341,21 +339,6 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="localCoursesModal">
-    <div class="modal-content">
-        <div class="modal-title">Mes Parcours Locaux</div>
-        <div id="localCoursesList" style="display:flex; flex-direction:column; gap:8px; margin-bottom:15px; max-height:200px; overflow-y:auto; padding-right:5px;">
-            </div>
-        <hr style="border:0; border-top:1px solid #eee; margin:15px 0;">
-        <div style="font-weight:bold; color:#2d3436; margin-bottom:10px; font-size:0.95rem;">Créer un nouveau parcours</div>
-        <input type="text" id="newLocalCourseName" placeholder="Nom du golf..." style="width:100%; margin-bottom:10px; padding:10px; border-radius:8px; border:2px solid #dfe6e9;">
-        <div class="modal-btns" style="margin-top:0;">
-            <button class="btn-secondary" style="flex:1;" onclick="closeLocalCoursesModal()">Annuler</button>
-            <button class="btn-main" style="flex:1;" onclick="createNewLocalCourse()">Créer</button>
-        </div>
-    </div>
-</div>
-
 <div class="modal-overlay" id="teamErrorModal">
     <div class="modal-content">
         <div class="modal-title" style="color: var(--crimson);">⚠️ Équipes Invalides</div>
@@ -394,18 +377,6 @@
     </div>
 </div>
 
-<div class="modal-overlay" id="courseNameModal">
-    <div class="modal-content">
-        <div class="modal-title">Nom du parcours</div>
-        <input type="text" id="newCourseNameInput" placeholder="Saisissez un nom (optionnel)" style="width: 100%; margin-bottom: 10px;">
-        <p style="font-size: 0.85rem; color: #636e72; margin-bottom: 20px;">Voulez-vous sauvegarder ce parcours localement ?</p>
-        <div class="modal-btns">
-            <button class="btn-secondary" style="flex:1;" onclick="finalizeCourseAndStart(false)">Passer</button>
-            <button class="btn-main" style="flex:1;" onclick="finalizeCourseAndStart(true)">Valider</button>
-        </div>
-    </div>
-</div>
-
 <div class="modal-overlay" id="deleteCourseModal">
     <div class="modal-content">
         <div class="modal-title" style="color: var(--crimson);">Voulez-vous effacer le parcours ?</div>
@@ -436,6 +407,7 @@
 
     let backupGameData = null;
     let currentEditIndex = 0;
+    let courseToDelete = null;
     
     // Données structurées : currentRegionData[golf_name] = { tees: { 'Blanc': { slope, sss, holes: [] }, ... } }
     let currentRegionData = {};
@@ -475,11 +447,13 @@
 
     async function loadRegions() {
         try {
+            const select = document.getElementById('regionSelect');
+            select.innerHTML = '<option value="">-- Sélectionnez une région --</option>';
+            select.innerHTML += '<option value="local">📁 Mes parcours (Création/Local)</option>';
+            
             const response = await fetch('golfs-regions.csv', { cache: "no-cache" });
             const text = await response.text();
             const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
-            const select = document.getElementById('regionSelect');
-            select.innerHTML = '<option value="">-- Sélectionnez une région --</option>';
             
             for(let i=1; i<lines.length; i++) {
                 const parts = lines[i].split(',');
@@ -493,17 +467,36 @@
         } catch(e) { console.error("Impossible de charger les régions", e); }
     }
 
+    function getSavedCourses() {
+        try { return JSON.parse(localStorage.getItem('wolf_saved_courses')) || {}; } catch(e) { return {}; }
+    }
+
     async function loadRegionGolfs() {
-        const filename = document.getElementById('regionSelect').value;
+        const regionVal = document.getElementById('regionSelect').value;
         const select = document.getElementById('golfSelect');
-        select.innerHTML = '<option value="">-- Sélectionnez un golf --</option>';
+        document.getElementById('newLocalCourseName').style.display = 'none';
+        select.innerHTML = '<option value="">-- Sélectionnez un parcours --</option>';
         currentRegionData = {};
         currentSelectedGolfData = null;
 
-        if (!filename) return;
+        if (!regionVal) return;
 
+        // Gestion des parcours locaux
+        if (regionVal === 'local') {
+            select.innerHTML += '<option value="new_local">➕ Nouveau parcours</option>';
+            const courses = getSavedCourses();
+            Object.keys(courses).sort().forEach(k => {
+                const opt = document.createElement('option');
+                opt.value = 'local_' + k; 
+                opt.text = k;
+                select.appendChild(opt);
+            });
+            return;
+        }
+
+        // Chargement base de données CSV
         try {
-            const response = await fetch(filename, { cache: "no-cache" });
+            const response = await fetch(regionVal, { cache: "no-cache" });
             const text = await response.text();
             const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
             if (lines.length === 0) return;
@@ -537,20 +530,67 @@
                 });
             }
             
-            // Ne lister qu'une seule fois chaque Golf (sans la couleur)
             Object.keys(currentRegionData).sort().forEach(gName => {
                 const opt = document.createElement('option');
                 opt.value = gName; opt.text = gName;
                 select.appendChild(opt);
             });
 
-        } catch(e) { console.error("Erreur de chargement de " + filename, e); }
+        } catch(e) { console.error("Erreur de chargement de " + regionVal, e); }
     }
 
     function applySelectedGolf() {
-        const gName = document.getElementById('golfSelect').value;
-        if (!gName) return;
+        const val = document.getElementById('golfSelect').value;
+        const newNameInput = document.getElementById('newLocalCourseName');
+        newNameInput.style.display = 'none';
+        document.getElementById('activeCourseDisplay').innerHTML = '';
 
+        if (!val) return;
+
+        // Créer un nouveau parcours manuel
+        if (val === 'new_local') {
+            newNameInput.style.display = 'block';
+            newNameInput.value = '';
+            state.activeCourseType = 'local';
+            state.activeCourseName = null;
+            
+            for(let i=1; i<=18; i++) {
+                if (document.getElementById('par'+i)) document.getElementById('par'+i).value = 4;
+                if (document.getElementById('hcp'+i)) {
+                    const hcpInput = document.getElementById('hcp'+i);
+                    if (document.getElementById('modeNet').checked) hcpInput.value = i;
+                    else hcpInput.dataset.old = i; 
+                }
+            }
+            updatePlayerTeeDropdowns(['Blanc', 'Jaune', 'Bleu', 'Rouge']);
+            return;
+        }
+
+        // Chargement parcours local existant
+        if (val.startsWith('local_')) {
+            const gName = val.substring(6);
+            state.activeCourseType = 'local';
+            state.activeCourseName = gName;
+            document.getElementById('activeCourseDisplay').innerHTML = `📍 ${gName} <span style="font-size:0.8rem; color:var(--crimson); cursor:pointer; text-decoration:underline; margin-left:10px;" onclick="promptDeleteLocalCourse('${gName.replace(/'/g, "\\'")}')">[Supprimer]</span>`;
+            
+            const data = getSavedCourses()[gName];
+            if (data) {
+                data.holes.forEach((h, idx) => {
+                    const i = idx + 1;
+                    if (document.getElementById('par'+i)) document.getElementById('par'+i).value = h.par;
+                    if (document.getElementById('hcp'+i)) {
+                        const hcpInput = document.getElementById('hcp'+i);
+                        if (document.getElementById('modeNet').checked) hcpInput.value = h.hcp;
+                        else hcpInput.dataset.old = h.hcp; 
+                    }
+                });
+            }
+            updatePlayerTeeDropdowns(['Blanc', 'Jaune', 'Bleu', 'Rouge']);
+            return;
+        }
+
+        // Chargement d'un golf de la base de données
+        const gName = val;
         state.activeCourseType = 'db';
         state.activeCourseName = gName;
         document.getElementById('activeCourseDisplay').innerHTML = `📍 ${gName}`;
@@ -572,82 +612,34 @@
                 }
             });
 
-            // Met à jour les départs proposés pour les joueurs
             updatePlayerTeeDropdowns(Object.keys(data.tees));
         }
     }
 
-    /* ---- GESTION DES PARCOURS LOCAUX ---- */
-
-    function getSavedCourses() {
-        try { return JSON.parse(localStorage.getItem('wolf_saved_courses')) || {}; } catch(e) { return {}; }
+    function promptDeleteLocalCourse(name) {
+        courseToDelete = name;
+        document.getElementById('deleteCourseModal').style.display = 'flex';
     }
 
-    function openLocalCoursesModal() {
-        const courses = getSavedCourses();
-        const keys = Object.keys(courses).slice(-5).reverse(); 
-        const listContainer = document.getElementById('localCoursesList');
-        listContainer.innerHTML = '';
-        
-        if (keys.length === 0) {
-            listContainer.innerHTML = '<div style="font-size:0.85rem; color:#636e72; font-style:italic;">Aucun parcours sauvegardé.</div>';
-        } else {
-            keys.forEach(k => {
-                listContainer.innerHTML += `<button class="btn-secondary" style="width:100%; text-align:left; padding:12px; margin-bottom:5px; background:#f1f2f6;" onclick="selectLocalCourse('${k.replace(/'/g, "\\'")}')">⛳ ${k}</button>`;
-            });
+    function confirmDeleteCourse(doDelete) {
+        document.getElementById('deleteCourseModal').style.display = 'none';
+        if (doDelete && courseToDelete) {
+            const courses = getSavedCourses();
+            delete courses[courseToDelete];
+            localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
+            
+            if (state.activeCourseName === courseToDelete) {
+                state.activeCourseType = null;
+                state.activeCourseName = null;
+                document.getElementById('activeCourseDisplay').innerHTML = '';
+            }
+            loadRegionGolfs(); // Rafraîchit le select
         }
-        
-        document.getElementById('newLocalCourseName').value = '';
-        document.getElementById('localCoursesModal').style.display = 'flex';
+        courseToDelete = null;
     }
 
-    function closeLocalCoursesModal() {
-        document.getElementById('localCoursesModal').style.display = 'none';
-    }
-
-    function createNewLocalCourse() {
-        const name = document.getElementById('newLocalCourseName').value.trim();
-        if(!name) { alert("Veuillez entrer un nom pour le parcours."); return; }
-        
-        const newCourse = { holes: [] };
-        for(let i=1; i<=18; i++) newCourse.holes.push({ par: 4, hcp: i });
-        
-        const courses = getSavedCourses();
-        courses[name] = newCourse;
-        localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
-        
-        selectLocalCourse(name);
-    }
-
-    function selectLocalCourse(name) {
-        const data = getSavedCourses()[name];
-        if(data) {
-            state.activeCourseType = 'local';
-            state.activeCourseName = name;
-            currentSelectedGolfData = null; // Désactive la BD
-
-            document.getElementById('activeCourseDisplay').innerHTML = `
-                📍 ${name} 
-                <span style="font-size:0.8rem; color:var(--crimson); cursor:pointer; font-weight:normal; text-decoration:underline; margin-left:10px;" onclick="document.getElementById('deleteCourseModal').style.display = 'flex'">[Supprimer]</span>
-            `;
-            
-            document.getElementById('golfSelect').value = '';
-            
-            data.holes.forEach((h, idx) => {
-                const i = idx + 1;
-                document.getElementById('par'+i).value = h.par;
-                const hcpInput = document.getElementById('hcp'+i);
-                if(document.getElementById('modeNet').checked) hcpInput.value = h.hcp;
-                else hcpInput.dataset.old = h.hcp; 
-            });
-            
-            updatePlayerTeeDropdowns(['Standard', 'Blanc', 'Jaune', 'Bleu', 'Rouge']);
-        }
-        closeLocalCoursesModal();
-    }
-
-    function saveCurrentCourse() {
-        if(!state.activeCourseName || state.activeCourseType !== 'local') return;
+    function saveCurrentCourseLocally() {
+        if(!state.activeCourseName) return;
         const courseData = { holes: [] };
         for(let i=1; i<=18; i++) {
             let hcpInput = document.getElementById('hcp'+i);
@@ -660,36 +652,32 @@
         localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
     }
 
-    function confirmDeleteCourse(doDelete) {
-        document.getElementById('deleteCourseModal').style.display = 'none';
-        if (doDelete && state.activeCourseName && state.activeCourseType === 'local') {
-            const courses = getSavedCourses();
-            delete courses[state.activeCourseName];
-            localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
-            
-            state.activeCourseType = null;
-            state.activeCourseName = null;
-            document.getElementById('activeCourseDisplay').innerHTML = '';
-        }
-    }
-
     /* ---- GESTION DES DEPARTS DES JOUEURS ---- */
 
     function updatePlayerTeeDropdowns(availableTees) {
         for (let i = 0; i < state.playersCount; i++) {
             const select = document.getElementById('pTee' + i);
+            const player = state.players.find(p => p.id === i);
+            
             if (select) {
-                const currentVal = select.value;
                 select.innerHTML = '';
                 availableTees.forEach(t => {
                     const opt = document.createElement('option');
                     opt.value = t; opt.text = t;
                     select.appendChild(opt);
                 });
-                if (availableTees.includes(currentVal)) select.value = currentVal;
-                else if (availableTees.includes('Jaune')) select.value = 'Jaune';
-                else select.value = availableTees[0];
 
+                // Pré-sélection automatique en fonction de l'index
+                let hcp = player ? player.hcp : 20;
+                let recommended = availableTees[0]; // Sécurité
+                
+                if (hcp <= 15.0 && availableTees.includes('Blanc')) recommended = 'Blanc';
+                else if (hcp > 15.0 && hcp <= 28.0 && availableTees.includes('Jaune')) recommended = 'Jaune';
+                else if (hcp > 28.0 && availableTees.includes('Bleu')) recommended = 'Bleu';
+                else if (hcp > 28.0 && availableTees.includes('Rouge')) recommended = 'Rouge';
+                else if (availableTees.includes('Jaune')) recommended = 'Jaune';
+                
+                select.value = recommended;
                 applyPlayerTeeStats(i);
             }
         }
@@ -702,11 +690,17 @@
         
         if (!teeSelect || !slopeInput || !sssInput) return;
 
-        const teeColor = teeSelect.value;
-        if (state.activeCourseType === 'db' && currentSelectedGolfData && currentSelectedGolfData.tees[teeColor]) {
-            const tData = currentSelectedGolfData.tees[teeColor];
-            slopeInput.value = tData.slope;
-            sssInput.value = tData.sss;
+        if (state.activeCourseType === 'db' && currentSelectedGolfData) {
+            const teeColor = teeSelect.value;
+            if (currentSelectedGolfData.tees[teeColor]) {
+                const tData = currentSelectedGolfData.tees[teeColor];
+                slopeInput.value = tData.slope;
+                sssInput.value = tData.sss;
+            }
+        } else {
+            // Parcours Local ou Nouveau (Valeurs standard)
+            slopeInput.value = 113;
+            sssInput.value = 72.0;
         }
     }
 
@@ -909,11 +903,6 @@
                             <div style="flex:1">
                                 <div style="font-size:0.75rem; color:#636e72; font-weight:bold; margin-bottom:2px;">Repère</div>
                                 <select id="pTee${p.id}" onchange="applyPlayerTeeStats(${p.id})" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
-                                    <option value="Standard" selected>Standard</option>
-                                    <option value="Blanc">Blanc</option>
-                                    <option value="Jaune">Jaune</option>
-                                    <option value="Bleu">Bleu</option>
-                                    <option value="Rouge">Rouge</option>
                                 </select>
                             </div>
                             <div style="flex:0.8">
@@ -941,45 +930,34 @@
         });
         pListContainer.innerHTML = pListHtml;
 
+        // Mise à jour initiale des sélecteurs
         if (state.activeCourseType === 'db' && currentSelectedGolfData) {
             updatePlayerTeeDropdowns(Object.keys(currentSelectedGolfData.tees));
+        } else {
+            updatePlayerTeeDropdowns(['Blanc', 'Jaune', 'Bleu', 'Rouge']);
         }
     }
 
     function validateCourseAndStart() {
-        if (!state.activeCourseName) {
-            document.getElementById('courseNameModal').style.display = 'flex';
+        const val = document.getElementById('golfSelect').value;
+
+        if (!val) {
+            alert("Veuillez sélectionner un golf (Base de données, Mes parcours ou Nouveau) avant de commencer.");
             return;
         }
 
-        if (state.activeCourseType === 'local') {
-            saveCurrentCourse();
-        }
-
-        finalizeCourseAndStart(false, state.activeCourseName);
-    }
-
-    function finalizeCourseAndStart(saveCourseLocally, existingName = null) {
-        document.getElementById('courseNameModal').style.display = 'none';
-        
-        let finalCourseName = existingName;
-        if (!existingName && saveCourseLocally) {
-            finalCourseName = document.getElementById('newCourseNameInput').value.trim();
-            if(finalCourseName) {
-                // Initialize standard holes before saving
-                const newCourse = { holes: [] };
-                for(let i=1; i<=18; i++) newCourse.holes.push({ par: 4, hcp: i });
-                const courses = getSavedCourses();
-                courses[finalCourseName] = newCourse;
-                localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
-                state.activeCourseType = 'local';
-                state.activeCourseName = finalCourseName;
-                saveCurrentCourse(); // Save table inputs
-            }
+        if (val === 'new_local') {
+            const newName = document.getElementById('newLocalCourseName').value.trim();
+            if (!newName) { alert("Veuillez entrer un nom pour votre nouveau parcours."); return; }
+            state.activeCourseName = newName;
+            state.activeCourseType = 'local';
+            saveCurrentCourseLocally(); // On sauvegarde ce qu'il a écrit dans la grille
+        } else if (state.activeCourseType === 'local') {
+            saveCurrentCourseLocally(); // Mise à jour de l'existant (si changement par ex)
         }
 
         const isNet = state.options.mode === 'net';
-        state.options.courseName = finalCourseName || "";
+        state.options.courseName = state.activeCourseName || "";
 
         let total18Par = 0;
         for(let i=1; i<=18; i++) total18Par += parseInt(document.getElementById('par'+i).value) || 4;
