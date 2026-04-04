@@ -507,6 +507,7 @@
 
         if (!regionVal) return;
 
+        // Gestion des parcours locaux
         if (regionVal === 'local') {
             select.innerHTML += '<option value="new_local">➕ Nouveau parcours</option>';
             const courses = getSavedCourses();
@@ -519,6 +520,7 @@
             return;
         }
 
+        // Chargement base de données CSV avec le nouveau format
         try {
             const response = await fetch(regionVal, { cache: "no-cache" });
             const text = await response.text();
@@ -576,6 +578,7 @@
 
         if (!val) return;
 
+        // Créer un nouveau parcours manuel
         if (val === 'new_local') {
             newNameInput.style.display = 'block';
             newNameInput.value = '';
@@ -594,6 +597,7 @@
             return;
         }
 
+        // Chargement parcours local existant
         if (val.startsWith('local_')) {
             const gName = val.substring(6);
             state.activeCourseType = 'local';
@@ -616,6 +620,7 @@
             return;
         }
 
+        // Chargement d'un golf de la base de données
         const gName = val;
         state.activeCourseType = 'db';
         state.activeCourseName = gName;
@@ -718,6 +723,8 @@
         }
     }
 
+    /* ---- GESTION DES DEPARTS DES JOUEURS ---- */
+
     function updatePlayerTeeDropdowns(availableTees) {
         for (let i = 0; i < state.playersCount; i++) {
             const select = document.getElementById('pTee' + i);
@@ -765,6 +772,8 @@
         }
     }
 
+    /* ---- GESTION DU SCORE (STEPPER) ---- */
+
     function stepScore(pid, delta, defaultPar, isEdit = false) {
         const inputClass = isEdit ? '.edit-score-input' : '.p-score-input';
         const input = document.querySelector(`${inputClass}[data-pid="${pid}"]`);
@@ -786,6 +795,8 @@
         const input = document.querySelector(`${inputClass}[data-pid="${pid}"]`);
         if (input) input.value = 'X';
     }
+
+    /* ---- LOGIQUE PRINCIPALE ---- */
 
     function renderPlayerInputs() {
         const pList = document.getElementById('playersList');
@@ -997,7 +1008,7 @@
             if (tPlayers.length > 0) {
                 pListHtml += `<div style="font-weight:bold; color:var(--primary-dark); margin-top:15px; border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:10px;">${team.name}</div>`;
                 tPlayers.forEach(p => {
-                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>, ${p.gender === 'F' ? 'Femme' : 'Homme'})` : '';
+                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>)` : '';
                     
                     let whsHtml = '';
                     if (state.options.mode === 'net') {
@@ -1123,7 +1134,7 @@
                 let net_calcule = brut_saisi - cr;
 
                 if (state.options.mode === 'net') {
-                    let maxNet = hole.par + 2;
+                    let maxNet = hole.par + 2; // Maximum pour le Net
                     if (isCross || net_calcule > maxNet) {
                         net_calcule = maxNet;
                         brut_saisi = maxNet + cr; 
@@ -1393,27 +1404,32 @@
     function generateHolesTableImageStyle(holesSubArray, startIndex) {
         if(holesSubArray.length === 0) return '';
         let groups = [], grandTotalPar = 0;
-        const headerSep = '<span style="margin:0 2px; color:#b2bec3;">/</span>';
+        const holeSep = '<span style="color:#b2bec3;">/</span>';
 
         for(let i=0; i<holesSubArray.length; i+=3) {
             let end = Math.min(i+2, holesSubArray.length-1);
-            let labelArr = [], parLabelArr = [];
+            let labelArr = [], parHtml = "";
             for(let j=i; j<=end; j++) {
                 labelArr.push(holesSubArray[j].num); 
-                parLabelArr.push(holesSubArray[j].par); 
+                parHtml += `<span style="display:inline-block; min-width:14px; text-align:center; margin:0 1px;">${holesSubArray[j].par}</span>`;
                 grandTotalPar += holesSubArray[j].par;
             }
-            groups.push({ s: i, e: end, label: labelArr.join(headerSep), parLabel: parLabelArr.join(headerSep) });
+            groups.push({ s: i, e: end, label: labelArr.join(holeSep), parHtml: parHtml });
         }
 
-        let html = `<div class="table-responsive"><table class="table-image-style"><thead><tr><th style="text-align:left; border-bottom:none; padding-bottom:0;">Trous</th>`;
-        groups.forEach(g => { html += `<th style="border-bottom:none; padding-bottom:0;">${g.label}</th>`; });
-        html += `<th style="border-bottom:none; padding-bottom:0;">Total</th></tr><tr><th style="text-align:left; color:#636e72; font-size:0.75rem; padding-top:2px;">Par</th>`;
-        groups.forEach(g => { html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; letter-spacing:0;">${g.parLabel}</th>`; });
-        html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px;">${grandTotalPar}</th></tr></thead><tbody>`;
+        let colGroupHtml = `<colgroup><col style="width:26%;">`;
+        let groupWidth = 60 / (groups.length || 1);
+        groups.forEach(() => { colGroupHtml += `<col style="width:${groupWidth}%;">`; });
+        colGroupHtml += `<col style="width:14%;"></colgroup>`;
+
+        let html = `<div class="table-responsive"><table class="table-image-style" style="table-layout:fixed; width:100%; min-width:320px;">${colGroupHtml}<thead><tr><th style="text-align:left; border-bottom:none; padding-bottom:0;">Trous</th>`;
+        groups.forEach(g => { html += `<th style="border-bottom:none; padding-bottom:0; text-align:center;">${g.label}</th>`; });
+        html += `<th style="border-bottom:none; padding-bottom:0; text-align:center;">Tot.</th></tr><tr><th style="text-align:left; color:#636e72; font-size:0.75rem; padding-top:2px;">Par</th>`;
+        groups.forEach(g => { html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; letter-spacing:0; text-align:center;">${g.parHtml}</th>`; });
+        html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; text-align:center;">${grandTotalPar}</th></tr></thead><tbody>`;
 
         state.players.forEach(p => {
-            html += `<tr><td class="player-name" style="color:${p.color}; border-left: 4px solid ${p.color};">${p.name.substring(0,6)}</td>`;
+            html += `<tr><td class="player-name" style="color:${p.color}; border-left: 4px solid ${p.color}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.85rem;">${p.name.substring(0,6)}</td>`;
             let blockBrut = 0, blockStd = 0;
 
             groups.forEach(g => {
@@ -1431,12 +1447,12 @@
                         blockStd += s.stb; 
                     }
                 }
-                html += `<td>
+                html += `<td style="text-align:center;">
                     <div class="brut-score" style="letter-spacing:0; white-space:nowrap;">${sBrutHtml}</div>
                     ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px; letter-spacing:0; white-space:nowrap;">${sStdHtml}</div>` : ''}
                 </td>`;
             });
-            html += `<td>
+            html += `<td style="text-align:center;">
                 <div class="brut-score">${blockBrut > 0 ? blockBrut : '-'}</div>
                 ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px;">${blockStd > 0 ? blockStd : '-'}</div>` : ''}
             </td></tr>`;
