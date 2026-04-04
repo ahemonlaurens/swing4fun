@@ -105,6 +105,7 @@
 
         .btn-main { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--primary), var(--teal)); color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: transform 0.1s; }
         .btn-main:active { transform: scale(0.98); }
+        .btn-main:disabled { opacity: 0.7; cursor: not-allowed; }
         .btn-secondary { background: #dfe6e9; color: #2d3436; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; display: inline-block; }
         .btn-ghost { background: transparent; color: #b2bec3; border: 2px dashed #dfe6e9; padding: 12px; border-radius: 8px; font-weight: 600; width: 100%; cursor: pointer; transition: 0.2s; margin-top: 15px;}
         
@@ -137,8 +138,8 @@
         .p-3 { background: var(--teal); }
         .p-4 { background: #b2bec3; }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; }
-        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 15px;}
+        .modal-content { background: white; padding: 25px; border-radius: 15px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;}
         .modal-title { font-size: 1.25rem; font-weight: bold; color: var(--primary-dark); margin-bottom: 15px; }
         .modal-btns { display: flex; gap: 10px; margin-top: 20px; }
 
@@ -343,9 +344,20 @@
         </div>
         <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
             <button class="btn-secondary" style="flex:1" onclick="exportCSV()">📥 CSV</button>
-            <button class="btn-secondary" style="flex:1" onclick="takeScreenshot()">📸 Capture</button>
+            <button class="btn-secondary" id="btnCapture" style="flex:1" onclick="takeScreenshot()">📸 Capture</button>
             <button class="btn-secondary" style="flex:100%; border: 2px solid var(--primary); color:var(--primary-dark); font-weight:700;" onclick="openEditMode()">✏️ Éditer les scores</button>
             <button class="btn-main" style="flex:100%; margin-top:5px;" onclick="window.location.href='index.html'">🔄 Nouvelle Partie / Accueil</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="screenshotModal">
+    <div class="modal-content" style="padding: 15px; background: transparent; box-shadow: none;">
+        <div style="background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+            <h3 style="margin-top:0; color: var(--primary-dark);">📸 Capture prête</h3>
+            <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 15px;">Appuyez longuement sur l'image ci-dessous pour l'enregistrer dans vos photos ou la partager.</p>
+            <img id="screenshotImage" src="" style="width: 100%; border-radius: 8px; border: 1px solid #eee; margin-bottom: 15px;">
+            <button class="btn-secondary" style="width: 100%; font-weight: bold;" onclick="document.getElementById('screenshotModal').style.display='none'">Fermer</button>
         </div>
     </div>
 </div>
@@ -649,13 +661,13 @@
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
         let label = "Configuration";
         if(id === 'screenRecap') label = "Configuration";
         if(id === 'screenGame' && state.course.length > 0) label = `Trou ${state.course[state.currentHoleIndex].num} (${state.currentHoleIndex+1}/${state.course.length})`;
         if(id === 'screenResults') label = "Résultats";
         if(id === 'screenEdit') label = "Édition des scores";
         document.getElementById('stepIndicator').textContent = label;
-        window.scrollTo(0,0);
     }
 
     function loadPlayersLocally() {
@@ -1235,35 +1247,38 @@
     }
 
     function takeScreenshot() {
-        // Remonter tout en haut pour éviter le bug de zone noire sur mobile
+        const btn = document.getElementById('btnCapture');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '⏳ Création...';
+        btn.disabled = true;
+
         window.scrollTo(0, 0);
         
-        const target = document.getElementById('resultsCapture');
-        
-        // Petit délai pour laisser le navigateur finir le scroll
         setTimeout(() => {
+            const target = document.getElementById('resultsCapture');
             html2canvas(target, { 
                 scale: 2, 
                 backgroundColor: '#f7f8fa',
                 useCORS: true,
+                logging: false,
                 scrollY: 0
             }).then(canvas => {
-                canvas.toBlob(function(blob) {
-                    if(!blob) return;
-                    const url = window.URL.createObjectURL(blob);
-                    const link = document.createElement('a');
-                    link.style.display = 'none';
-                    link.href = url;
-                    link.download = `loup-resultats-${new Date().getTime()}.png`;
-                    document.body.appendChild(link);
-                    link.click();
-                    setTimeout(() => {
-                        document.body.removeChild(link);
-                        window.URL.revokeObjectURL(url);
-                    }, 100);
-                }, 'image/png');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                
+                try {
+                    const dataUrl = canvas.toDataURL('image/png');
+                    document.getElementById('screenshotImage').src = dataUrl;
+                    document.getElementById('screenshotModal').style.display = 'flex';
+                } catch(e) {
+                    alert("Erreur lors de la capture d'écran.");
+                }
+            }).catch(err => {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                alert("Erreur lors de la création de l'image.");
             });
-        }, 100);
+        }, 300);
     }
 
     window.onload = init;
