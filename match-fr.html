@@ -97,7 +97,7 @@
         .table-image-style td { border-bottom: 1px solid #f8f9fa; padding: 8px 2px; text-align: center; vertical-align: middle; }
         .table-image-style .net-score { color: #5dade2; font-size: 0.85rem; font-weight: 600;}
         .table-image-style .brut-score { color: #2d3436; font-weight: 700; font-size: 0.9rem;}
-        .table-image-style .player-name { text-align: left; font-weight: 700; font-size: 0.9rem; padding-left: 6px; border-radius: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+        .table-image-style .player-name { text-align: left; font-weight: 700; font-size: 0.9rem; padding-left: 8px; border-radius: 4px; }
 
         .course-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 600px) { .course-grid { grid-template-columns: 1fr; } }
@@ -1011,7 +1011,7 @@
             if (tPlayers.length > 0) {
                 pListHtml += `<div style="font-weight:bold; color:var(--primary-dark); margin-top:15px; border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:10px;">${team.name}</div>`;
                 tPlayers.forEach(p => {
-                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>, ${p.gender === 'F' ? 'Femme' : 'Homme'})` : '';
+                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>)` : '';
                     
                     let whsHtml = '';
                     if (state.options.mode === 'net') {
@@ -1407,7 +1407,7 @@
     function generateHolesTableImageStyle(holesSubArray, startIndex) {
         if(holesSubArray.length === 0) return '';
         let groups = [], grandTotalPar = 0;
-        const holeSep = '<span style="color:#b2bec3; margin:0 2px;">/</span>';
+        const holeSep = '<span style="color:#b2bec3; margin:0;">/</span>';
 
         for(let i=0; i<holesSubArray.length; i+=3) {
             let end = Math.min(i+2, holesSubArray.length-1);
@@ -1420,7 +1420,7 @@
             groups.push({ 
                 s: i, 
                 e: end, 
-                label: labelArr.join(holeSep), 
+                label: `<span style="white-space:nowrap;">${labelArr.join(holeSep)}</span>`, 
                 parHtml: `<div style="display:flex; justify-content:center; gap:2px;">${parHtml}</div>` 
             });
         }
