@@ -166,7 +166,7 @@
                     <li><strong>À 4 joueurs (2v2) :</strong> 2 points sont en jeu. Le meilleur joueur de l'équipe 1 affronte le meilleur de l'équipe 2 (1 point). Les 2èmes meilleurs s'affrontent également (1 point).</li>
                     <li><strong>À 3 joueurs (2v1 ou 1v3) :</strong> <b>1 seul point</b> est en jeu. Le joueur qui joue seul se compare uniquement au <b>meilleur des deux autres</b> joueurs adverses.</li>
                 </ul>
-                <p><strong>La Croix (X) :</strong> Entrer "X" signifie ramasser la balle. Cela vaut <b>Par + 4</b>. Ce score s'additionne à votre total.</p>
+                <p><strong>La Croix (X) :</strong> Entrer "X" signifie ramasser la balle. En mode Brut, cela vaut <b>Par + 4</b>. En mode Net, cela vaut <b>Par + Coups Reçus + 2</b>. Ce score s'additionne à votre total.</p>
             </div>
         </div>
         
@@ -976,7 +976,6 @@
             if(isNet) {
                 let exactHcp = parseFloat(document.getElementById('pHcp'+i).value.replace(',', '.'));
                 if(isNaN(exactHcp) || exactHcp < -10 || exactHcp > 54) {
-                    // Remplace le alert natif par notre pop-up
                     document.getElementById('indexErrorModal').style.display = 'flex';
                     return; 
                 }
@@ -1125,7 +1124,14 @@
                 
                 const cr = calculateCR(p, hole);
                 let isCross = (val === 'X');
-                let brut = isCross ? (hole.par + 4) : parseInt(val);
+                let brut;
+                
+                if (isCross) {
+                    brut = state.options.mode === 'net' ? (hole.par + cr + 2) : (hole.par + 4);
+                } else {
+                    brut = parseInt(val);
+                }
+                
                 let net = brut - cr; 
                 
                 if (state.options.mode === 'net' && net > hole.par + 2 && !isCross) { 
@@ -1394,19 +1400,23 @@
     function generateHolesTableImageStyle(holesSubArray, startIndex) {
         if(holesSubArray.length === 0) return '';
         let groups = [], grandTotalPar = 0;
+        const sep = '<span style="margin:0 3px; color:#b2bec3;">/</span>';
+
         for(let i=0; i<holesSubArray.length; i+=3) {
             let end = Math.min(i+2, holesSubArray.length-1);
-            let label = "", parLabel = "";
+            let labelArr = [], parLabelArr = [];
             for(let j=i; j<=end; j++) {
-                label += holesSubArray[j].num; parLabel += holesSubArray[j].par; grandTotalPar += holesSubArray[j].par;
+                labelArr.push(holesSubArray[j].num); 
+                parLabelArr.push(holesSubArray[j].par); 
+                grandTotalPar += holesSubArray[j].par;
             }
-            groups.push({ s: i, e: end, label: label, parLabel: parLabel });
+            groups.push({ s: i, e: end, label: labelArr.join(sep), parLabel: parLabelArr.join(sep) });
         }
 
         let html = `<div class="table-responsive"><table class="table-image-style"><thead><tr><th style="text-align:left; border-bottom:none; padding-bottom:0;">Trous</th>`;
         groups.forEach(g => { html += `<th style="border-bottom:none; padding-bottom:0;">${g.label}</th>`; });
         html += `<th style="border-bottom:none; padding-bottom:0;">Total</th></tr><tr><th style="text-align:left; color:#636e72; font-size:0.75rem; padding-top:2px;">Par</th>`;
-        groups.forEach(g => { html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; letter-spacing:1px;">${g.parLabel}</th>`; });
+        groups.forEach(g => { html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px;">${g.parLabel}</th>`; });
         html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px;">${grandTotalPar}</th></tr></thead><tbody>`;
 
         state.players.forEach(p => {
@@ -1414,15 +1424,22 @@
             let blockBrut = 0, blockStd = 0;
 
             groups.forEach(g => {
-                let sBrutStr = "", sStdStr = "";
+                let sBrutArr = [], sStdArr = [];
                 for(let idx = g.s; idx <= g.e; idx++) {
                     const s = p.scores[startIndex + idx];
-                    if(s) { sBrutStr += s.brut; sStdStr += s.stb; blockBrut += s.brut; blockStd += s.stb; }
-                    else { sBrutStr += '-'; sStdStr += '-'; }
+                    if(s) { 
+                        sBrutArr.push(s.brut); 
+                        sStdArr.push(s.stb); 
+                        blockBrut += s.brut; 
+                        blockStd += s.stb; 
+                    } else { 
+                        sBrutArr.push('-'); 
+                        sStdArr.push('-'); 
+                    }
                 }
                 html += `<td>
-                    <div class="brut-score" style="letter-spacing:1px;">${sBrutStr}</div>
-                    ${state.options.mode === 'net' ? `<div class="net-score" style="letter-spacing:1px; margin-top:-2px;">${sStdStr}</div>` : ''}
+                    <div class="brut-score">${sBrutArr.join(sep)}</div>
+                    ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px;">${sStdArr.join(sep)}</div>` : ''}
                 </td>`;
             });
             html += `<td>
@@ -1458,12 +1475,12 @@
         });
 
         const tSummary = document.getElementById('tableSummary');
-        let htmlSum = `<thead><tr><th class="text-left">Joueur</th><th>Brut</th>${state.options.mode === 'net' ? `<th>Net (Jeu)</th><th>Stb</th>` : ''}</tr></thead><tbody>`;
+        let htmlSum = `<thead><tr><th class="text-left">Joueur</th><th>Brut</th>${state.options.mode === 'net' ? `<th>Net</th><th>Stb</th>` : ''}</tr></thead><tbody>`;
         state.players.forEach(p => {
             let totB = 0, totNet = 0, totStb = 0;
             p.scores.slice(0, holesPlayed).forEach(s => { totB += s.brut; totNet += s.net; totStb += s.stb; });
             htmlSum += `<tr>
-                <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,6)} ${state.options.mode === 'net' ? `<span style="font-size:0.75rem; color:#636e72;">(${p.playingHcp})</span>` : ''}</td>
+                <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,6)}</td>
                 <td class="score-brut">${totB > 0 ? totB : '-'}</td>`;
             if(state.options.mode === 'net') htmlSum += `<td class="score-net">${totNet > 0 ? totNet : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
             htmlSum += `</tr>`;
