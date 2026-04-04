@@ -16,6 +16,7 @@
             --orange: #ff4200; --violet: #7536f0;
             --teal: #1acfbf; --blue: #1e88e5;
             --crimson: #d6084d; --lime: #d9fa4f;
+            --green: #43a047;
             --bg: #f7f8fa; --card-bg: #ffffff;
             --text: #2d3436;
             --shadow: 0 4px 15px rgba(0,0,0,0.08);
@@ -110,14 +111,13 @@
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: white; }
         .dot { height: 14px; width: 14px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 8px; flex-shrink: 0; }
         
-        /* Nouveau Design Grille de Score */
+        /* Design Grille de Score (+/-) */
         .score-row { display: grid; grid-template-columns: 14px 1fr 115px 35px 35px; align-items: center; gap: 8px; margin-bottom: 15px; }
-        
         .stepper-container { display: flex; align-items: center; justify-content: space-between; background: #f1f2f6; border-radius: 20px; padding: 3px; }
         .btn-stepper { width: 30px; height: 30px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 600; cursor: pointer; transition: transform 0.1s, background 0.2s; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .btn-stepper:active { transform: scale(0.9); }
-        .btn-stepper.minus { color: var(--crimson); border: 1px solid rgba(214,8,77,0.3); }
-        .btn-stepper.plus { color: var(--teal); border: 1px solid rgba(26,207,191,0.3); }
+        .btn-stepper.minus { color: var(--green); border: 1px solid rgba(67,160,71,0.3); }
+        .btn-stepper.plus { color: var(--crimson); border: 1px solid rgba(214,8,77,0.3); }
         
         #resultsCapture { padding: 20px; background: var(--bg); border-radius: 12px; }
         .podium { display: flex; align-items: flex-end; justify-content: center; gap: 15px; margin: 40px 0 20px 0; height: 250px; padding-bottom: 10px; border-bottom: 2px solid #eee; }
@@ -344,8 +344,16 @@
             <button class="btn-secondary" style="flex:1" onclick="exportCSV()">📥 CSV</button>
             <button class="btn-secondary" style="flex:1" onclick="takeScreenshot()">📸 Capture</button>
             <button class="btn-secondary" style="flex:100%; border: 2px solid var(--primary); color:var(--primary-dark); font-weight:700;" onclick="openEditMode()">✏️ Éditer les scores</button>
-            <button class="btn-main" style="flex:100%; margin-top:5px;" onclick="window.location.href='equipe.html'">🔄 Nouvelle Partie / Accueil</button>
+            <button class="btn-main" style="flex:100%; margin-top:5px;" onclick="window.location.href='index.html'">🔄 Nouvelle Partie / Accueil</button>
         </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="indexErrorModal">
+    <div class="modal-content">
+        <div class="modal-title" style="color: var(--orange);">⚠️ Index manquants</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Entrez les index pour tous les joueurs afin de jouer en mode Net.</p>
+        <button class="btn-main" style="width: 100%;" onclick="document.getElementById('indexErrorModal').style.display='none'">OK</button>
     </div>
 </div>
 
@@ -511,7 +519,6 @@
             const lines = text.split(/\r?\n/).filter(l => l.trim() !== '');
             if (lines.length === 0) return;
             
-            // Nouveau Header : nom-golf;numero-trou;par;hcp;sss-homme;sss-femme;slope-homme;slope-femme
             const headers = lines[0].split(';').map(h => h.trim());
             
             for(let i=1; i<lines.length; i++) {
@@ -969,7 +976,9 @@
             if(isNet) {
                 let exactHcp = parseFloat(document.getElementById('pHcp'+i).value.replace(',', '.'));
                 if(isNaN(exactHcp) || exactHcp < -10 || exactHcp > 54) {
-                    alert(`Veuillez entrer un index valide pour ${pObj.name}.`); return; 
+                    // Remplace le alert natif par notre pop-up
+                    document.getElementById('indexErrorModal').style.display = 'flex';
+                    return; 
                 }
                 pObj.hcp = exactHcp;
             }
@@ -1449,12 +1458,12 @@
         });
 
         const tSummary = document.getElementById('tableSummary');
-        let htmlSum = `<thead><tr><th class="text-left">Jou.</th><th>Brut</th>${state.options.mode === 'net' ? `<th>Net</th><th>Stb</th>` : ''}</tr></thead><tbody>`;
+        let htmlSum = `<thead><tr><th class="text-left">Joueur</th><th>Brut</th>${state.options.mode === 'net' ? `<th>Net (Jeu)</th><th>Stb</th>` : ''}</tr></thead><tbody>`;
         state.players.forEach(p => {
             let totB = 0, totNet = 0, totStb = 0;
             p.scores.slice(0, holesPlayed).forEach(s => { totB += s.brut; totNet += s.net; totStb += s.stb; });
             htmlSum += `<tr>
-                <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,6)}</td>
+                <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,6)} ${state.options.mode === 'net' ? `<span style="font-size:0.75rem; color:#636e72;">(${p.playingHcp})</span>` : ''}</td>
                 <td class="score-brut">${totB > 0 ? totB : '-'}</td>`;
             if(state.options.mode === 'net') htmlSum += `<td class="score-net">${totNet > 0 ? totNet : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
             htmlSum += `</tr>`;
