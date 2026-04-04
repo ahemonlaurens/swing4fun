@@ -97,7 +97,7 @@
         .table-image-style td { border-bottom: 1px solid #f8f9fa; padding: 8px 2px; text-align: center; vertical-align: middle; }
         .table-image-style .net-score { color: #5dade2; font-size: 0.85rem; font-weight: 600;}
         .table-image-style .brut-score { color: #2d3436; font-weight: 700; font-size: 0.9rem;}
-        .table-image-style .player-name { text-align: left; font-weight: 700; font-size: 0.9rem; padding-left: 8px; border-radius: 4px; }
+        .table-image-style .player-name { text-align: left; font-weight: 700; font-size: 0.9rem; padding-left: 6px; border-radius: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
         .course-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 600px) { .course-grid { grid-template-columns: 1fr; } }
@@ -166,7 +166,7 @@
                     <li><strong>À 4 joueurs (2v2) :</strong> 2 points sont en jeu. Le meilleur joueur de l'équipe 1 affronte le meilleur de l'équipe 2 (1 point). Les 2èmes meilleurs s'affrontent également (1 point).</li>
                     <li><strong>À 3 joueurs (2v1 ou 1v3) :</strong> <b>1 seul point</b> est en jeu. Le joueur qui joue seul se compare uniquement au <b>meilleur des deux autres</b> joueurs adverses.</li>
                 </ul>
-                <p><strong>La Croix (X) :</strong> Entrer "X" signifie ramasser la balle. En mode Brut, cela vaut <b>Par + 4</b>. En mode Net, cela vaut <b>Par + Coups Reçus + 2</b>. Ce score s'additionne à votre total.</p>
+                <p><strong>La Croix (X) :</strong> Entrer "X" signifie ramasser la balle. En mode Brut, cela vaut <b>Par + 4</b>. En mode Net, cela limite le score à <b>Par + Coups Reçus + 2</b>. Ce score s'additionne à votre total.</p>
             </div>
         </div>
         
@@ -738,8 +738,9 @@
                     select.appendChild(opt);
                 });
 
+                // Pré-sélection automatique en fonction de l'index
                 let hcp = player ? player.hcp : 20;
-                let recommended = availableTees[0]; 
+                let recommended = availableTees[0]; // Sécurité
                 
                 if (hcp <= 15.0 && availableTees.includes('Blanc')) recommended = 'Blanc';
                 else if (hcp > 15.0 && hcp <= 28.0 && availableTees.includes('Jaune')) recommended = 'Jaune';
@@ -764,9 +765,11 @@
         const gender = player ? player.gender : 'M';
 
         if (state.activeCourseType === 'db' && currentSelectedGolfData) {
+            // Le slope/sss dépend uniquement du genre selon le nouveau format CSV
             slopeInput.value = gender === 'F' ? currentSelectedGolfData.slope_f : currentSelectedGolfData.slope_m;
             sssInput.value = gender === 'F' ? currentSelectedGolfData.sss_f : currentSelectedGolfData.sss_m;
         } else {
+            // Parcours Local ou Nouveau (Valeurs standard)
             slopeInput.value = 113;
             sssInput.value = 72.0;
         }
@@ -1008,7 +1011,7 @@
             if (tPlayers.length > 0) {
                 pListHtml += `<div style="font-weight:bold; color:var(--primary-dark); margin-top:15px; border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:10px;">${team.name}</div>`;
                 tPlayers.forEach(p => {
-                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>)` : '';
+                    const hcpText = state.options.mode === 'net' ? `(Index: <b>${p.hcp}</b>, ${p.gender === 'F' ? 'Femme' : 'Homme'})` : '';
                     
                     let whsHtml = '';
                     if (state.options.mode === 'net') {
@@ -1404,55 +1407,71 @@
     function generateHolesTableImageStyle(holesSubArray, startIndex) {
         if(holesSubArray.length === 0) return '';
         let groups = [], grandTotalPar = 0;
-        const holeSep = '<span style="color:#b2bec3;">/</span>';
+        const holeSep = '<span style="color:#b2bec3; margin:0 2px;">/</span>';
 
         for(let i=0; i<holesSubArray.length; i+=3) {
             let end = Math.min(i+2, holesSubArray.length-1);
             let labelArr = [], parHtml = "";
             for(let j=i; j<=end; j++) {
                 labelArr.push(holesSubArray[j].num); 
-                parHtml += `<span style="display:inline-block; min-width:14px; text-align:center; margin:0 1px;">${holesSubArray[j].par}</span>`;
+                parHtml += `<span style="display:inline-block; width:15px; text-align:center;">${holesSubArray[j].par}</span>`;
                 grandTotalPar += holesSubArray[j].par;
             }
-            groups.push({ s: i, e: end, label: labelArr.join(holeSep), parHtml: parHtml });
+            groups.push({ 
+                s: i, 
+                e: end, 
+                label: labelArr.join(holeSep), 
+                parHtml: `<div style="display:flex; justify-content:center; gap:2px;">${parHtml}</div>` 
+            });
         }
 
-        let colGroupHtml = `<colgroup><col style="width:26%;">`;
-        let groupWidth = 60 / (groups.length || 1);
+        let colGroupHtml = `<colgroup><col style="width:23%;">`;
+        let groupWidth = 63 / (groups.length || 1);
         groups.forEach(() => { colGroupHtml += `<col style="width:${groupWidth}%;">`; });
         colGroupHtml += `<col style="width:14%;"></colgroup>`;
 
-        let html = `<div class="table-responsive"><table class="table-image-style" style="table-layout:fixed; width:100%; min-width:320px;">${colGroupHtml}<thead><tr><th style="text-align:left; border-bottom:none; padding-bottom:0;">Trous</th>`;
-        groups.forEach(g => { html += `<th style="border-bottom:none; padding-bottom:0; text-align:center;">${g.label}</th>`; });
-        html += `<th style="border-bottom:none; padding-bottom:0; text-align:center;">Tot.</th></tr><tr><th style="text-align:left; color:#636e72; font-size:0.75rem; padding-top:2px;">Par</th>`;
-        groups.forEach(g => { html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; letter-spacing:0; text-align:center;">${g.parHtml}</th>`; });
-        html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; text-align:center;">${grandTotalPar}</th></tr></thead><tbody>`;
+        let html = `<div class="table-responsive"><table class="table-image-style" style="table-layout:fixed; width:100%; min-width:300px;">${colGroupHtml}<thead><tr><th style="text-align:left; border-bottom:none; padding-bottom:0;">Trous</th>`;
+        
+        groups.forEach((g, i) => { 
+            let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : '';
+            html += `<th style="border-bottom:none; padding-bottom:0; text-align:center; ${borderStyle}">${g.label}</th>`; 
+        });
+        html += `<th style="border-bottom:none; padding-bottom:0; text-align:center; border-left:1px dashed #e2e8f0;">Tot.</th></tr><tr><th style="text-align:left; color:#636e72; font-size:0.75rem; padding-top:2px;">Par</th>`;
+        
+        groups.forEach((g, i) => { 
+            let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : '';
+            html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; letter-spacing:0; text-align:center; ${borderStyle}">${g.parHtml}</th>`; 
+        });
+        html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; text-align:center; border-left:1px dashed #e2e8f0;">${grandTotalPar}</th></tr></thead><tbody>`;
 
         state.players.forEach(p => {
-            html += `<tr><td class="player-name" style="color:${p.color}; border-left: 4px solid ${p.color}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.85rem;">${p.name.substring(0,6)}</td>`;
+            html += `<tr><td class="player-name" style="color:${p.color}; border-left: 4px solid ${p.color}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.85rem; padding-right:4px;">${p.name.substring(0,6)}</td>`;
             let blockBrut = 0, blockStd = 0;
 
-            groups.forEach(g => {
+            groups.forEach((g, i) => {
                 let sBrutHtml = "", sStdHtml = "";
                 for(let idx = g.s; idx <= g.e; idx++) {
                     const s = p.scores[startIndex + idx];
                     let brutVal = s ? s.brut : '-';
                     let stdVal = s ? s.stb : '-';
                     
-                    sBrutHtml += `<span style="display:inline-block; min-width:14px; text-align:center; margin:0 1px;">${brutVal}</span>`;
-                    sStdHtml += `<span style="display:inline-block; min-width:14px; text-align:center; margin:0 1px;">${stdVal}</span>`;
+                    sBrutHtml += `<span style="display:inline-block; width:15px; text-align:center;">${brutVal}</span>`;
+                    sStdHtml += `<span style="display:inline-block; width:15px; text-align:center;">${stdVal}</span>`;
                     
                     if(s) { 
                         blockBrut += s.brut; 
                         blockStd += s.stb; 
                     }
                 }
-                html += `<td style="text-align:center;">
-                    <div class="brut-score" style="letter-spacing:0; white-space:nowrap;">${sBrutHtml}</div>
-                    ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px; letter-spacing:0; white-space:nowrap;">${sStdHtml}</div>` : ''}
+                
+                let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : '';
+                
+                html += `<td style="text-align:center; ${borderStyle}">
+                    <div class="brut-score" style="display:flex; justify-content:center; gap:2px; letter-spacing:0;">${sBrutHtml}</div>
+                    ${state.options.mode === 'net' ? `<div class="net-score" style="display:flex; justify-content:center; gap:2px; margin-top:-2px; letter-spacing:0;">${sStdHtml}</div>` : ''}
                 </td>`;
             });
-            html += `<td style="text-align:center;">
+            html += `<td style="text-align:center; border-left:1px dashed #e2e8f0;">
                 <div class="brut-score">${blockBrut > 0 ? blockBrut : '-'}</div>
                 ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px;">${blockStd > 0 ? blockStd : '-'}</div>` : ''}
             </td></tr>`;
