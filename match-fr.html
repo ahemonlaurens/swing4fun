@@ -191,11 +191,11 @@
 
             <div class="form-group" style="flex-wrap: wrap; gap: 10px;">
                 <div class="form-label" style="min-width: 100px;">Nom équipe 1</div>
-                <input type="text" id="team1Name" value="Équipe 1" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--blue); text-align: center;">
+                <input type="text" id="team1Name" value="Eq. 1" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--blue); text-align: left;">
             </div>
             <div class="form-group" style="flex-wrap: wrap; gap: 10px;">
                 <div class="form-label" style="min-width: 100px;">Nom équipe 2</div>
-                <input type="text" id="team2Name" value="Équipe 2" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--orange); text-align: center;">
+                <input type="text" id="team2Name" value="Eq. 2" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--orange); text-align: left;">
             </div>
         </div>
 
@@ -381,8 +381,8 @@
     <div class="modal-content">
         <div class="modal-title" style="color: var(--crimson);">Voulez-vous effacer le parcours ?</div>
         <div class="modal-btns">
-            <button class="btn-secondary" style="flex:1;" onclick="confirmDeleteCourse(false)">Conserve</button>
-            <button class="btn-main" style="flex:1; background:var(--crimson);" onclick="confirmDeleteCourse(true)">Efface</button>
+            <button class="btn-secondary" style="flex:1;" onclick="confirmDeleteCourse(false)">Conserver</button>
+            <button class="btn-main" style="flex:1; background:var(--crimson);" onclick="confirmDeleteCourse(true)">Effacer</button>
         </div>
     </div>
 </div>
@@ -390,7 +390,7 @@
 <script>
     const state = {
         playersCount: 4,
-        teams: [{ id: 1, name: 'Équipe 1' }, { id: 2, name: 'Équipe 2' }],
+        teams: [{ id: 1, name: 'Eq. 1' }, { id: 2, name: 'Eq. 2' }],
         players: [
             { id: 0, name: '', hcp: 0, playingHcp: 0, color: 'var(--p1)', team: 1, scores: [], gender: 'M' },
             { id: 1, name: '', hcp: 0, playingHcp: 0, color: 'var(--p2)', team: 1, scores: [], gender: 'M' },
@@ -449,7 +449,7 @@
         try {
             const select = document.getElementById('regionSelect');
             select.innerHTML = '<option value="">-- Sélectionnez une région --</option>';
-            select.innerHTML += '<option value="local">📁 Mes parcours (Création/Local)</option>';
+            select.innerHTML += '<option value="local">📁 Mes parcours</option>';
             
             const response = await fetch('golfs-regions.csv', { cache: "no-cache" });
             const text = await response.text();
@@ -524,7 +524,6 @@
                     currentRegionData[gName].tees[teeColor] = {
                         slope_m: s_m,
                         sss_m: sss_m,
-                        // Fallback vers les valeurs homme si les valeurs femme sont absentes ou 0
                         slope_f: (isNaN(s_f) || s_f === 0) ? s_m : s_f,
                         sss_f: (isNaN(sss_f) || sss_f === 0) ? sss_m : sss_f,
                         holes: []
@@ -579,7 +578,7 @@
             const gName = val.substring(6);
             state.activeCourseType = 'local';
             state.activeCourseName = gName;
-            document.getElementById('activeCourseDisplay').innerHTML = `📍 ${gName} <span style="font-size:0.8rem; color:var(--crimson); cursor:pointer; text-decoration:underline; margin-left:10px;" onclick="promptDeleteLocalCourse('${gName.replace(/'/g, "\\'")}')">[Supprimer]</span>`;
+            document.getElementById('activeCourseDisplay').innerHTML = `📍 ${gName} <span style="font-size:1.1rem; color:var(--crimson); cursor:pointer; margin-left:10px;" onclick="promptDeleteLocalCourse('${gName.replace(/'/g, "\\'")}')" title="Effacer ce parcours">🗑️</span>`;
             
             const data = getSavedCourses()[gName];
             if (data) {
@@ -660,6 +659,52 @@
         localStorage.setItem('wolf_saved_courses', JSON.stringify(courses));
     }
 
+    function checkAndExportDBUpdates() {
+        if (state.activeCourseType !== 'db' || !currentSelectedGolfData) return;
+
+        const firstTeeKey = Object.keys(currentSelectedGolfData.tees)[0];
+        const originalHoles = currentSelectedGolfData.tees[firstTeeKey].holes;
+        
+        let updates = [];
+        let isNet = document.getElementById('modeNet').checked;
+
+        for (let i = 1; i <= 18; i++) {
+            const origHole = originalHoles.find(h => h.num === i);
+            if (!origHole) continue;
+
+            let currentPar = parseInt(document.getElementById('par'+i).value) || 4;
+            
+            let hcpInput = document.getElementById('hcp'+i);
+            let currentHcpVal = hcpInput.value === '🔒' ? hcpInput.dataset.old : hcpInput.value;
+            let currentHcp = parseInt(currentHcpVal) || origHole.hcp;
+
+            if (currentPar !== origHole.par || (isNet && currentHcp !== origHole.hcp)) {
+                updates.push({
+                    hole: i,
+                    oldPar: origHole.par,
+                    newPar: currentPar,
+                    oldHcp: origHole.hcp,
+                    newHcp: currentHcp
+                });
+            }
+        }
+
+        if (updates.length > 0) {
+            let csvContent = "Golf,Trou,Ancien Par,Nouveau Par,Ancien Hcp,Nouveau Hcp\n";
+            updates.forEach(u => {
+                csvContent += `"${state.activeCourseName}",${u.hole},${u.oldPar},${u.newPar},${u.oldHcp},${u.newHcp}\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `golfs-updates.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+    }
+
     /* ---- GESTION DES DEPARTS DES JOUEURS ---- */
 
     function updatePlayerTeeDropdowns(availableTees) {
@@ -675,7 +720,7 @@
                     select.appendChild(opt);
                 });
 
-                // Pré-sélection automatique en fonction de l'index ET du genre (généralités)
+                // Pré-sélection automatique en fonction de l'index
                 let hcp = player ? player.hcp : 20;
                 let recommended = availableTees[0]; // Sécurité
                 
@@ -720,13 +765,12 @@
     function renderPlayerInputs() {
         const pList = document.getElementById('playersList');
         pList.innerHTML = '';
-        const t1Name = document.getElementById('team1Name').value || 'Équipe 1';
-        const t2Name = document.getElementById('team2Name').value || 'Équipe 2';
+        const t1Name = document.getElementById('team1Name').value || 'Eq. 1';
+        const t2Name = document.getElementById('team2Name').value || 'Eq. 2';
 
         for (let i = 0; i < state.playersCount; i++) {
             const defaultTeam = (i < 2) ? 1 : 2; 
             
-            // Design Bouton H/F pour le genre
             const genderHtml = `
             <div class="btn-group gender-toggle" style="flex: 0.8; min-width: 60px; display: none;">
                 <input type="radio" name="pGen${i}" id="pGenM${i}" value="M" checked><label for="pGenM${i}" style="padding: 6px 4px; font-size:0.85rem;">H</label>
@@ -749,8 +793,8 @@
     }
 
     function updateTeamDropdowns() {
-        const t1Name = document.getElementById('team1Name').value || 'Équipe 1';
-        const t2Name = document.getElementById('team2Name').value || 'Équipe 2';
+        const t1Name = document.getElementById('team1Name').value || 'Eq. 1';
+        const t2Name = document.getElementById('team2Name').value || 'Eq. 2';
         for (let i = 0; i < 4; i++) {
             const sel = document.getElementById('pTeam' + i);
             if (sel) { sel.options[0].text = t1Name; sel.options[1].text = t2Name; }
@@ -800,7 +844,6 @@
     function updateCalcMode() {
         const isNet = document.getElementById('modeNet').checked;
         
-        // Affiche/Cache le sélecteur H/F pour chaque joueur
         document.querySelectorAll('.gender-toggle').forEach(el => {
             el.style.display = isNet ? 'flex' : 'none';
         });
@@ -836,7 +879,7 @@
         window.scrollTo(0,0);
         
         let label = "Configuration";
-        if(id === 'screenRecap') label = "Parcours et Joueurs";
+        if(id === 'screenRecap') label = "Configuration";
         if(id === 'screenGame' && state.course.length > 0) {
             label = `Trou ${state.course[state.currentHoleIndex].num} (${state.currentHoleIndex+1}/${state.course.length})`;
         }
@@ -911,8 +954,8 @@
 
         state.options.mode = isNet ? 'net' : 'brut';
         state.options.holes = document.querySelector('input[name="holes"]:checked').value;
-        state.teams[0].name = document.getElementById('team1Name').value.trim() || 'Équipe 1';
-        state.teams[1].name = document.getElementById('team2Name').value.trim() || 'Équipe 2';
+        state.teams[0].name = document.getElementById('team1Name').value.trim() || 'Eq. 1';
+        state.teams[1].name = document.getElementById('team2Name').value.trim() || 'Eq. 2';
 
         savePlayersLocally();
         renderPlayersListRecap();
@@ -985,9 +1028,11 @@
             if (!newName) { alert("Veuillez entrer un nom pour votre nouveau parcours."); return; }
             state.activeCourseName = newName;
             state.activeCourseType = 'local';
-            saveCurrentCourseLocally(); // On sauvegarde ce qu'il a écrit dans la grille
+            saveCurrentCourseLocally(); 
         } else if (state.activeCourseType === 'local') {
-            saveCurrentCourseLocally(); // Mise à jour de l'existant (si changement par ex)
+            saveCurrentCourseLocally(); 
+        } else if (state.activeCourseType === 'db') {
+            checkAndExportDBUpdates();
         }
 
         const isNet = state.options.mode === 'net';
@@ -1207,7 +1252,7 @@
             inputDiv.innerHTML += `
                 <div class="score-row">
                     <span class="dot" style="background:${p.color}; margin:0;"></span>
-                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} <span style="font-size:0.75rem; color:${tColor};">(${p.team === 1 ? 'Éq 1' : 'Éq 2'})</span></span>
+                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} <span style="font-size:0.75rem; color:${tColor};">(${p.team === 1 ? 'Eq. 1' : 'Eq. 2'})</span></span>
                     <div style="display:flex; gap:4px;">
                         <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="p-score-input" data-pid="${p.id}" placeholder="Score" value="${val}" style="width:100%; min-width:0; text-align:center; padding:8px 5px;">
                         <button class="btn-secondary" style="padding:0; width:35px; font-weight:bold; color:var(--crimson); flex-shrink:0;" onclick="this.previousElementSibling.value='X'">X</button>
@@ -1289,7 +1334,7 @@
             inputDiv.innerHTML += `
                 <div class="score-row">
                     <span class="dot" style="background:${p.color}; margin:0;"></span>
-                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} <span style="font-size:0.75rem; color:${tColor};">(${p.team === 1 ? 'Éq 1' : 'Éq 2'})</span></span>
+                    <span style="font-size:0.95rem" class="text-left">${p.name.substring(0,10)} <span style="font-size:0.75rem; color:${tColor};">(${p.team === 1 ? 'Eq. 1' : 'Eq. 2'})</span></span>
                     <div style="display:flex; gap:4px;">
                         <input type="text" inputmode="decimal" pattern="[0-9Xx]*" class="edit-score-input" data-pid="${p.id}" placeholder="Score" value="${pastVal}" style="width:100%; min-width:0; text-align:center; padding:8px 5px;">
                         <button class="btn-secondary" style="padding:0; width:35px; font-weight:bold; color:var(--crimson); flex-shrink:0;" onclick="this.previousElementSibling.value='X'">X</button>
