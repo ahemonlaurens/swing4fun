@@ -111,7 +111,6 @@
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: white; }
         .dot { height: 14px; width: 14px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 8px; flex-shrink: 0; }
         
-        /* Spécifique Loup */
         .wolf-banner { background: linear-gradient(45deg, #fff3e0, #ffe0b2); padding: 15px; border-radius: 12px; border: 2px solid var(--orange); margin-bottom: 15px; text-align: center; font-size: 1.05rem; font-weight: 700; }
         .partner-selector { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
         .partner-btn { flex: 1; min-width: 80px; padding: 12px 5px; border: 2px solid #dfe6e9; border-radius: 10px; background: white; cursor: pointer; font-weight: 700; text-align: center; font-size: 0.9rem; transition: 0.2s; }
@@ -120,7 +119,6 @@
         .partner-btn.gold { border-color: #ffd700; background: linear-gradient(45deg, #fff, #fff9e6); }
         .partner-btn.gold.selected { background: linear-gradient(45deg, var(--orange), var(--lime)); color: black; border-color: transparent; }
 
-        /* Grille Score */
         .score-row { display: grid; grid-template-columns: 14px 1fr 115px 35px 35px; align-items: center; gap: 8px; margin-bottom: 15px; }
         .stepper-container { display: flex; align-items: center; justify-content: space-between; background: #f1f2f6; border-radius: 20px; padding: 3px; }
         .btn-stepper { width: 30px; height: 30px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 600; cursor: pointer; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -146,7 +144,7 @@
 
         .rules-content { font-size: 1.05rem; line-height: 1.6; color: #444; background: #fdfdfd; padding: 18px; border-radius: 8px; border: 1px solid #eee; margin-top: 10px; }
         .rules-content p { margin-top: 0; margin-bottom: 10px; }
-        .rules-content ul { margin: 0; padding-left: 20px; }
+        .rules-content ul { margin: 0; padding-left: 20px; margin-bottom: 10px;}
     </style>
 </head>
 <body>
@@ -172,6 +170,7 @@
                     <li><b>Loup d'Or (x3) :</b> Annoncé avant le 1er drive. Gain: +9/-9, autres -3/+3.</li>
                     <li><b>Carry Over :</b> En cas d'égalité parfaite, les points sont reportés au trou suivant.</li>
                 </ul>
+                <p><strong>La Croix (X) :</strong> Entrer "X" signifie ramasser la balle. En mode Brut, cela vaut <b>Par + 4</b>. En mode Net, cela limite le score à <b>Par + Coups Reçus + 2</b>. Ce score s'additionne à votre total.</p>
             </div>
         </div>
         
@@ -1236,7 +1235,8 @@
     }
 
     function takeScreenshot() {
-        html2canvas(document.getElementById('resultsCapture'), { scale: 2, backgroundColor: '#f7f8fa' }).then(canvas => {
+        window.scrollTo(0, 0);
+        html2canvas(document.getElementById('resultsCapture'), { scale: 2, backgroundColor: '#f7f8fa', scrollY: 0 }).then(canvas => {
             const link = document.createElement('a'); link.download = `loup-resultats-${new Date().getTime()}.png`;
             link.href = canvas.toDataURL(); link.click();
         });
