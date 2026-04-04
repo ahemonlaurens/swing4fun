@@ -649,13 +649,13 @@
     function showScreen(id) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        window.scrollTo(0,0);
         let label = "Configuration";
         if(id === 'screenRecap') label = "Configuration";
         if(id === 'screenGame' && state.course.length > 0) label = `Trou ${state.course[state.currentHoleIndex].num} (${state.currentHoleIndex+1}/${state.course.length})`;
         if(id === 'screenResults') label = "Résultats";
         if(id === 'screenEdit') label = "Édition des scores";
         document.getElementById('stepIndicator').textContent = label;
+        window.scrollTo(0,0);
     }
 
     function loadPlayersLocally() {
@@ -1235,11 +1235,35 @@
     }
 
     function takeScreenshot() {
+        // Remonter tout en haut pour éviter le bug de zone noire sur mobile
         window.scrollTo(0, 0);
-        html2canvas(document.getElementById('resultsCapture'), { scale: 2, backgroundColor: '#f7f8fa', scrollY: 0 }).then(canvas => {
-            const link = document.createElement('a'); link.download = `loup-resultats-${new Date().getTime()}.png`;
-            link.href = canvas.toDataURL(); link.click();
-        });
+        
+        const target = document.getElementById('resultsCapture');
+        
+        // Petit délai pour laisser le navigateur finir le scroll
+        setTimeout(() => {
+            html2canvas(target, { 
+                scale: 2, 
+                backgroundColor: '#f7f8fa',
+                useCORS: true,
+                scrollY: 0
+            }).then(canvas => {
+                canvas.toBlob(function(blob) {
+                    if(!blob) return;
+                    const url = window.URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.style.display = 'none';
+                    link.href = url;
+                    link.download = `loup-resultats-${new Date().getTime()}.png`;
+                    document.body.appendChild(link);
+                    link.click();
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        window.URL.revokeObjectURL(url);
+                    }, 100);
+                }, 'image/png');
+            });
+        }, 100);
     }
 
     window.onload = init;
