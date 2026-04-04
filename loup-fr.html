@@ -11,7 +11,6 @@
 
     <style>
         :root {
-            /* Couleurs adaptées au thème Loup */
             --primary: #72bf44;
             --primary-dark: #5a9936;
             --orange: #ff4200; --violet: #7536f0;
@@ -22,7 +21,6 @@
             --text: #2d3436;
             --shadow: 0 4px 15px rgba(0,0,0,0.08);
             
-            /* Couleurs des joueurs */
             --p1: #1e88e5; --p2: #e53935; --p3: #43a047; --p4: #fb8c00;
         }
 
@@ -351,10 +349,26 @@
     </div>
 </div>
 
+<div class="modal-overlay" id="indexModal">
+    <div class="modal-content">
+        <div class="modal-title" style="color: var(--orange);">Donnez l'index de chaque joueur</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Veuillez renseigner un index valide pour tous les joueurs afin de jouer en mode Net.</p>
+        <button class="btn-main" style="width: 100%;" onclick="document.getElementById('indexModal').style.display='none'">OK</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="courseModal">
+    <div class="modal-content">
+        <div class="modal-title" style="color: var(--orange);">Sélectionner un parcours</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Veuillez choisir ou créer un golf avant de commencer la partie.</p>
+        <button class="btn-main" style="width: 100%;" onclick="document.getElementById('courseModal').style.display='none'">OK</button>
+    </div>
+</div>
+
 <div class="modal-overlay" id="validationModal">
     <div class="modal-content">
         <div class="modal-title" style="color: var(--orange);">⚠️ Attention</div>
-        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Entrez les scores et choisissez le partenaire du Loup pour valider.</p>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Entrez les scores de tous les joueurs et choisissez le partenaire du Loup pour valider.</p>
         <button class="btn-main" style="width: 100%;" onclick="closeValidationModal()">OK</button>
     </div>
 </div>
@@ -424,7 +438,7 @@
         }
     }
 
-    // --- REUTILISATION LOGIQUE DB GOLFS (MATCH-FR) ---
+    // --- REUTILISATION LOGIQUE DB GOLFS ---
     async function loadRegions() {
         try {
             const select = document.getElementById('regionSelect');
@@ -587,7 +601,7 @@
         }
     }
 
-    // --- REUTILISATION DESIGN & PLAYERS SETUP ---
+    // --- CONFIG PLAYERS ---
     function renderPlayerInputs() {
         const pList = document.getElementById('playersList');
         pList.innerHTML = '';
@@ -679,7 +693,10 @@
             state.players[i].gender = isNet ? (genEl ? genEl.value : 'M') : 'M';
             if(isNet) {
                 let exactHcp = parseFloat(document.getElementById('pHcp'+i).value.replace(',', '.'));
-                if(isNaN(exactHcp)) { alert("Veuillez entrer un index valide."); return; }
+                if(isNaN(exactHcp)) { 
+                    document.getElementById('indexModal').style.display = 'flex';
+                    return; 
+                }
                 state.players[i].hcp = exactHcp;
             }
         }
@@ -723,11 +740,17 @@
 
     function validateCourseAndStart() {
         const val = document.getElementById('golfSelect').value;
-        if (!val) { alert("Sélectionnez un golf avant de commencer."); return; }
+        if (!val) { 
+            document.getElementById('courseModal').style.display = 'flex';
+            return; 
+        }
         
         if (val === 'new_local') {
             const newName = document.getElementById('newLocalCourseName').value.trim();
-            if (!newName) { alert("Veuillez entrer un nom pour votre nouveau parcours."); return; }
+            if (!newName) { 
+                document.getElementById('courseModal').style.display = 'flex';
+                return; 
+            }
             state.activeCourseName = newName; state.activeCourseType = 'local';
             saveCurrentCourseLocally(); 
         } else if (state.activeCourseType === 'local') { saveCurrentCourseLocally(); }
@@ -756,7 +779,6 @@
             state.course.push({ num: i, par: parseInt(document.getElementById('par'+i).value) || 4, hcp: isNet ? (isNaN(hcpVal) ? 1 : hcpVal) : null });
         }
 
-        // Loup order logic
         state.wolfSequence = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
 
         startGame();
@@ -770,7 +792,7 @@
         return cr;
     }
 
-    // --- GAME ENGINE (LOUP LOGIC) ---
+    // --- GAME ENGINE ---
     function startGame() {
         state.currentHoleIndex = 0; state.gameData = []; state.carryPool = 0;
         state.players.forEach(p => { p.scores = []; p.points = []; });
@@ -806,7 +828,6 @@
             const record = state.gameData[i];
             const hole = state.course[i];
             
-            // Forced wolf on last holes if needed
             let wolfIdx = state.wolfSequence[i % 4];
             const forcedHolesCount = (state.options.holes === '18') ? 2 : 1;
             if (i >= state.course.length - forcedHolesCount) {
@@ -834,7 +855,6 @@
                 p.scores[i] = { brut: brut_saisi, net: net_calcule, stb: Math.max(0, 2 + hole.par - net_calcule), display: isCross ? 'X' : parseInt(val), isCross: isCross };
             });
 
-            // Wolf Points Logic
             let basePoints = 1 + currentCarry;
             let pMap = {0:0, 1:0, 2:0, 3:0};
             let newCarryPool = currentCarry;
@@ -932,7 +952,9 @@
         document.getElementById('wolfBanner').innerHTML = `🐺 C'est à <b>${wolf.name}</b> de chasser !`;
 
         const pastRecord = state.gameData[state.currentHoleIndex] || {};
-        let selectedPartnerId = pastRecord.partner;
+        let selectedPartnerId = pastRecord.partner !== undefined ? pastRecord.partner : null;
+
+        window.currentSelectedPartnerId = selectedPartnerId;
 
         window.selectPartner = function(id, el, isEdit=false) {
             const parentId = isEdit ? 'editPartnerSelection' : 'partnerSelection';
@@ -941,7 +963,6 @@
             if(isEdit) window.editSelectedPartnerId = id;
             else window.currentSelectedPartnerId = id;
         }
-        window.currentSelectedPartnerId = selectedPartnerId;
 
         const partDiv = document.getElementById('partnerSelection');
         partDiv.innerHTML = '';
@@ -988,7 +1009,11 @@
             if(!val || (val !== 'X' && isNaN(parseInt(val)))) { hasError = true; break; }
             record.scores[input.dataset.pid] = val;
         }
-        if (hasError || !window.currentSelectedPartnerId) { document.getElementById('validationModal').style.display = 'flex'; return; }
+        
+        if (hasError || window.currentSelectedPartnerId === null || window.currentSelectedPartnerId === undefined || window.currentSelectedPartnerId === '') { 
+            document.getElementById('validationModal').style.display = 'flex'; 
+            return; 
+        }
         record.partner = window.currentSelectedPartnerId;
 
         state.gameData[state.currentHoleIndex] = record;
@@ -1025,7 +1050,10 @@
             if(!val || (val !== 'X' && isNaN(parseInt(val)))) { document.getElementById('validationModal').style.display = 'flex'; return false; }
             record.scores[input.dataset.pid] = val;
         }
-        if (!window.editSelectedPartnerId) { document.getElementById('validationModal').style.display = 'flex'; return false; }
+        if (window.editSelectedPartnerId === null || window.editSelectedPartnerId === undefined || window.editSelectedPartnerId === '') { 
+            document.getElementById('validationModal').style.display = 'flex'; 
+            return false; 
+        }
         record.partner = window.editSelectedPartnerId;
         state.gameData[currentEditIndex] = record;
         return true;
@@ -1043,13 +1071,14 @@
         if (index >= state.course.length - forcedHolesCount) {
             let minTotal = Infinity;
             state.players.forEach(p => {
-                const total = p.points.slice(0, index).reduce((a, b) => a + b, 0); // up to this hole
+                const total = p.points.slice(0, index).reduce((a, b) => a + b, 0); 
                 if (total < minTotal) { minTotal = total; wolfIdx = p.id; }
             });
         }
         document.getElementById('editWolfBanner').innerHTML = `🐺 C'est à <b>${state.players[wolfIdx].name}</b> de chasser !`;
 
-        window.editSelectedPartnerId = record.partner;
+        window.editSelectedPartnerId = record.partner !== undefined ? record.partner : null;
+        
         const partDiv = document.getElementById('editPartnerSelection');
         partDiv.innerHTML = '';
         state.players.forEach(p => {
@@ -1138,7 +1167,7 @@
         const pod = document.getElementById('podium'); pod.innerHTML = '';
         const range = Math.max(1, sortedPlayers[0].pts - sortedPlayers[3].pts);
         
-        const orderMap = [1, 0, 2, 3]; // 2nd, 1st, 3rd, 4th
+        const orderMap = [1, 0, 2, 3]; 
         orderMap.forEach(idx => {
             const p = sortedPlayers[idx];
             let height = 30 + ((p.pts - sortedPlayers[3].pts)/range * 70);
