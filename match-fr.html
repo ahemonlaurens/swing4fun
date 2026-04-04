@@ -336,7 +336,7 @@
                 <div class="table-responsive"><table id="tableSummary"></table></div>
             </div>
             <div class="card" style="box-shadow:none; border: 1px solid #eee; padding: 10px;">
-                <h3 style="margin-top:5px; margin-bottom: 15px;">Scores par trou <span style="font-size:0.75rem; font-weight:normal; color:#636e72;">(<span style="color:var(--text); font-weight:bold;">Brut</span> / <span style="color:#5dade2; font-weight:bold;">Std</span>)</span></h3>
+                <h3 style="margin-top:5px; margin-bottom: 15px;">Scores par trou <span style="font-size:0.75rem; font-weight:normal; color:#636e72;">(<span style="color:var(--text); font-weight:bold;">Brut</span> / <span style="color:#5dade2; font-weight:bold;">Net</span>)</span></h3>
                 <div id="groupedHolesContainer"></div>
             </div>
         </div>
@@ -354,6 +354,14 @@
         <div class="modal-title" style="color: var(--orange);">⚠️ Index manquants</div>
         <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Entrez les index pour tous les joueurs afin de jouer en mode Net.</p>
         <button class="btn-main" style="width: 100%;" onclick="document.getElementById('indexErrorModal').style.display='none'">OK</button>
+    </div>
+</div>
+
+<div class="modal-overlay" id="missingGolfModal">
+    <div class="modal-content">
+        <div class="modal-title" style="color: var(--orange);">⚠️ Attention</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Sélectionnez un golf (Base de données, Mes parcours ou Nouveau) avant de commencer.</p>
+        <button class="btn-main" style="width: 100%;" onclick="document.getElementById('missingGolfModal').style.display='none'">OK</button>
     </div>
 </div>
 
@@ -499,7 +507,6 @@
 
         if (!regionVal) return;
 
-        // Gestion des parcours locaux
         if (regionVal === 'local') {
             select.innerHTML += '<option value="new_local">➕ Nouveau parcours</option>';
             const courses = getSavedCourses();
@@ -512,7 +519,6 @@
             return;
         }
 
-        // Chargement base de données CSV avec le nouveau format
         try {
             const response = await fetch(regionVal, { cache: "no-cache" });
             const text = await response.text();
@@ -570,7 +576,6 @@
 
         if (!val) return;
 
-        // Créer un nouveau parcours manuel
         if (val === 'new_local') {
             newNameInput.style.display = 'block';
             newNameInput.value = '';
@@ -589,7 +594,6 @@
             return;
         }
 
-        // Chargement parcours local existant
         if (val.startsWith('local_')) {
             const gName = val.substring(6);
             state.activeCourseType = 'local';
@@ -612,7 +616,6 @@
             return;
         }
 
-        // Chargement d'un golf de la base de données
         const gName = val;
         state.activeCourseType = 'db';
         state.activeCourseName = gName;
@@ -652,7 +655,7 @@
                 state.activeCourseName = null;
                 document.getElementById('activeCourseDisplay').innerHTML = '';
             }
-            loadRegionGolfs(); // Rafraîchit le select
+            loadRegionGolfs(); 
         }
         courseToDelete = null;
     }
@@ -715,8 +718,6 @@
         }
     }
 
-    /* ---- GESTION DES DEPARTS DES JOUEURS ---- */
-
     function updatePlayerTeeDropdowns(availableTees) {
         for (let i = 0; i < state.playersCount; i++) {
             const select = document.getElementById('pTee' + i);
@@ -730,9 +731,8 @@
                     select.appendChild(opt);
                 });
 
-                // Pré-sélection automatique en fonction de l'index
                 let hcp = player ? player.hcp : 20;
-                let recommended = availableTees[0]; // Sécurité
+                let recommended = availableTees[0]; 
                 
                 if (hcp <= 15.0 && availableTees.includes('Blanc')) recommended = 'Blanc';
                 else if (hcp > 15.0 && hcp <= 28.0 && availableTees.includes('Jaune')) recommended = 'Jaune';
@@ -757,17 +757,13 @@
         const gender = player ? player.gender : 'M';
 
         if (state.activeCourseType === 'db' && currentSelectedGolfData) {
-            // Le slope/sss dépend uniquement du genre selon le nouveau format CSV
             slopeInput.value = gender === 'F' ? currentSelectedGolfData.slope_f : currentSelectedGolfData.slope_m;
             sssInput.value = gender === 'F' ? currentSelectedGolfData.sss_f : currentSelectedGolfData.sss_m;
         } else {
-            // Parcours Local ou Nouveau (Valeurs standard)
             slopeInput.value = 113;
             sssInput.value = 72.0;
         }
     }
-
-    /* ---- GESTION DU SCORE (STEPPER) ---- */
 
     function stepScore(pid, delta, defaultPar, isEdit = false) {
         const inputClass = isEdit ? '.edit-score-input' : '.p-score-input';
@@ -790,8 +786,6 @@
         const input = document.querySelector(`${inputClass}[data-pid="${pid}"]`);
         if (input) input.value = 'X';
     }
-
-    /* ---- LOGIQUE PRINCIPALE ---- */
 
     function renderPlayerInputs() {
         const pList = document.getElementById('playersList');
@@ -1047,7 +1041,7 @@
         const val = document.getElementById('golfSelect').value;
 
         if (!val) {
-            alert("Veuillez sélectionner un golf (Base de données, Mes parcours ou Nouveau) avant de commencer.");
+            document.getElementById('missingGolfModal').style.display = 'flex';
             return;
         }
 
@@ -1124,22 +1118,21 @@
                 
                 const cr = calculateCR(p, hole);
                 let isCross = (val === 'X');
-                let brut;
                 
-                if (isCross) {
-                    brut = state.options.mode === 'net' ? (hole.par + cr + 2) : (hole.par + 4);
-                } else {
-                    brut = parseInt(val);
+                let brut_saisi = isCross ? (hole.par + 4) : parseInt(val);
+                let net_calcule = brut_saisi - cr;
+
+                if (state.options.mode === 'net') {
+                    let maxNet = hole.par + 2;
+                    if (isCross || net_calcule > maxNet) {
+                        net_calcule = maxNet;
+                        brut_saisi = maxNet + cr; 
+                    }
                 }
+
+                let stb = Math.max(0, 2 + hole.par - net_calcule);
                 
-                let net = brut - cr; 
-                
-                if (state.options.mode === 'net' && net > hole.par + 2 && !isCross) { 
-                    net = hole.par + 2; brut = net + cr; 
-                }
-                let stb = Math.max(0, 2 + hole.par - net);
-                
-                p.scores[i] = { brut: brut, net: net, stb: stb, display: isCross ? 'X' : brut, isCross: isCross };
+                p.scores[i] = { brut: brut_saisi, net: net_calcule, stb: stb, display: isCross ? 'X' : parseInt(val), isCross: isCross };
             });
         }
     }
@@ -1430,7 +1423,6 @@
                     let brutVal = s ? s.brut : '-';
                     let stdVal = s ? s.stb : '-';
                     
-                    // L'espacement fin des scores grâce à l'inline-block de taille fixe.
                     sBrutHtml += `<span style="display:inline-block; min-width:14px; text-align:center; margin:0 1px;">${brutVal}</span>`;
                     sStdHtml += `<span style="display:inline-block; min-width:14px; text-align:center; margin:0 1px;">${stdVal}</span>`;
                     
@@ -1440,8 +1432,8 @@
                     }
                 }
                 html += `<td>
-                    <div class="brut-score" style="letter-spacing:0;">${sBrutHtml}</div>
-                    ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px; letter-spacing:0;">${sStdHtml}</div>` : ''}
+                    <div class="brut-score" style="letter-spacing:0; white-space:nowrap;">${sBrutHtml}</div>
+                    ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px; letter-spacing:0; white-space:nowrap;">${sStdHtml}</div>` : ''}
                 </td>`;
             });
             html += `<td>
@@ -1482,7 +1474,7 @@
             let totB = 0, totNet = 0, totStb = 0;
             p.scores.slice(0, holesPlayed).forEach(s => { totB += s.brut; totNet += s.net; totStb += s.stb; });
             htmlSum += `<tr>
-                <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,6)} <span style="font-size:0.75rem; color:#636e72;">${state.options.mode === 'net' ? `(${p.playingHcp})` : ''}</span></td>
+                <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,6)}</td>
                 <td class="score-brut">${totB > 0 ? totB : '-'}</td>`;
             if(state.options.mode === 'net') htmlSum += `<td class="score-net">${totNet > 0 ? totNet : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
             htmlSum += `</tr>`;
