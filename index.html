@@ -183,6 +183,17 @@
     </div>
 
     <div class="apps-grid">
+        <a href="match-indiv-fr.html" class="app-card" id="matchIndivLink">
+            <div class="app-icon">🏌️</div>
+            <div class="app-content">
+                <div class="app-info">
+                    <div class="app-name" data-i18n="matchIndivTitle">Match play individuel</div>
+                    <div class="app-desc" data-i18n="matchIndivDesc">Jouez seule contre vos amis.</div>
+                </div>
+                <div class="btn-launch" data-i18n="launchBtn">Lancer</div>
+            </div>
+        </a>
+
         <a href="match-fr.html" class="app-card" id="matchLink">
             <div class="app-icon">🤝</div>
             <div class="app-content">
@@ -238,6 +249,8 @@
         fr: {
             installBtn: "📲 Installer",
             welcomePart1: "<b>Swinguez entre amis !</b>",
+            matchIndivTitle: "Match play individuel",
+            matchIndivDesc: "Jouez seule contre vos amis.",
             matchTitle: "Match Play par équipe",
             matchDesc: "Joue en équipe à 3 ou 4 joueurs.",
             wolfTitle: "Le jeu du Loup",
@@ -261,6 +274,8 @@
         en: {
             installBtn: "📲 Install",
             welcomePart1: "<b>Swing for Fun!</b>",
+            matchIndivTitle: "Individual Match Play",
+            matchIndivDesc: "Play solo against your friends.",
             matchTitle: "Team Match Play",
             matchDesc: "Play in teams of 3 or 4 players.",
             wolfTitle: "Wolf Game",
@@ -284,6 +299,8 @@
         es: {
             installBtn: "📲 Instalar",
             welcomePart1: "<b>Swing 4 Fun!</b>",
+            matchIndivTitle: "Match Play Individual",
+            matchIndivDesc: "Juega solo contra tus amigos.",
             matchTitle: "Match Play en equipo",
             matchDesc: "Juega en equipos de 3 o 4 jugadores.",
             wolfTitle: "Juego del Lobo",
@@ -312,7 +329,6 @@
     const closeModalBtn = document.getElementById('closeModalBtn');
     const langSelect = document.getElementById('langSelect');
     
-    // Nouveaux éléments pour la modale de partage
     const headerShareBtn = document.getElementById('headerShareBtn');
     const shareModal = document.getElementById('shareModal');
     const closeShareModalBtn = document.getElementById('closeShareModalBtn');
@@ -329,6 +345,12 @@
         document.documentElement.lang = lang;
         localStorage.setItem('userLanguage', lang);
         
+        // Mise à jour dynamique du lien Match Individuel
+        const matchIndivLink = document.getElementById('matchIndivLink');
+        if (matchIndivLink) {
+            matchIndivLink.href = 'match-indiv-' + lang.toLowerCase() + '.html';
+        }
+
         const matchLink = document.getElementById('matchLink');
         if (matchLink) {
             matchLink.href = 'match-' + lang.toLowerCase() + '.html';
@@ -380,7 +402,6 @@
         iosModal.style.display = 'none';
     });
 
-    // Gestion de la modale de partage
     headerShareBtn.addEventListener('click', () => {
         shareModal.style.display = 'flex';
     });
@@ -405,7 +426,6 @@
         }
     });
 
-    // Fermer les modales si on clique en dehors du contenu
     window.addEventListener('click', (e) => {
         if (e.target === iosModal) {
             iosModal.style.display = 'none';
