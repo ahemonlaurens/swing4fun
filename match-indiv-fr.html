@@ -687,16 +687,52 @@
         }
     }
 
+    function saveCustomTeeStats(playerId) {
+        const slopeInput = document.getElementById('pSlope' + playerId);
+        const sssInput = document.getElementById('pSss' + playerId);
+        const teeSelect = document.getElementById('pTee' + playerId);
+        if (!slopeInput || !sssInput || !teeSelect) return;
+
+        let gender = 'M';
+        const genEl = document.querySelector(`input[name="pGen${playerId}"]:checked`);
+        if (genEl) gender = genEl.value;
+
+        const tee = teeSelect.value;
+        const courseName = state.activeCourseName || "default";
+        const key = `${courseName}_${gender}_${tee}`;
+
+        const sharedStats = JSON.parse(localStorage.getItem('shared_golf_tee_stats') || '{}');
+        sharedStats[key] = {
+            slope: parseFloat(slopeInput.value) || 113,
+            sss: parseFloat(sssInput.value) || 72.0
+        };
+        localStorage.setItem('shared_golf_tee_stats', JSON.stringify(sharedStats));
+    }
+
     function applyPlayerTeeStats(playerId) {
         const teeSelect = document.getElementById('pTee' + playerId);
         const slopeInput = document.getElementById('pSlope' + playerId);
         const sssInput = document.getElementById('pSss' + playerId);
         if (!teeSelect || !slopeInput || !sssInput) return;
 
-        const player = state.players.find(p => p.id === playerId);
-        const gender = player ? player.gender : 'M';
+        let gender = 'M';
+        const genEl = document.querySelector(`input[name="pGen${playerId}"]:checked`);
+        if (genEl) gender = genEl.value;
+        else {
+            const player = state.players.find(p => p.id === playerId);
+            if(player) gender = player.gender;
+        }
 
-        if (state.activeCourseType === 'db' && currentSelectedGolfData) {
+        const tee = teeSelect.value;
+        const courseName = state.activeCourseName || "default";
+        const key = `${courseName}_${gender}_${tee}`;
+        
+        const sharedStats = JSON.parse(localStorage.getItem('shared_golf_tee_stats') || '{}');
+
+        if (sharedStats[key]) {
+            slopeInput.value = sharedStats[key].slope;
+            sssInput.value = sharedStats[key].sss;
+        } else if (state.activeCourseType === 'db' && currentSelectedGolfData) {
             slopeInput.value = gender === 'F' ? currentSelectedGolfData.slope_f : currentSelectedGolfData.slope_m;
             sssInput.value = gender === 'F' ? currentSelectedGolfData.sss_f : currentSelectedGolfData.sss_m;
         } else {
@@ -732,8 +768,8 @@
         for (let i = 0; i < state.playersCount; i++) {
             const genderHtml = `
             <div class="btn-group gender-toggle" style="flex: 0.8; min-width: 60px; display: none;">
-                <input type="radio" name="pGen${i}" id="pGenM${i}" value="M" checked><label for="pGenM${i}" style="padding: 6px 4px; font-size:0.85rem;">H</label>
-                <input type="radio" name="pGen${i}" id="pGenF${i}" value="F"><label for="pGenF${i}" style="padding: 6px 4px; font-size:0.85rem;">F</label>
+                <input type="radio" name="pGen${i}" id="pGenM${i}" value="M" checked onchange="applyPlayerTeeStats(${i})"><label for="pGenM${i}" style="padding: 6px 4px; font-size:0.85rem;">H</label>
+                <input type="radio" name="pGen${i}" id="pGenF${i}" value="F" onchange="applyPlayerTeeStats(${i})"><label for="pGenF${i}" style="padding: 6px 4px; font-size:0.85rem;">F</label>
             </div>`;
 
             pList.innerHTML += `
@@ -894,11 +930,11 @@
                     </div>
                     <div style="flex:0.8">
                         <div style="font-size:0.75rem; color:#636e72; font-weight:bold; margin-bottom:2px;">Slope</div>
-                        <input type="number" id="pSlope${p.id}" value="113" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
+                        <input type="number" id="pSlope${p.id}" value="113" onchange="saveCustomTeeStats(${p.id})" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
                     </div>
                     <div style="flex:0.8">
                         <div style="font-size:0.75rem; color:#636e72; font-weight:bold; margin-bottom:2px;">SSS</div>
-                        <input type="number" id="pSss${p.id}" value="72.0" step="0.1" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
+                        <input type="number" id="pSss${p.id}" value="72.0" step="0.1" onchange="saveCustomTeeStats(${p.id})" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
                     </div>
                 </div>`;
             }
@@ -939,6 +975,7 @@
                 p.slope = slope;
                 p.sss = sss;
                 p.playingHcp = Math.round((p.hcp * slope / 113) + (sss - total18Par));
+                saveCustomTeeStats(p.id);
             });
         }
 
@@ -985,7 +1022,6 @@
                 const cr = calculateCR(p, hole);
                 let isCross = (val === 'X');
                 
-                // brut_reel garde toujours sa valeur mathématique de par+4 pour les calculs bruts
                 let brut_reel = isCross ? (hole.par + 4) : parseInt(val);
                 let sba = brut_reel;
                 let net_calcule = brut_reel - cr;
@@ -994,12 +1030,11 @@
                     let maxNet = hole.par + 2; 
                     if (isCross || net_calcule > maxNet) { 
                         net_calcule = maxNet; 
-                        sba = maxNet + cr; // (Par + 2 + CR)
+                        sba = maxNet + cr; 
                     }
                 }
 
                 let stb = Math.max(0, 2 + hole.par - net_calcule);
-                // On préserve le vrai 'brut_reel' dans la propriété 'brut'
                 p.scores[i] = { brut: brut_reel, sba: sba, net: net_calcule, stb: stb, display: isCross ? 'X' : parseInt(val), isCross: isCross };
             });
         }
@@ -1290,7 +1325,7 @@
         const tSummary = document.getElementById('tableSummary');
         let htmlSum = `<thead><tr><th class="text-left">Joueur</th>`;
         if (state.options.mode === 'net') {
-            htmlSum += `<th>SBA</th><th>IND</th><th>Stb</th></tr></thead><tbody>`;
+            htmlSum += `<th>Brut</th><th>SBA</th><th>IND</th><th>Stb</th></tr></thead><tbody>`;
         } else {
             htmlSum += `<th>Brut</th></tr></thead><tbody>`;
         }
@@ -1298,8 +1333,8 @@
         state.players.forEach(p => {
             let totB = 0, totSBA = 0, totStb = 0;
             p.scores.slice(0, state.gameData.length).forEach(s => { 
-                totB += s.brut; // Le brut réel (Par + 4 inclus pour les X)
-                totSBA += s.sba || s.brut; // Capped brut
+                totB += s.brut;
+                totSBA += s.sba || s.brut; 
                 totStb += s.stb; 
             });
             
@@ -1307,7 +1342,7 @@
             
             htmlSum += `<tr><td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,8)}</td>`;
             if(state.options.mode === 'net') {
-                htmlSum += `<td class="score-brut">${totSBA > 0 ? totSBA : '-'}</td><td class="score-net">${totSBA > 0 ? diff : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
+                htmlSum += `<td class="score-brut">${totB > 0 ? totB : '-'}</td><td class="score-brut">${totSBA > 0 ? totSBA : '-'}</td><td class="score-net">${totSBA > 0 ? diff : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
             } else {
                 htmlSum += `<td class="score-brut">${totB > 0 ? totB : '-'}</td>`;
             }
@@ -1319,18 +1354,20 @@
         scoreDefs.style.cssText = "margin-top:10px;";
         if (state.options.mode === 'net') {
             scoreDefs.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; cursor:pointer; background:#f8f9fa; padding:10px; border-radius:8px; border:1px solid #eee;" onclick="toggleScoreDefs()">
+                <div style="background:#f8f9fa; padding:10px; border-radius:8px; border:1px solid #eee;">
                     <div style="line-height:1.6; font-size:0.85rem; color:#636e72;">
+                        <strong>* Brut :</strong> Score brut total<br>
                         <strong>* SBA :</strong> Score Brut Ajusté<br>
                         <strong>* IND :</strong> Index joué<br>
-                        <strong>* STB :</strong> Stableford
-                    </div>
-                    <div style="display:flex; align-items:center; gap:5px; color:var(--primary-dark); font-weight:bold;">
-                        <span id="scoreDefsToggleText" style="font-size:0.8rem;">Définitions</span>
-                        <span id="scoreDefsToggleIcon" style="font-size:1rem;">▶</span>
+                        <strong>* STB :</strong> Stableford 
+                        <span onclick="toggleScoreDefs()" style="margin-left:15px; cursor:pointer; color:var(--primary-dark); font-weight:bold; display:inline-flex; align-items:center; gap:4px;">
+                            <span id="scoreDefsToggleText">Définitions</span>
+                            <span id="scoreDefsToggleIcon" style="font-size:0.9rem;">▶</span>
+                        </span>
                     </div>
                 </div>
                 <div id="scoreDefsContent" style="display:none; margin-top:8px; padding:12px; background:#fff; border:1px solid #dfe6e9; border-radius:8px; font-size:0.8rem; line-height:1.5; color:#2d3436;">
+                    <p style="margin:0 0 8px 0;"><strong>Brut :</strong> Somme de vos scores réels. Une croix (X) est comptabilisée comme Par + 4.</p>
                     <p style="margin:0 0 8px 0;"><strong>SBA (Score Brut Ajusté) :</strong> Le score brut correspond au nombre de coups joués. Pour éviter qu'un mauvais trou ne pénalise trop le résultat global, il est plafonné à : <em>Par du Trou + Coups Reçus + 2</em>. La croix équivaut à <em>Par + 4</em>, puis est plafonnée par ce maximum.</p>
                     <p style="margin:0 0 8px 0;"><strong>IND (Index joué) :</strong> Le score différentiel reflète la performance du jour. Formule : <em>(113 / Slope) x (SBA - SSS)</em>.</p>
                     <p style="margin:0;"><strong>STB (Stableford) :</strong> Convertit le score net en points (2 pts pour le Par net, 3 pour un Birdie net, etc.).</p>
@@ -1347,6 +1384,8 @@
         
         if(allerHoles.length > 0) container.innerHTML += generateHolesTableImageStyle(allerHoles, 0);
         if(retourHoles.length > 0) container.innerHTML += `<div style="margin-top:20px;"></div>` + generateHolesTableImageStyle(retourHoles, allerHoles.length);
+        
+        container.innerHTML += `<div style="font-size:0.8rem; color:#636e72; font-style:italic; margin-top:12px;">* Score brut par trou. X = Par + 4.</div>`;
     }
 
     function exportCSV() {
