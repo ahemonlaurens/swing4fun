@@ -89,7 +89,8 @@
         .score-net { font-weight: 600; color: var(--blue); }
 
         #tableSummary { table-layout: fixed; width: 100%; font-size: 0.9rem; }
-        #tableSummary th, #tableSummary td { padding: 6px 2px; }
+        #tableSummary th, #tableSummary td { padding: 8px 6px; word-wrap: break-word; } /* Padding ajusté pour aérer les colonnes */
+        #tableSummary .text-left { padding-left: 2px; padding-right: 2px; }
 
         .table-image-style { width: 100%; border-collapse: collapse; font-family: 'Quicksand', sans-serif; font-size: 0.9rem; }
         .table-image-style th { border-bottom: 2px solid #eee; padding: 10px 2px; color: #2d3436; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;}
@@ -1323,9 +1324,9 @@
         });
 
         const tSummary = document.getElementById('tableSummary');
-        let htmlSum = `<thead><tr><th class="text-left" style="width:${state.options.mode === 'net' ? '44%' : '70%'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Joueur</th>`;
+        let htmlSum = `<thead><tr><th class="text-left" style="width:${state.options.mode === 'net' ? '40%' : '70%'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Joueur</th>`;
         if (state.options.mode === 'net') {
-            htmlSum += `<th style="width:14%;">Brut</th><th style="width:14%;">SBA</th><th style="width:14%;">IND</th><th style="width:14%;">Stb</th></tr></thead><tbody>`;
+            htmlSum += `<th style="width:15%;">Brut</th><th style="width:15%;">SBA</th><th style="width:15%;">IND</th><th style="width:15%;">Stb</th></tr></thead><tbody>`;
         } else {
             htmlSum += `<th>Brut</th></tr></thead><tbody>`;
         }
@@ -1355,13 +1356,13 @@
         if (state.options.mode === 'net') {
             scoreDefs.innerHTML = `
                 <div style="background:#f8f9fa; padding:10px; border-radius:8px; border:1px solid #eee; display:flex; justify-content:space-between; align-items:flex-end;">
-                    <div style="line-height:1.6; font-size:0.85rem; color:#636e72;">
+                    <div style="line-height:1.6; font-size:0.85rem; color:#636e72; flex:1;">
                         <strong>* Brut :</strong> Score brut total<br>
                         <strong>* SBA :</strong> Score Brut Ajusté<br>
                         <strong>* IND :</strong> Index joué<br>
                         <strong>* STB :</strong> Stableford
                     </div>
-                    <div onclick="toggleScoreDefs()" style="cursor:pointer; color:var(--primary-dark); font-weight:bold; display:flex; align-items:center; gap:4px; padding-bottom: 2px;">
+                    <div onclick="toggleScoreDefs()" style="cursor:pointer; color:var(--primary-dark); font-weight:bold; display:flex; align-items:center; gap:4px; padding-bottom: 2px; white-space:nowrap;">
                         <span id="scoreDefsToggleText" style="font-size:0.8rem;">Définitions</span>
                         <span id="scoreDefsToggleIcon" style="font-size:0.9rem;">▶</span>
                     </div>
