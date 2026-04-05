@@ -17,12 +17,11 @@
             --teal: #1acfbf; --blue: #1e88e5;
             --crimson: #d6084d; --lime: #d9fa4f;
             --green: #43a047;
-            --nav-forward: #10ac84; --nav-forward-light: #1dd1a1; /* Nouvelle couleur navigation avant */
+            --nav-forward: #10ac84; --nav-forward-light: #1dd1a1;
             --bg: #f7f8fa; --card-bg: #ffffff;
             --text: #2d3436;
             --shadow: 0 4px 15px rgba(0,0,0,0.08);
             
-            /* Couleurs des joueurs */
             --p1: #1e88e5; --p2: #e53935; --p3: #43a047; --p4: #fb8c00;
         }
 
@@ -92,13 +91,19 @@
         #tableSummary { table-layout: fixed; width: 100%; font-size: 0.9rem; }
         #tableSummary th, #tableSummary td { padding: 6px 2px; word-wrap: break-word; }
 
+        .table-image-style { width: 100%; border-collapse: collapse; font-family: 'Quicksand', sans-serif; font-size: 0.9rem; }
+        .table-image-style th { border-bottom: 2px solid #eee; padding: 10px 2px; color: #2d3436; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;}
+        .table-image-style td { border-bottom: 1px solid #f8f9fa; padding: 8px 2px; text-align: center; vertical-align: middle; }
+        .table-image-style .net-score { color: #5dade2; font-size: 0.85rem; font-weight: 600;}
+        .table-image-style .brut-score { color: #2d3436; font-weight: 700; font-size: 0.9rem;}
+        .table-image-style .player-name { text-align: left; font-weight: 700; font-size: 0.9rem; padding-left: 8px; border-radius: 4px; }
+
         .course-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 600px) { .course-grid { grid-template-columns: 1fr; } }
 
-        /* Boutons de navigation */
         .btn-main { width: 100%; padding: 15px; border-radius: 12px; border: none; background: linear-gradient(45deg, var(--primary), var(--violet)); color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: transform 0.1s; }
         .btn-main:active { transform: scale(0.98); }
-        .btn-forward { background: linear-gradient(45deg, var(--nav-forward), var(--nav-forward-light)); } /* Nouveau bouton avancer */
+        .btn-forward { background: linear-gradient(45deg, var(--nav-forward), var(--nav-forward-light)); }
         .btn-secondary { background: #dfe6e9; color: #2d3436; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: 600; text-align: center; display: inline-block; }
         .btn-ghost { background: transparent; color: #b2bec3; border: 2px dashed #dfe6e9; padding: 12px; border-radius: 8px; font-weight: 600; width: 100%; cursor: pointer; transition: 0.2s; margin-top: 15px;}
         .btn-ghost:hover { border-color: #636e72; color: #636e72; }
@@ -106,7 +111,6 @@
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: white; }
         .dot { height: 14px; width: 14px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 8px; flex-shrink: 0; }
         
-        /* Design Grille de Score (+/-) */
         .score-row { display: grid; grid-template-columns: 14px 1fr 115px 35px 35px; align-items: center; gap: 8px; margin-bottom: 15px; }
         .stepper-container { display: flex; align-items: center; justify-content: space-between; background: #f1f2f6; border-radius: 20px; padding: 3px; }
         .btn-stepper { width: 30px; height: 30px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 600; cursor: pointer; transition: transform 0.1s, background 0.2s; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -126,10 +130,8 @@
         .t-2 { background: linear-gradient(45deg, var(--p3), #81c784); box-shadow: 0 -4px 15px rgba(67,160,71,0.3); }
         .t-3 { background: linear-gradient(45deg, var(--p4), #ffb74d); box-shadow: 0 -4px 15px rgba(251,140,0,0.3); }
 
-        .match-winner-bg { background-color: rgba(16, 172, 132, 0.15); } 
-
-        .dashboard-scores { display: flex; flex-wrap: wrap; justify-content: space-around; background: #f8f9fa; padding: 15px 10px; border-radius: 8px; margin-top: 15px; border: 1px solid #eee; gap: 10px;}
-        .team-score-item { text-align: center; font-weight: bold; flex: 1; min-width: 80px;}
+        .dashboard-scores { display: grid; gap: 10px; background: #f8f9fa; padding: 15px 10px; border-radius: 8px; margin-top: 15px; border: 1px solid #eee;}
+        .team-score-item { text-align: center; font-weight: bold; background: #fff; padding: 10px; border-radius: 6px; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 2000; }
         .modal-content { background: white; padding: 25px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
@@ -327,6 +329,11 @@
             <div class="card" style="box-shadow:none; border: 1px solid #eee;">
                 <h3>Récapitulatif des Scores</h3>
                 <div class="table-responsive"><table id="tableSummary"></table></div>
+                <div style="font-size:0.8rem; color:#636e72; font-style:italic; margin-top:5px;">* Stb = Stableford</div>
+            </div>
+            <div class="card" style="box-shadow:none; border: 1px solid #eee; padding: 10px;">
+                <h3 style="margin-top:5px; margin-bottom: 15px;">Scores par trou <span style="font-size:0.75rem; font-weight:normal; color:#636e72;">(<span style="color:var(--text); font-weight:bold;">Brut</span> / <span style="color:#5dade2; font-weight:bold;">Net</span>)</span></h3>
+                <div id="groupedHolesContainer"></div>
             </div>
         </div>
         <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;">
@@ -1010,10 +1017,16 @@
         const tsDiv = document.getElementById('dashboardTeamScores');
         tsDiv.innerHTML = '';
         
+        if (state.playersCount === 4) {
+            tsDiv.style.gridTemplateColumns = '1fr 1fr';
+        } else {
+            tsDiv.style.gridTemplateColumns = `repeat(${state.playersCount}, 1fr)`;
+        }
+        
         state.players.forEach((p, idx) => {
             const pts = matchData.pPoints[p.id];
             tsDiv.innerHTML += `
-                <div class="team-score-item" style="color:${p.color}; border-left: 4px solid ${p.color}; background: #fff; padding: 10px; border-radius: 6px;">
+                <div class="team-score-item" style="color:${p.color}; border-left: 4px solid ${p.color};">
                     ${p.name.substring(0,8)} <br><span style="font-size:1.3rem; color:var(--text);">${pts} pt${pts > 1 ? 's' : ''}</span>
                 </div>`;
         });
@@ -1145,6 +1158,81 @@
     function saveAndCloseEdit() { if(saveCurrentEditHoleLocally()) { recalculateAllScores(); saveGameLocally(); finishGame(); } }
     function cancelEdit() { state.gameData = backupGameData; recalculateAllScores(); finishGame(); }
 
+    function generateHolesTableImageStyle(holesSubArray, startIndex) {
+        if(holesSubArray.length === 0) return '';
+        let groups = [], grandTotalPar = 0;
+        const holeSep = '<span style="color:#b2bec3; margin:0;">/</span>';
+
+        for(let i=0; i<holesSubArray.length; i+=3) {
+            let end = Math.min(i+2, holesSubArray.length-1);
+            let labelArr = [], parHtml = "";
+            for(let j=i; j<=end; j++) {
+                labelArr.push(holesSubArray[j].num); 
+                parHtml += `<span style="display:inline-block; width:15px; text-align:center;">${holesSubArray[j].par}</span>`;
+                grandTotalPar += holesSubArray[j].par;
+            }
+            groups.push({ 
+                s: i, 
+                e: end, 
+                label: `<span style="white-space:nowrap;">${labelArr.join(holeSep)}</span>`, 
+                parHtml: `<div style="display:flex; justify-content:center; gap:2px;">${parHtml}</div>` 
+            });
+        }
+
+        let colGroupHtml = `<colgroup><col style="width:23%;">`;
+        let groupWidth = 63 / (groups.length || 1);
+        groups.forEach(() => { colGroupHtml += `<col style="width:${groupWidth}%;">`; });
+        colGroupHtml += `<col style="width:14%;"></colgroup>`;
+
+        let html = `<div class="table-responsive"><table class="table-image-style" style="table-layout:fixed; width:100%; min-width:300px;">${colGroupHtml}<thead><tr><th style="text-align:left; border-bottom:none; padding-bottom:0;">Trous</th>`;
+        
+        groups.forEach((g, i) => { 
+            let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : '';
+            html += `<th style="border-bottom:none; padding-bottom:0; text-align:center; ${borderStyle}">${g.label}</th>`; 
+        });
+        html += `<th style="border-bottom:none; padding-bottom:0; text-align:center; border-left:1px dashed #e2e8f0;">Tot.</th></tr><tr><th style="text-align:left; color:#636e72; font-size:0.75rem; padding-top:2px;">Par</th>`;
+        
+        groups.forEach((g, i) => { 
+            let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : '';
+            html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; letter-spacing:0; text-align:center; ${borderStyle}">${g.parHtml}</th>`; 
+        });
+        html += `<th style="color:#636e72; font-size:0.8rem; padding-top:2px; text-align:center; border-left:1px dashed #e2e8f0;">${grandTotalPar}</th></tr></thead><tbody>`;
+
+        state.players.forEach(p => {
+            html += `<tr><td class="player-name" style="color:${p.color}; border-left: 4px solid ${p.color}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.85rem; padding-right:4px;">${p.name.substring(0,6)}</td>`;
+            let blockBrut = 0, blockStd = 0;
+
+            groups.forEach((g, i) => {
+                let sBrutHtml = "", sStdHtml = "";
+                for(let idx = g.s; idx <= g.e; idx++) {
+                    const s = p.scores[startIndex + idx];
+                    let brutVal = s ? s.brut : '-';
+                    let stdVal = s ? s.stb : '-';
+                    
+                    sBrutHtml += `<span style="display:inline-block; width:15px; text-align:center;">${brutVal}</span>`;
+                    sStdHtml += `<span style="display:inline-block; width:15px; text-align:center;">${stdVal}</span>`;
+                    
+                    if(s) { 
+                        blockBrut += s.brut; 
+                        blockStd += s.stb; 
+                    }
+                }
+                
+                let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : '';
+                
+                html += `<td style="text-align:center; ${borderStyle}">
+                    <div class="brut-score" style="display:flex; justify-content:center; gap:2px; letter-spacing:0;">${sBrutHtml}</div>
+                    ${state.options.mode === 'net' ? `<div class="net-score" style="display:flex; justify-content:center; gap:2px; margin-top:-2px; letter-spacing:0;">${sStdHtml}</div>` : ''}
+                </td>`;
+            });
+            html += `<td style="text-align:center; border-left:1px dashed #e2e8f0;">
+                <div class="brut-score">${blockBrut > 0 ? blockBrut : '-'}</div>
+                ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px;">${blockStd > 0 ? blockStd : '-'}</div>` : ''}
+            </td></tr>`;
+        });
+        return html + `</tbody></table></div>`;
+    }
+
     function finishGame() {
         showScreen('screenResults');
         localStorage.removeItem('indiv_match_saved_game');
@@ -1171,18 +1259,25 @@
         });
 
         const tSummary = document.getElementById('tableSummary');
-        let htmlSum = `<thead><tr><th class="text-left">Joueur</th><th>Pts Match</th><th>Brut</th>${state.options.mode === 'net' ? `<th>Net</th><th>Stb</th>` : ''}</tr></thead><tbody>`;
+        let htmlSum = `<thead><tr><th class="text-left">Joueur</th><th>Brut</th>${state.options.mode === 'net' ? `<th>Net</th><th>Stb*</th>` : ''}</tr></thead><tbody>`;
         state.players.forEach(p => {
             let totB = 0, totNet = 0, totStb = 0;
             p.scores.slice(0, state.gameData.length).forEach(s => { totB += s.brut; totNet += s.net; totStb += s.stb; });
             htmlSum += `<tr>
                 <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,8)}</td>
-                <td style="font-weight:700; color:var(--nav-forward);">${matchData.pPoints[p.id]}</td>
                 <td class="score-brut">${totB > 0 ? totB : '-'}</td>`;
             if(state.options.mode === 'net') htmlSum += `<td class="score-net">${totNet > 0 ? totNet : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
             htmlSum += `</tr>`;
         });
         tSummary.innerHTML = htmlSum + `</tbody>`;
+
+        const container = document.getElementById('groupedHolesContainer'); container.innerHTML = '';
+        const coursePlayed = state.course.slice(0, state.gameData.length);
+        const allerHoles = coursePlayed.filter(h => h.num <= 9);
+        const retourHoles = coursePlayed.filter(h => h.num > 9);
+        
+        if(allerHoles.length > 0) container.innerHTML += generateHolesTableImageStyle(allerHoles, 0);
+        if(retourHoles.length > 0) container.innerHTML += `<div style="margin-top:20px;"></div>` + generateHolesTableImageStyle(retourHoles, allerHoles.length);
     }
 
     function exportCSV() {
