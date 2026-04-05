@@ -89,7 +89,7 @@
         .score-net { font-weight: 600; color: var(--blue); }
 
         #tableSummary { table-layout: fixed; width: 100%; font-size: 0.9rem; }
-        #tableSummary th, #tableSummary td { padding: 8px 6px; word-wrap: break-word; } /* Padding ajusté pour aérer les colonnes */
+        #tableSummary th, #tableSummary td { padding: 8px 6px; word-wrap: break-word; } 
         #tableSummary .text-left { padding-left: 2px; padding-right: 2px; }
 
         .table-image-style { width: 100%; border-collapse: collapse; font-family: 'Quicksand', sans-serif; font-size: 0.9rem; }
@@ -1324,9 +1324,9 @@
         });
 
         const tSummary = document.getElementById('tableSummary');
-        let htmlSum = `<thead><tr><th class="text-left" style="width:${state.options.mode === 'net' ? '40%' : '70%'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Joueur</th>`;
+        let htmlSum = `<thead><tr><th class="text-left" style="width:${state.options.mode === 'net' ? '34%' : '70%'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Joueur</th>`;
         if (state.options.mode === 'net') {
-            htmlSum += `<th style="width:15%;">Brut</th><th style="width:15%;">SBA</th><th style="width:15%;">IND</th><th style="width:15%;">Stb</th></tr></thead><tbody>`;
+            htmlSum += `<th style="width:16.5%;">Brut</th><th style="width:16.5%;">SBA</th><th style="width:16.5%;">IND</th><th style="width:16.5%;">Stb</th></tr></thead><tbody>`;
         } else {
             htmlSum += `<th>Brut</th></tr></thead><tbody>`;
         }
