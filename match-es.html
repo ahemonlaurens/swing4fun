@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Match por equipos - Gestor Pro</title>
+    <title>Partido por Equipos - Gestor Pro</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -90,7 +90,8 @@
         .score-net { font-weight: 600; color: var(--blue); }
 
         #tableSummary { table-layout: fixed; width: 100%; font-size: 0.9rem; }
-        #tableSummary th, #tableSummary td { padding: 6px 2px; word-wrap: break-word; }
+        #tableSummary th, #tableSummary td { padding: 8px 6px; word-wrap: break-word; } 
+        #tableSummary .text-left { padding-left: 2px; padding-right: 2px; }
 
         .table-image-style { width: 100%; border-collapse: collapse; font-family: 'Quicksand', sans-serif; font-size: 0.9rem; }
         .table-image-style th { border-bottom: 2px solid #eee; padding: 10px 2px; color: #2d3436; font-weight: 700; text-transform: uppercase; font-size: 0.85rem;}
@@ -98,6 +99,8 @@
         .table-image-style .net-score { color: #5dade2; font-size: 0.85rem; font-weight: 600;}
         .table-image-style .brut-score { color: #2d3436; font-weight: 700; font-size: 0.9rem;}
         .table-image-style .player-name { text-align: left; font-weight: 700; font-size: 0.9rem; padding-left: 8px; border-radius: 4px; }
+        
+        .score-cell-colored { display:inline-block; width:22px; line-height: 22px; text-align:center; border-radius:4px; font-weight:bold; }
 
         .course-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 600px) { .course-grid { grid-template-columns: 1fr; } }
@@ -111,7 +114,7 @@
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; color: white; }
         .dot { height: 14px; width: 14px; border-radius: 50%; display: inline-block; vertical-align: middle; margin-right: 8px; flex-shrink: 0; }
         
-        /* Diseño Cuadrícula de Golpes (+/-) */
+        /* Diseño Cuadrícula de Puntuación (+/-) */
         .score-row { display: grid; grid-template-columns: 14px 1fr 115px 35px 35px; align-items: center; gap: 8px; margin-bottom: 15px; }
         .stepper-container { display: flex; align-items: center; justify-content: space-between; background: #f1f2f6; border-radius: 20px; padding: 3px; }
         .btn-stepper { width: 30px; height: 30px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 600; cursor: pointer; transition: transform 0.1s, background 0.2s; background: #ffffff; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
@@ -148,7 +151,7 @@
 <body>
 
 <header>
-    <div class="logo">⛳ Match por equipos</div>
+    <div class="logo">⛳ Partido por Equipos</div>
     <div class="step-indicator" id="stepIndicator">Configuración</div>
 </header>
 
@@ -163,17 +166,17 @@
                 <p><strong>El Principio:</strong> Dos equipos compiten (2v2, 2v1 o 1v3).</p>
                 <p><strong>La Puntuación (Match):</strong> En cada hoyo:</p>
                 <ul>
-                    <li><strong>Con 4 jugadores (2v2):</strong> Hay 2 puntos en juego. El mejor jugador del Eq. 1 se enfrenta al mejor del Eq. 2 (1 punto). Los segundos mejores también se enfrentan (1 punto).</li>
-                    <li><strong>Con 3 jugadores (2v1 o 1v3):</strong> <b>Solo 1 punto</b> está en juego. El jugador que juega solo compara su resultado con el <b>mejor de los otros dos</b> jugadores.</li>
+                    <li><strong>Con 4 jugadores (2v2):</strong> Hay 2 puntos en juego. El mejor jugador del Equipo 1 se enfrenta al mejor del Equipo 2 (1 punto). Los segundos mejores también se enfrentan (1 punto).</li>
+                    <li><strong>Con 3 jugadores (2v1 o 1v3):</strong> <b>Solo hay 1 punto</b> en juego. El jugador solitario compara su puntuación únicamente con el <b>mejor de los dos</b> oponentes.</li>
                 </ul>
-                <p><strong>La Cruz (X):</strong> Introducir "X" significa levantar la bola. En modo Bruto, equivale a <b>Par + 4</b>. En modo Neto, limita la puntuación a <b>Par + Golpes Recibidos + 2</b>. Esta puntuación se suma al total.</p>
+                <p><strong>La Cruz (X):</strong> Introducir "X" significa recoger la bola. En modo Bruto, vale <b>Par + 4</b>. En modo Neto, limita la puntuación a <b>Par + Golpes Recibidos + 2</b>. Esta puntuación se suma a su total.</p>
             </div>
         </div>
         
         <div class="card">
             <h2>Opciones de Juego</h2>
             <div class="form-group">
-                <div class="form-label">Modo de cálculo<span class="form-desc">Bruto (real) o Neto (ajuste Hcp)</span></div>
+                <div class="form-label">Modo de puntuación<span class="form-desc">Bruto (real) o Neto (ajustado por Hcp)</span></div>
                 <div class="btn-group">
                     <input type="radio" name="calcMode" id="modeBrut" value="brut" checked onchange="updateCalcMode()"><label for="modeBrut">Bruto</label>
                     <input type="radio" name="calcMode" id="modeNet" value="net" onchange="updateCalcMode()"><label for="modeNet">Neto</label>
@@ -181,7 +184,7 @@
             </div>
             
             <div class="form-group">
-                <div class="form-label">Recorrido<span class="form-desc">Selección de hoyos</span></div>
+                <div class="form-label">Campo<span class="form-desc">Selección de hoyos</span></div>
                 <div class="btn-group">
                     <input type="radio" name="holes" id="h18" value="18" checked onchange="updateCourseVisibility()"><label for="h18">18</label>
                     <input type="radio" name="holes" id="hFront" value="front" onchange="updateCourseVisibility()"><label for="hFront">Ida</label>
@@ -190,7 +193,7 @@
             </div>
             
             <div class="form-group">
-                <div class="form-label">Número de jugadores</div>
+                <div class="form-label">Nº de jugadores</div>
                 <div class="btn-group">
                     <input type="radio" name="nbPlayers" id="p3" value="3" onchange="updatePlayerCount()"><label for="p3">3 Jugadores</label>
                     <input type="radio" name="nbPlayers" id="p4" value="4" checked onchange="updatePlayerCount()"><label for="p4">4 Jugadores</label>
@@ -199,11 +202,11 @@
 
             <div class="form-group" style="flex-wrap: wrap; gap: 10px;">
                 <div class="form-label" style="min-width: 100px;">Nombre Equipo 1</div>
-                <input type="text" id="team1Name" value="Eq. 1" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--blue); text-align: left;">
+                <input type="text" id="team1Name" value="Equipo 1" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--blue); text-align: left;">
             </div>
             <div class="form-group" style="flex-wrap: wrap; gap: 10px;">
                 <div class="form-label" style="min-width: 100px;">Nombre Equipo 2</div>
-                <input type="text" id="team2Name" value="Eq. 2" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--orange); text-align: left;">
+                <input type="text" id="team2Name" value="Equipo 2" oninput="updateTeamDropdowns()" style="flex: 1; min-width: 150px; background: #f1f2f6; border: 2px solid #dfe6e9; color: var(--orange); text-align: left;">
             </div>
         </div>
 
@@ -213,7 +216,7 @@
         </div>
 
         <div style="display:flex; gap:10px;">
-            <button class="btn-secondary" style="flex:1; padding:15px 5px; font-size:0.95rem; white-space:nowrap;" onclick="window.location.href='index.html'">← Atrás</button>
+            <button class="btn-secondary" style="flex:1; padding:15px 5px; font-size:0.95rem; white-space:nowrap;" onclick="window.location.href='index.html'">← Volver</button>
             <button class="btn-main" style="flex:2.2; padding:15px 5px; font-size:1rem; white-space:nowrap;" onclick="validateSetup()">Siguiente ➜</button>
         </div>
     </div>
@@ -221,17 +224,17 @@
     <div id="screenRecap" class="screen">
         
         <div class="card">
-            <h2>1. El Recorrido</h2>
+            <h2>1. El Campo</h2>
             <div id="courseSelectionArea" style="background:#e3f2fd; padding:15px; border-radius:8px; margin-bottom:15px;">
                 <div class="form-label" style="font-weight:bold; color:var(--blue); margin-bottom: 12px;">🔍 Buscar mi campo</div>
                 <div style="display:flex; flex-direction:column; gap:10px;">
                     <select id="regionSelect" onchange="loadRegionGolfs()" style="width:100%; padding:8px; border:2px solid #dfe6e9; border-radius:8px;">
-                        <option value="">-- Selecciona una región --</option>
+                        <option value="">-- Seleccione una región --</option>
                     </select>
                     <select id="golfSelect" onchange="applySelectedGolf()" style="width:100%; padding:8px; border:2px solid #dfe6e9; border-radius:8px;">
-                        <option value="">-- Selecciona una región primero --</option>
+                        <option value="">-- Seleccione una región primero --</option>
                     </select>
-                    <input type="text" id="newLocalCourseName" placeholder="Introduce el nombre de tu campo..." style="display:none; width:100%; padding:10px; font-weight:bold; border:2px solid var(--primary); border-radius:8px; outline:none;">
+                    <input type="text" id="newLocalCourseName" placeholder="Introduzca el nombre de su campo..." style="display:none; width:100%; padding:10px; font-weight:bold; border:2px solid var(--primary); border-radius:8px; outline:none;">
                 </div>
             </div>
             <div id="activeCourseDisplay" style="text-align:center; font-weight:bold; color:var(--primary-dark); font-size:1.1rem; min-height:1.5em; margin-bottom:10px;"></div>
@@ -239,7 +242,7 @@
 
         <div class="card">
             <h2>2. Detalles de los Hoyos</h2>
-            <div style="font-size: 0.9rem; color:#636e72; margin-bottom:15px;">Verifica o edita el Par y el Hándicap de cada hoyo.</div>
+            <div style="font-size: 0.9rem; color:#636e72; margin-bottom:15px;">Verifique o edite el Par y el Hándicap para cada hoyo.</div>
             <div class="course-grid">
                 <div id="containerAller">
                     <h3>IDA (1-9)</h3>
@@ -264,7 +267,7 @@
 
         <div class="card">
             <h2>3. Equipos y Salidas</h2>
-            <div style="font-size: 0.9rem; color:#636e72; margin-bottom:15px;">El tee se preselecciona según el hándicap. Los valores Slope/SSS se ajustan automáticamente (Hombre/Mujer).</div>
+            <div style="font-size: 0.9rem; color:#636e72; margin-bottom:15px;">Las barras de salida se preseleccionan según el hándicap. Los valores Slope/Valoración se ajustan automáticamente (Hombre/Mujer).</div>
             <div id="recapPlayersList" style="margin-bottom: 10px;"></div>
         </div>
 
@@ -276,7 +279,7 @@
 
     <div id="screenGame" class="screen">
         <div class="card" style="padding:15px;">
-            <h3 style="margin-top:0; color:#2d3436; text-align:left; font-size:1rem;">📊 Tablero (Hoyo Anterior)</h3>
+            <h3 style="margin-top:0; color:#2d3436; text-align:left; font-size:1rem;">📊 Panel de Control (Hoyo Anterior)</h3>
             <div id="prevHoleDashboard" style="display:none;">
                 <table style="margin:0;">
                     <thead id="dashboardHeader">
@@ -293,7 +296,7 @@
             <div id="holeInfo" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"></div>
             
             <div style="display:grid; grid-template-columns: 14px 1fr 110px 35px 35px; gap:8px; margin-top:10px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72; text-align:center;">
-                <div></div><div style="text-align:left;">Jugador</div><div>Golpes</div><div></div><div>Rec</div>
+                <div></div><div style="text-align:left;">Jugador</div><div>Golpes</div><div></div><div>Rec.</div>
             </div>
             <div id="holeInputs"></div>
 
@@ -302,14 +305,14 @@
                 <button class="btn-main" id="btnNextHole" onclick="nextHole()" style="flex:2;">Validar ➜</button>
             </div>
         </div>
-        <button class="btn-ghost" onclick="openEndGameModal()">🛑 Terminar antes</button>
+        <button class="btn-ghost" onclick="openEndGameModal()">🛑 Terminar partida anticipadamente</button>
     </div>
 
     <div id="screenEdit" class="screen">
         <div class="card">
             <h2>Editar puntuaciones</h2>
             <div class="form-group" style="flex-direction:column; align-items:flex-start;">
-                <label class="form-label" style="margin-bottom:8px; font-weight:bold; color:var(--primary-dark)">Selecciona el hoyo a editar:</label>
+                <label class="form-label" style="margin-bottom:8px; font-weight:bold; color:var(--primary-dark)">Seleccione el hoyo a editar:</label>
                 <select id="editHoleSelect" onchange="changeEditHole(this.value)" style="width:100%; font-size:1.05rem; padding:10px;"></select>
             </div>
         </div>
@@ -317,7 +320,7 @@
             <div id="editHoleInfo" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;"></div>
             
             <div style="display:grid; grid-template-columns: 14px 1fr 110px 35px 35px; gap:8px; margin-top:20px; margin-bottom:5px; font-size:0.85rem; font-weight:700; color:#636e72; text-align:center;">
-                <div></div><div style="text-align:left;">Jugador</div><div>Golpes</div><div></div><div>Rec</div>
+                <div></div><div style="text-align:left;">Jugador</div><div>Golpes</div><div></div><div>Rec.</div>
             </div>
             <div id="editHoleInputs"></div>
         </div>
@@ -334,9 +337,10 @@
             <div class="card" style="box-shadow:none; border: 1px solid #eee;">
                 <h3>Resumen de Puntuaciones</h3>
                 <div class="table-responsive"><table id="tableSummary"></table></div>
+                <div id="scoreDefinitions"></div>
             </div>
             <div class="card" style="box-shadow:none; border: 1px solid #eee; padding: 10px;">
-                <h3 style="margin-top:5px; margin-bottom: 15px;">Puntuaciones por Hoyo <span style="font-size:0.75rem; font-weight:normal; color:#636e72;">(<span style="color:var(--text); font-weight:bold;">Bruto</span> / <span style="color:#5dade2; font-weight:bold;">Neto</span>)</span></h3>
+                <h3 style="margin-top:5px; margin-bottom: 15px;">Puntuaciones por hoyo</h3>
                 <div id="groupedHolesContainer"></div>
             </div>
         </div>
@@ -344,7 +348,7 @@
             <button class="btn-secondary" style="flex:1" onclick="exportCSV()">📥 CSV</button>
             <button class="btn-secondary" style="flex:1" onclick="takeScreenshot()">📸 Captura</button>
             <button class="btn-secondary" style="flex:100%; border: 2px solid var(--primary); color:var(--primary-dark); font-weight:700;" onclick="openEditMode()">✏️ Editar puntuaciones</button>
-            <button class="btn-main" style="flex:100%; margin-top:5px;" onclick="window.location.href='index.html'">🔄 Nuevo Juego / Inicio</button>
+            <button class="btn-main" style="flex:100%; margin-top:5px;" onclick="window.location.href='index.html'">🔄 Nueva Partida / Inicio</button>
         </div>
     </div>
 </div>
@@ -352,7 +356,7 @@
 <div class="modal-overlay" id="indexErrorModal">
     <div class="modal-content">
         <div class="modal-title" style="color: var(--orange);">⚠️ Hándicaps faltantes</div>
-        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Introduce los hándicaps (Index) de todos los jugadores para jugar en modo Neto.</p>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Introduzca los hándicaps de todos los jugadores para jugar en modo Neto.</p>
         <button class="btn-main" style="width: 100%;" onclick="document.getElementById('indexErrorModal').style.display='none'">OK</button>
     </div>
 </div>
@@ -360,7 +364,7 @@
 <div class="modal-overlay" id="missingGolfModal">
     <div class="modal-content">
         <div class="modal-title" style="color: var(--orange);">⚠️ Atención</div>
-        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Selecciona un campo (Base de datos, Mis campos o Nuevo) antes de comenzar.</p>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Seleccione un campo (Base de datos, Mis campos o Nuevo) antes de comenzar.</p>
         <button class="btn-main" style="width: 100%;" onclick="document.getElementById('missingGolfModal').style.display='none'">OK</button>
     </div>
 </div>
@@ -375,10 +379,10 @@
 
 <div class="modal-overlay" id="resumeModal">
     <div class="modal-content">
-        <div class="modal-title">¿Juego en progreso?</div>
-        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 5px;">Se detectó un juego sin terminar.</p>
+        <div class="modal-title">¿Partida en curso?</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 5px;">Se ha detectado una partida no terminada.</p>
         <div class="modal-btns">
-            <button class="btn-secondary" style="flex:1;" onclick="handleResume(false)">Nuevo</button>
+            <button class="btn-secondary" style="flex:1;" onclick="handleResume(false)">Nueva</button>
             <button class="btn-main" style="flex:1; padding: 10px;" onclick="handleResume(true)">Reanudar</button>
         </div>
     </div>
@@ -386,8 +390,8 @@
 
 <div class="modal-overlay" id="endGameModal">
     <div class="modal-content">
-        <div class="modal-title">¿Quieres terminar el juego?</div>
-        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 5px;">Puedes reanudar este juego más tarde donde lo dejaste.</p>
+        <div class="modal-title">¿Desea terminar la partida?</div>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 5px;">Podrá reanudar esta partida más tarde donde la dejó.</p>
         <div class="modal-btns">
             <button class="btn-secondary" style="flex:1;" onclick="closeEndGameModal()">Cancelar</button>
             <button class="btn-main" style="flex:1; background:var(--crimson);" onclick="forceFinishGame()">Terminar</button>
@@ -398,14 +402,14 @@
 <div class="modal-overlay" id="validationModal">
     <div class="modal-content">
         <div class="modal-title" style="color: var(--orange);">⚠️ Atención</div>
-        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Introduce puntuaciones para validar el hoyo.</p>
+        <p style="font-size: 0.95rem; color: #636e72; margin-bottom: 20px;">Introduzca las puntuaciones para validar el hoyo.</p>
         <button class="btn-main" style="width: 100%;" onclick="closeValidationModal()">OK</button>
     </div>
 </div>
 
 <div class="modal-overlay" id="deleteCourseModal">
     <div class="modal-content">
-        <div class="modal-title" style="color: var(--crimson);">¿Quieres borrar el campo?</div>
+        <div class="modal-title" style="color: var(--crimson);">¿Desea borrar este campo?</div>
         <div class="modal-btns">
             <button class="btn-secondary" style="flex:1;" onclick="confirmDeleteCourse(false)">Conservar</button>
             <button class="btn-main" style="flex:1; background:var(--crimson);" onclick="confirmDeleteCourse(true)">Borrar</button>
@@ -416,18 +420,18 @@
 <script>
     const state = {
         playersCount: 4,
-        teams: [{ id: 1, name: 'Eq. 1' }, { id: 2, name: 'Eq. 2' }],
+        teams: [{ id: 1, name: 'Equipo 1' }, { id: 2, name: 'Equipo 2' }],
         players: [
-            { id: 0, name: '', hcp: 0, playingHcp: 0, color: 'var(--p1)', team: 1, scores: [], gender: 'H' },
-            { id: 1, name: '', hcp: 0, playingHcp: 0, color: 'var(--p2)', team: 1, scores: [], gender: 'H' },
-            { id: 2, name: '', hcp: 0, playingHcp: 0, color: 'var(--p3)', team: 2, scores: [], gender: 'H' },
-            { id: 3, name: '', hcp: 0, playingHcp: 0, color: 'var(--p4)', team: 2, scores: [], gender: 'H' }
+            { id: 0, name: '', hcp: 0, playingHcp: 0, slope: 113, sss: 72, color: 'var(--p1)', team: 1, scores: [], gender: 'M' },
+            { id: 1, name: '', hcp: 0, playingHcp: 0, slope: 113, sss: 72, color: 'var(--p2)', team: 1, scores: [], gender: 'M' },
+            { id: 2, name: '', hcp: 0, playingHcp: 0, slope: 113, sss: 72, color: 'var(--p3)', team: 2, scores: [], gender: 'M' },
+            { id: 3, name: '', hcp: 0, playingHcp: 0, slope: 113, sss: 72, color: 'var(--p4)', team: 2, scores: [], gender: 'M' }
         ],
         course: [],
         options: { mode: 'brut', holes: '18', courseName: '' },
         currentHoleIndex: 0,
         gameData: [],
-        activeCourseType: null, // 'db' or 'local'
+        activeCourseType: null, // 'db' ou 'local'
         activeCourseName: null
     };
 
@@ -435,7 +439,7 @@
     let currentEditIndex = 0;
     let courseToDelete = null;
     
-    // FORMATO : currentRegionData[nom-golf] = { slope_m, sss_m, slope_f, sss_f, holes: [] }
+    // NOUVEAU FORMAT : currentRegionData[nom-golf] = { slope_m, sss_m, slope_f, sss_f, holes: [] }
     let currentRegionData = {};
     let currentSelectedGolfData = null;
 
@@ -471,10 +475,20 @@
         }
     }
 
+    function toggleScoreDefs() {
+        const content = document.getElementById('scoreDefsContent');
+        const icon = document.getElementById('scoreDefsToggleIcon');
+        if (content.style.display === 'none') {
+            content.style.display = 'block'; icon.innerHTML = '▼';
+        } else {
+            content.style.display = 'none'; icon.innerHTML = '▶';
+        }
+    }
+
     async function loadRegions() {
         try {
             const select = document.getElementById('regionSelect');
-            select.innerHTML = '<option value="">-- Selecciona una región --</option>';
+            select.innerHTML = '<option value="">-- Seleccione una región --</option>';
             select.innerHTML += '<option value="local">📁 Mis campos</option>';
             
             const response = await fetch('golfs-regions.csv', { cache: "no-cache" });
@@ -490,7 +504,7 @@
                     select.appendChild(opt);
                 }
             }
-        } catch(e) { console.error("No se pudieron cargar las regiones", e); }
+        } catch(e) { console.error("Impossible de charger les régions", e); }
     }
 
     function getSavedCourses() {
@@ -501,13 +515,13 @@
         const regionVal = document.getElementById('regionSelect').value;
         const select = document.getElementById('golfSelect');
         document.getElementById('newLocalCourseName').style.display = 'none';
-        select.innerHTML = '<option value="">-- Selecciona un campo --</option>';
+        select.innerHTML = '<option value="">-- Seleccione un campo --</option>';
         currentRegionData = {};
         currentSelectedGolfData = null;
 
         if (!regionVal) return;
 
-        // Gestión de campos locales
+        // Gestion des parcours locaux
         if (regionVal === 'local') {
             select.innerHTML += '<option value="new_local">➕ Nuevo campo</option>';
             const courses = getSavedCourses();
@@ -520,7 +534,7 @@
             return;
         }
 
-        // Carga de base de datos CSV
+        // Chargement base de données CSV avec le nouveau format
         try {
             const response = await fetch(regionVal, { cache: "no-cache" });
             const text = await response.text();
@@ -567,7 +581,7 @@
                 select.appendChild(opt);
             });
 
-        } catch(e) { console.error("Error al cargar " + regionVal, e); }
+        } catch(e) { console.error("Erreur de chargement de " + regionVal, e); }
     }
 
     function applySelectedGolf() {
@@ -578,7 +592,7 @@
 
         if (!val) return;
 
-        // Crear nuevo campo local manual
+        // Créer un nouveau parcours manuel
         if (val === 'new_local') {
             newNameInput.style.display = 'block';
             newNameInput.value = '';
@@ -597,7 +611,7 @@
             return;
         }
 
-        // Cargar campo local existente
+        // Chargement parcours local existant
         if (val.startsWith('local_')) {
             const gName = val.substring(6);
             state.activeCourseType = 'local';
@@ -620,7 +634,7 @@
             return;
         }
 
-        // Cargar campo de la base de datos
+        // Chargement d'un golf de la base de données
         const gName = val;
         state.activeCourseType = 'db';
         state.activeCourseName = gName;
@@ -708,7 +722,7 @@
         }
 
         if (updates.length > 0) {
-            let csvContent = "Golf,Hoyo,Antiguo Par,Nuevo Par,Antiguo Hcp,Nuevo Hcp\n";
+            let csvContent = "Golf,Hoyo,Par Antiguo,Nuevo Par,Hcp Antiguo,Nuevo Hcp\n";
             updates.forEach(u => {
                 csvContent += `"${state.activeCourseName}",${u.hole},${u.oldPar},${u.newPar},${u.oldHcp},${u.newHcp}\n`;
             });
@@ -723,7 +737,7 @@
         }
     }
 
-    /* ---- GESTIÓN DE SALIDAS (TEES) ---- */
+    /* ---- GESTION DES DEPARTS DES JOUEURS ---- */
 
     function updatePlayerTeeDropdowns(availableTees) {
         for (let i = 0; i < state.playersCount; i++) {
@@ -738,8 +752,9 @@
                     select.appendChild(opt);
                 });
 
+                // Pré-sélection automatique en fonction de l'index
                 let hcp = player ? player.hcp : 20;
-                let recommended = availableTees[0]; 
+                let recommended = availableTees[0]; // Sécurité
                 
                 if (hcp <= 15.0 && availableTees.includes('Blancas')) recommended = 'Blancas';
                 else if (hcp > 15.0 && hcp <= 28.0 && availableTees.includes('Amarillas')) recommended = 'Amarillas';
@@ -761,18 +776,20 @@
         if (!teeSelect || !slopeInput || !sssInput) return;
 
         const player = state.players.find(p => p.id === playerId);
-        const gender = player ? player.gender : 'H';
+        const gender = player ? player.gender : 'M';
 
         if (state.activeCourseType === 'db' && currentSelectedGolfData) {
-            slopeInput.value = gender === 'M' ? currentSelectedGolfData.slope_f : currentSelectedGolfData.slope_m;
-            sssInput.value = gender === 'M' ? currentSelectedGolfData.sss_f : currentSelectedGolfData.sss_m;
+            // Le slope/sss dépend uniquement du genre selon le nouveau format CSV
+            slopeInput.value = gender === 'F' ? currentSelectedGolfData.slope_f : currentSelectedGolfData.slope_m;
+            sssInput.value = gender === 'F' ? currentSelectedGolfData.sss_f : currentSelectedGolfData.sss_m;
         } else {
+            // Parcours Local ou Nouveau (Valeurs standard)
             slopeInput.value = 113;
             sssInput.value = 72.0;
         }
     }
 
-    /* ---- GESTIÓN DE PUNTUACIONES (+/-) ---- */
+    /* ---- GESTION DU SCORE (STEPPER) ---- */
 
     function stepScore(pid, delta, defaultPar, isEdit = false) {
         const inputClass = isEdit ? '.edit-score-input' : '.p-score-input';
@@ -796,21 +813,21 @@
         if (input) input.value = 'X';
     }
 
-    /* ---- LÓGICA PRINCIPAL ---- */
+    /* ---- LOGIQUE PRINCIPALE ---- */
 
     function renderPlayerInputs() {
         const pList = document.getElementById('playersList');
         pList.innerHTML = '';
-        const t1Name = document.getElementById('team1Name').value || 'Eq. 1';
-        const t2Name = document.getElementById('team2Name').value || 'Eq. 2';
+        const t1Name = document.getElementById('team1Name').value || 'Equipo 1';
+        const t2Name = document.getElementById('team2Name').value || 'Equipo 2';
 
         for (let i = 0; i < state.playersCount; i++) {
             const defaultTeam = (i < 2) ? 1 : 2; 
             
             const genderHtml = `
             <div class="btn-group gender-toggle" style="flex: 0.8; min-width: 60px; display: none;">
-                <input type="radio" name="pGen${i}" id="pGenH${i}" value="H" checked><label for="pGenH${i}" style="padding: 6px 4px; font-size:0.85rem;">H</label>
-                <input type="radio" name="pGen${i}" id="pGenM${i}" value="M"><label for="pGenM${i}" style="padding: 6px 4px; font-size:0.85rem;">M</label>
+                <input type="radio" name="pGen${i}" id="pGenM${i}" value="M" checked><label for="pGenM${i}" style="padding: 6px 4px; font-size:0.85rem;">H</label>
+                <input type="radio" name="pGen${i}" id="pGenF${i}" value="F"><label for="pGenF${i}" style="padding: 6px 4px; font-size:0.85rem;">M</label>
             </div>`;
 
             pList.innerHTML += `
@@ -818,7 +835,7 @@
                     <span class="dot" style="background:${state.players[i].color}; width:16px; height:16px; align-self: center; flex-shrink:0;"></span>
                     <input type="text" id="pName${i}" placeholder="Jugador ${i+1}" maxlength="15" style="flex: 2; min-width: 0; padding:8px 6px;">
                     ${genderHtml}
-                    <input type="text" inputmode="decimal" id="pHcp${i}" placeholder="Hcp" style="flex: 0.8; min-width: 0; padding:8px 4px;" class="hcp-input">
+                    <input type="text" inputmode="decimal" id="pHcp${i}" placeholder="Hándicap" style="flex: 0.8; min-width: 0; padding:8px 4px;" class="hcp-input">
                     <select id="pTeam${i}" style="flex: 1.5; min-width: 0; padding: 8px 4px; font-size:0.9rem;">
                         <option value="1" ${defaultTeam === 1 ? 'selected' : ''}>${t1Name}</option>
                         <option value="2" ${defaultTeam === 2 ? 'selected' : ''}>${t2Name}</option>
@@ -829,8 +846,8 @@
     }
 
     function updateTeamDropdowns() {
-        const t1Name = document.getElementById('team1Name').value || 'Eq. 1';
-        const t2Name = document.getElementById('team2Name').value || 'Eq. 2';
+        const t1Name = document.getElementById('team1Name').value || 'Equipo 1';
+        const t2Name = document.getElementById('team2Name').value || 'Equipo 2';
         for (let i = 0; i < 4; i++) {
             const sel = document.getElementById('pTeam' + i);
             if (sel) { sel.options[0].text = t1Name; sel.options[1].text = t2Name; }
@@ -853,8 +870,8 @@
                         if (saved[i].hcp !== null && saved[i].hcp !== '🔒') {
                             document.getElementById('pHcp'+i).value = saved[i].hcp;
                         }
-                        if (saved[i].gender === 'M' && document.getElementById(`pGenM${i}`)) {
-                            document.getElementById(`pGenM${i}`).checked = true;
+                        if (saved[i].gender === 'F' && document.getElementById(`pGenF${i}`)) {
+                            document.getElementById(`pGenF${i}`).checked = true;
                         }
                     }
                 }
@@ -871,7 +888,7 @@
             arr.push({
                 name: document.getElementById('pName'+i) ? document.getElementById('pName'+i).value.trim() : `Jugador ${i+1}`,
                 hcp: (hcpVal === '🔒') ? '' : hcpVal,
-                gender: genEl ? genEl.value : 'H'
+                gender: genEl ? genEl.value : 'M'
             });
         }
         localStorage.setItem('wolf_saved_players', JSON.stringify(arr));
@@ -974,8 +991,8 @@
                 name: name || `Jugador ${i+1}`,
                 color: `var(--p${i+1})`,
                 team: parseInt(document.getElementById('pTeam'+i).value),
-                gender: isNet ? (genEl ? genEl.value : 'H') : 'H',
-                scores: [], hcp: 0, playingHcp: 0
+                gender: isNet ? (genEl ? genEl.value : 'M') : 'M',
+                scores: [], hcp: 0, playingHcp: 0, slope: 113, sss: 72
             };
             
             if(isNet) {
@@ -991,8 +1008,8 @@
 
         state.options.mode = isNet ? 'net' : 'brut';
         state.options.holes = document.querySelector('input[name="holes"]:checked').value;
-        state.teams[0].name = document.getElementById('team1Name').value.trim() || 'Eq. 1';
-        state.teams[1].name = document.getElementById('team2Name').value.trim() || 'Eq. 2';
+        state.teams[0].name = document.getElementById('team1Name').value.trim() || 'Equipo 1';
+        state.teams[1].name = document.getElementById('team2Name').value.trim() || 'Equipo 2';
 
         savePlayersLocally();
         renderPlayersListRecap();
@@ -1008,14 +1025,14 @@
             if (tPlayers.length > 0) {
                 pListHtml += `<div style="font-weight:bold; color:var(--primary-dark); margin-top:15px; border-bottom:1px solid #eee; padding-bottom:5px; margin-bottom:10px;">${team.name}</div>`;
                 tPlayers.forEach(p => {
-                    const hcpText = state.options.mode === 'net' ? `(Hcp: <b>${p.hcp}</b>)` : '';
+                    const hcpText = state.options.mode === 'net' ? `(Hándicap: <b>${p.hcp}</b>)` : '';
                     
                     let whsHtml = '';
                     if (state.options.mode === 'net') {
                         whsHtml = `
                         <div style="display:flex; gap:10px; margin-top:8px; padding-left:24px;">
                             <div style="flex:1">
-                                <div style="font-size:0.75rem; color:#636e72; font-weight:bold; margin-bottom:2px;">Tee</div>
+                                <div style="font-size:0.75rem; color:#636e72; font-weight:bold; margin-bottom:2px;">Salida</div>
                                 <select id="pTee${p.id}" onchange="applyPlayerTeeStats(${p.id})" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
                                 </select>
                             </div>
@@ -1024,7 +1041,7 @@
                                 <input type="number" id="pSlope${p.id}" value="113" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
                             </div>
                             <div style="flex:0.8">
-                                <div style="font-size:0.75rem; color:#636e72; font-weight:bold; margin-bottom:2px;">SSS</div>
+                                <div style="font-size:0.75rem; color:#636e72; font-weight:bold; margin-bottom:2px;">Valor. (VC)</div>
                                 <input type="number" id="pSss${p.id}" value="72.0" step="0.1" style="width:100%; padding:6px; font-size:0.9rem; border-radius:6px; border:1px solid #dfe6e9;">
                             </div>
                         </div>`;
@@ -1044,6 +1061,7 @@
         });
         pListContainer.innerHTML = pListHtml;
 
+        // Mise à jour initiale des sélecteurs
         updatePlayerTeeDropdowns(['Estándar', 'Blancas', 'Amarillas', 'Azules', 'Rojas']);
     }
 
@@ -1057,7 +1075,7 @@
 
         if (val === 'new_local') {
             const newName = document.getElementById('newLocalCourseName').value.trim();
-            if (!newName) { alert("Por favor, introduce un nombre para el nuevo campo."); return; }
+            if (!newName) { alert("Por favor, introduzca un nombre para su nuevo campo."); return; }
             state.activeCourseName = newName;
             state.activeCourseType = 'local';
             saveCurrentCourseLocally(); 
@@ -1077,6 +1095,8 @@
             state.players.forEach(p => {
                 const slope = parseFloat(document.getElementById('pSlope'+p.id).value) || 113;
                 const sss = parseFloat(document.getElementById('pSss'+p.id).value) || 72;
+                p.slope = slope;
+                p.sss = sss;
                 p.playingHcp = Math.round((p.hcp * slope / 113) + (sss - total18Par));
             });
         }
@@ -1129,20 +1149,21 @@
                 const cr = calculateCR(p, hole);
                 let isCross = (val === 'X');
                 
-                let brut_saisi = isCross ? (hole.par + 4) : parseInt(val);
-                let net_calcule = brut_saisi - cr;
+                let brut_reel = isCross ? (hole.par + 4) : parseInt(val);
+                let sba = brut_reel;
+                let net_calcule = brut_reel - cr;
 
                 if (state.options.mode === 'net') {
                     let maxNet = hole.par + 2; 
                     if (isCross || net_calcule > maxNet) {
                         net_calcule = maxNet;
-                        brut_saisi = maxNet + cr; 
+                        sba = maxNet + cr; 
                     }
                 }
 
                 let stb = Math.max(0, 2 + hole.par - net_calcule);
                 
-                p.scores[i] = { brut: brut_saisi, net: net_calcule, stb: stb, display: isCross ? 'X' : parseInt(val), isCross: isCross };
+                p.scores[i] = { brut: brut_reel, sba: sba, net: net_calcule, stb: stb, display: isCross ? 'X' : parseInt(val), isCross: isCross };
             });
         }
     }
@@ -1285,7 +1306,7 @@
         state.players.forEach(p => {
             const cr = calculateCR(p, hole);
             let val = pastRecord[p.id];
-            if (val === undefined) val = hole.par; 
+            if (val === undefined) val = hole.par; // Défaut = Par
             
             const tColor = p.team === 1 ? 'var(--blue)' : 'var(--orange)';
             
@@ -1294,7 +1315,7 @@
                     <span class="dot" style="background:${p.color}; margin:0;"></span>
                     <span style="font-size:0.95rem; line-height:1.2;" class="text-left">
                         ${p.name.substring(0,10)}<br>
-                        <span style="font-size:0.7rem; color:${tColor};">(${p.team === 1 ? 'Eq. 1' : 'Eq. 2'})</span>
+                        <span style="font-size:0.7rem; color:${tColor};">(${p.team === 1 ? 'Equipo 1' : 'Equipo 2'})</span>
                     </span>
                     <div class="stepper-container">
                         <button class="btn-stepper minus" onclick="stepScore(${p.id}, -1, ${hole.par}, false)">−</button>
@@ -1309,7 +1330,7 @@
         });
         
         const btnPrev = document.getElementById('btnPrevHole');
-        if (state.currentHoleIndex === 0) { btnPrev.textContent = '← Atrás'; btnPrev.onclick = () => showScreen('screenRecap'); } 
+        if (state.currentHoleIndex === 0) { btnPrev.textContent = '← Resumen'; btnPrev.onclick = () => showScreen('screenRecap'); } 
         else { btnPrev.textContent = '← Anterior'; btnPrev.onclick = prevHole; }
         document.getElementById('btnNextHole').textContent = (state.currentHoleIndex === state.course.length - 1) ? 'Terminar 🏆' : 'Validar ➜';
     }
@@ -1382,7 +1403,7 @@
                     <span class="dot" style="background:${p.color}; margin:0;"></span>
                     <span style="font-size:0.95rem; line-height:1.2;" class="text-left">
                         ${p.name.substring(0,10)}<br>
-                        <span style="font-size:0.7rem; color:${tColor};">(${p.team === 1 ? 'Eq. 1' : 'Eq. 2'})</span>
+                        <span style="font-size:0.7rem; color:${tColor};">(${p.team === 1 ? 'Equipo 1' : 'Equipo 2'})</span>
                     </span>
                     <div class="stepper-container">
                         <button class="btn-stepper minus" onclick="stepScore(${p.id}, -1, ${hole.par}, true)">−</button>
@@ -1410,7 +1431,7 @@
             let labelArr = [], parHtml = "";
             for(let j=i; j<=end; j++) {
                 labelArr.push(holesSubArray[j].num); 
-                parHtml += `<span style="display:inline-block; width:15px; text-align:center;">${holesSubArray[j].par}</span>`;
+                parHtml += `<span style="display:inline-block; width:22px; text-align:center;">${holesSubArray[j].par}</span>`;
                 grandTotalPar += holesSubArray[j].par;
             }
             groups.push({ 
@@ -1442,34 +1463,38 @@
 
         state.players.forEach(p => {
             html += `<tr><td class="player-name" style="color:${p.color}; border-left: 4px solid ${p.color}; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.85rem; padding-right:4px;">${p.name.substring(0,6)}</td>`;
-            let blockBrut = 0, blockStd = 0;
+            let blockBrut = 0;
 
             groups.forEach((g, i) => {
-                let sBrutHtml = "", sStdHtml = "";
+                let sBrutHtml = "";
                 for(let idx = g.s; idx <= g.e; idx++) {
                     const s = p.scores[startIndex + idx];
-                    let brutVal = s ? s.brut : '-';
-                    let stdVal = s ? s.stb : '-';
+                    const parTrou = holesSubArray[idx].par;
+                    let brutVal = s ? (s.isCross ? 'X' : s.brut) : '-';
                     
-                    sBrutHtml += `<span style="display:inline-block; width:15px; text-align:center;">${brutVal}</span>`;
-                    sStdHtml += `<span style="display:inline-block; width:15px; text-align:center;">${stdVal}</span>`;
-                    
-                    if(s) { 
-                        blockBrut += s.brut; 
-                        blockStd += s.stb; 
+                    let bgColor = 'transparent';
+                    if(s && !s.isCross) {
+                        let diff = s.brut - parTrou;
+                        if(diff < 0) bgColor = diff <= -2 ? '#a5d6a7' : '#c8e6c9'; 
+                        else if(diff > 0) bgColor = diff >= 2 ? '#ef9a9a' : '#ffcdd2'; 
+                        else bgColor = '#ffffff';
+                    } else if (s && s.isCross) {
+                        bgColor = '#ef9a9a';
                     }
+
+                    sBrutHtml += `<span class="score-cell-colored" style="background-color:${bgColor};">${brutVal}</span>`;
+                    
+                    if(s) { blockBrut += s.brut; }
                 }
                 
                 let borderStyle = i > 0 ? 'border-left:1px dashed #e2e8f0;' : '';
                 
                 html += `<td style="text-align:center; ${borderStyle}">
-                    <div class="brut-score" style="display:flex; justify-content:center; gap:2px; letter-spacing:0;">${sBrutHtml}</div>
-                    ${state.options.mode === 'net' ? `<div class="net-score" style="display:flex; justify-content:center; gap:2px; margin-top:-2px; letter-spacing:0;">${sStdHtml}</div>` : ''}
+                    <div class="brut-score" style="display:flex; justify-content:center; gap:4px; letter-spacing:0;">${sBrutHtml}</div>
                 </td>`;
             });
             html += `<td style="text-align:center; border-left:1px dashed #e2e8f0;">
                 <div class="brut-score">${blockBrut > 0 ? blockBrut : '-'}</div>
-                ${state.options.mode === 'net' ? `<div class="net-score" style="margin-top:-2px;">${blockStd > 0 ? blockStd : '-'}</div>` : ''}
             </td></tr>`;
         });
         return html + `</tbody></table></div>`;
@@ -1500,17 +1525,63 @@
         });
 
         const tSummary = document.getElementById('tableSummary');
-        let htmlSum = `<thead><tr><th class="text-left">Jugador</th><th>Bruto</th>${state.options.mode === 'net' ? `<th>Neto</th><th>Stb</th>` : ''}</tr></thead><tbody>`;
+        let htmlSum = `<thead><tr><th class="text-left" style="width:${state.options.mode === 'net' ? '30%' : '70%'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Jugador</th>`;
+        if (state.options.mode === 'net') {
+            htmlSum += `<th style="width:20%; white-space:nowrap;">Bruto</th><th style="width:15%; white-space:nowrap;">SBA</th><th style="width:20%; white-space:nowrap;">Diff</th><th style="width:15%; white-space:nowrap;">Stb</th></tr></thead><tbody>`;
+        } else {
+            htmlSum += `<th style="white-space:nowrap;">Bruto</th></tr></thead><tbody>`;
+        }
+        
         state.players.forEach(p => {
-            let totB = 0, totNet = 0, totStb = 0;
-            p.scores.slice(0, holesPlayed).forEach(s => { totB += s.brut; totNet += s.net; totStb += s.stb; });
-            htmlSum += `<tr>
-                <td class="text-left" style="font-weight:bold; color:${p.color}">${p.name.substring(0,6)}</td>
-                <td class="score-brut">${totB > 0 ? totB : '-'}</td>`;
-            if(state.options.mode === 'net') htmlSum += `<td class="score-net">${totNet > 0 ? totNet : '-'}</td><td style="font-weight:700; color:var(--violet)">${totStb}</td>`;
+            let totB = 0, totSBA = 0, totStb = 0;
+            p.scores.slice(0, holesPlayed).forEach(s => { 
+                totB += s.brut;
+                totSBA += s.sba || s.brut; 
+                totStb += s.stb; 
+            });
+            
+            let diff = p.slope ? ((113 / p.slope) * (totSBA - p.sss)).toFixed(1) : '-';
+            
+            htmlSum += `<tr><td class="text-left" style="font-weight:bold; color:${p.color}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="${p.name}">${p.name}</td>`;
+            if(state.options.mode === 'net') {
+                htmlSum += `<td class="score-brut" style="white-space:nowrap;">${totB > 0 ? totB : '-'}</td><td class="score-brut" style="white-space:nowrap;">${totSBA > 0 ? totSBA : '-'}</td><td class="score-net" style="white-space:nowrap;">${totSBA > 0 ? diff : '-'}</td><td style="font-weight:700; color:var(--violet); white-space:nowrap;">${totStb}</td>`;
+            } else {
+                htmlSum += `<td class="score-brut" style="white-space:nowrap;">${totB > 0 ? totB : '-'}</td>`;
+            }
             htmlSum += `</tr>`;
         });
         tSummary.innerHTML = htmlSum + `</tbody>`;
+
+        const scoreDefs = document.getElementById('scoreDefinitions');
+        if (scoreDefs) {
+            scoreDefs.style.cssText = "margin-top:10px;";
+            if (state.options.mode === 'net') {
+                scoreDefs.innerHTML = `
+                    <div style="background:#f8f9fa; padding:10px; border-radius:8px; border:1px solid #eee;">
+                        <div style="line-height:1.6; font-size:0.85rem; color:#636e72;">
+                            <strong>* Bruto :</strong> Total de golpes reales<br>
+                            <strong>* SBA :</strong> Score Bruto Ajustado (AGS)<br>
+                            <strong>* Diff :</strong> Diferencial de Hándicap<br>
+                            <strong>* STB :</strong> Stableford
+                        </div>
+                        <div style="display:flex; justify-content:flex-end; margin-top:8px;">
+                            <div onclick="toggleScoreDefs()" style="cursor:pointer; color:var(--primary-dark); font-weight:bold; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;">
+                                <span id="scoreDefsToggleText" style="font-size:0.8rem;">Definiciones</span>
+                                <span id="scoreDefsToggleIcon" style="font-size:0.9rem;">▶</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="scoreDefsContent" style="display:none; margin-top:8px; padding:12px; background:#fff; border:1px solid #dfe6e9; border-radius:8px; font-size:0.8rem; line-height:1.5; color:#2d3436;">
+                        <p style="margin:0 0 8px 0;"><strong>Bruto :</strong> Suma de golpes reales. Una cruz (X) cuenta como Par + 4.</p>
+                        <p style="margin:0 0 8px 0;"><strong>SBA (Score Bruto Ajustado) :</strong> Para evitar que un mal hoyo penalice en exceso, la puntuación se limita a: <em>Par del hoyo + Golpes Recibidos + 2</em>. La cruz (X) equivale a <em>Par + 4</em>, y luego se aplica el límite.</p>
+                        <p style="margin:0 0 8px 0;"><strong>Diff (Diferencial de Hándicap) :</strong> Refleja el rendimiento del día. Fórmula: <em>(113 / Slope) x (SBA - Valoración)</em>.</p>
+                        <p style="margin:0;"><strong>STB (Stableford) :</strong> Convierte la puntuación neta en puntos (2 pts por el Par neto, 3 por el Birdie neto, etc.).</p>
+                    </div>
+                `;
+            } else {
+                scoreDefs.innerHTML = `<div style="font-size:0.8rem; color:#636e72; font-style:italic;">Nota: Una cruz (X) cuenta como Par + 4 en el total bruto.</div>`;
+            }
+        }
 
         const container = document.getElementById('groupedHolesContainer'); container.innerHTML = '';
         const coursePlayed = state.course.slice(0, holesPlayed);
@@ -1519,6 +1590,8 @@
         
         if(allerHoles.length > 0) container.innerHTML += generateHolesTableImageStyle(allerHoles, 0);
         if(retourHoles.length > 0) container.innerHTML += `<div style="margin-top:20px;"></div>` + generateHolesTableImageStyle(retourHoles, allerHoles.length);
+        
+        container.innerHTML += `<div style="font-size:0.8rem; color:#636e72; font-style:italic; margin-top:12px;">* Puntuación bruta por hoyo. X = Par + 4.</div>`;
     }
 
     function exportCSV() {
