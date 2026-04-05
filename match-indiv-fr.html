@@ -464,6 +464,16 @@
         }
     }
 
+    function toggleScoreDefs() {
+        const content = document.getElementById('scoreDefsContent');
+        const icon = document.getElementById('scoreDefsToggleIcon');
+        if (content.style.display === 'none') {
+            content.style.display = 'block'; icon.innerHTML = '▼';
+        } else {
+            content.style.display = 'none'; icon.innerHTML = '▶';
+        }
+    }
+
     async function loadRegions() {
         try {
             const select = document.getElementById('regionSelect');
@@ -975,21 +985,22 @@
                 const cr = calculateCR(p, hole);
                 let isCross = (val === 'X');
                 
-                let brut_saisi = isCross ? (hole.par + 4) : parseInt(val);
-                let net_calcule = brut_saisi - cr;
-                let sba = brut_saisi;
+                // brut_reel garde toujours sa valeur mathématique de par+4 pour les calculs bruts
+                let brut_reel = isCross ? (hole.par + 4) : parseInt(val);
+                let sba = brut_reel;
+                let net_calcule = brut_reel - cr;
 
                 if (state.options.mode === 'net') {
                     let maxNet = hole.par + 2; 
                     if (isCross || net_calcule > maxNet) { 
                         net_calcule = maxNet; 
                         sba = maxNet + cr; // (Par + 2 + CR)
-                        brut_saisi = sba;
                     }
                 }
 
                 let stb = Math.max(0, 2 + hole.par - net_calcule);
-                p.scores[i] = { brut: brut_saisi, sba: sba, net: net_calcule, stb: stb, display: isCross ? 'X' : parseInt(val), isCross: isCross };
+                // On préserve le vrai 'brut_reel' dans la propriété 'brut'
+                p.scores[i] = { brut: brut_reel, sba: sba, net: net_calcule, stb: stb, display: isCross ? 'X' : parseInt(val), isCross: isCross };
             });
         }
     }
@@ -1279,7 +1290,7 @@
         const tSummary = document.getElementById('tableSummary');
         let htmlSum = `<thead><tr><th class="text-left">Joueur</th>`;
         if (state.options.mode === 'net') {
-            htmlSum += `<th>SBA</th><th>IND</th><th>Stb*</th></tr></thead><tbody>`;
+            htmlSum += `<th>SBA</th><th>IND</th><th>Stb</th></tr></thead><tbody>`;
         } else {
             htmlSum += `<th>Brut</th></tr></thead><tbody>`;
         }
@@ -1287,8 +1298,8 @@
         state.players.forEach(p => {
             let totB = 0, totSBA = 0, totStb = 0;
             p.scores.slice(0, state.gameData.length).forEach(s => { 
-                totB += s.brut; 
-                totSBA += s.sba || s.brut; 
+                totB += s.brut; // Le brut réel (Par + 4 inclus pour les X)
+                totSBA += s.sba || s.brut; // Capped brut
                 totStb += s.stb; 
             });
             
@@ -1305,11 +1316,28 @@
         tSummary.innerHTML = htmlSum + `</tbody>`;
 
         const scoreDefs = document.getElementById('scoreDefinitions');
-        scoreDefs.style.cssText = "font-size:0.8rem; color:#636e72; font-style:italic; margin-top:10px;";
+        scoreDefs.style.cssText = "margin-top:10px;";
         if (state.options.mode === 'net') {
-            scoreDefs.innerHTML = `<strong>* SBA :</strong> Score Brut Ajusté (Plafonné à Par + CR + 2).<br><strong>* IND :</strong> Index Joué / Différentiel = (113 / Slope) x (SBA - SSS).<br><strong>* Stb :</strong> Stableford.`;
+            scoreDefs.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; cursor:pointer; background:#f8f9fa; padding:10px; border-radius:8px; border:1px solid #eee;" onclick="toggleScoreDefs()">
+                    <div style="line-height:1.6; font-size:0.85rem; color:#636e72;">
+                        <strong>* SBA :</strong> Score Brut Ajusté<br>
+                        <strong>* IND :</strong> Index joué<br>
+                        <strong>* STB :</strong> Stableford
+                    </div>
+                    <div style="display:flex; align-items:center; gap:5px; color:var(--primary-dark); font-weight:bold;">
+                        <span id="scoreDefsToggleText" style="font-size:0.8rem;">Définitions</span>
+                        <span id="scoreDefsToggleIcon" style="font-size:1rem;">▶</span>
+                    </div>
+                </div>
+                <div id="scoreDefsContent" style="display:none; margin-top:8px; padding:12px; background:#fff; border:1px solid #dfe6e9; border-radius:8px; font-size:0.8rem; line-height:1.5; color:#2d3436;">
+                    <p style="margin:0 0 8px 0;"><strong>SBA (Score Brut Ajusté) :</strong> Le score brut correspond au nombre de coups joués. Pour éviter qu'un mauvais trou ne pénalise trop le résultat global, il est plafonné à : <em>Par du Trou + Coups Reçus + 2</em>. La croix équivaut à <em>Par + 4</em>, puis est plafonnée par ce maximum.</p>
+                    <p style="margin:0 0 8px 0;"><strong>IND (Index joué) :</strong> Le score différentiel reflète la performance du jour. Formule : <em>(113 / Slope) x (SBA - SSS)</em>.</p>
+                    <p style="margin:0;"><strong>STB (Stableford) :</strong> Convertit le score net en points (2 pts pour le Par net, 3 pour un Birdie net, etc.).</p>
+                </div>
+            `;
         } else {
-            scoreDefs.innerHTML = `<em>Note: La croix (X) compte pour Par + 4 dans le total brut.</em>`;
+            scoreDefs.innerHTML = `<div style="font-size:0.8rem; color:#636e72; font-style:italic;">Note: La croix (X) compte pour Par + 4 dans le total brut.</div>`;
         }
 
         const container = document.getElementById('groupedHolesContainer'); container.innerHTML = '';
